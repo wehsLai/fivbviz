@@ -1,0 +1,70 @@
+---
+title: "fivbviz"
+# runtime: shiny
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    # vertical_layout: fill or scroll
+    theme: 
+      version: 4
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(reactable)
+library(fivbvis)
+library(flexdashboard)
+library(shiny)
+# laoyout https://pkgs.rstudio.com/flexdashboard/articles/using.html#layout
+v_caching(TRUE)
+Sys.setlocale(category = 'LC_ALL', locale = 'English_United States.1252')
+Y <- format(Sys.Date(), "%Y")
+```
+
+Tournament
+=====================================  
+
+Inputs {.sidebar}
+-------------------------------------
+
+```{r}
+# change season
+# selectizeInput('sel_season', 'Season', choices = c(Y:1949), selected = Y)
+```
+    
+Column {data-width=1000}
+-------------------------------------
+    
+### tournament list
+    
+```{r}
+pl <- list(Fields = "No Season ShortNameOrName StartDate EndDate Gender OrganizerType Status")
+tournaments <- v_get_volley_tournament_list(parent = pl) %>% arrange(desc(startDate))
+
+tl.colDef <- list(
+    no = colDef(minWidth = 50, filterable = FALSE, align = "left"),
+    season = colDef(minWidth = 50),
+    shortNameOrName = colDef(name = "Tournament", minWidth = 240)
+)
+
+reactable(
+    tournaments,
+    columns = tl.colDef,
+    defaultColDef = colDef(
+        header = function(value) {
+            fivbvis:::first_to_upper(value)
+        },
+        headerVAlign = 'bottom',
+        minWidth = 70
+    ),
+    pageSizeOptions = c(20, 40),
+    defaultPageSize = 20,
+    showPageSizeOptions = TRUE,
+    resizable = TRUE,
+    filterable = TRUE,
+    highlight = TRUE,
+    striped = TRUE,
+    compact = TRUE,
+    wrap = FALSE
+)
+```
