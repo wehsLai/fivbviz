@@ -1,0 +1,41 @@
+---
+title: "fivbviz"
+runtime: shiny
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    # vertical_layout: fill or scroll
+    theme: 
+      version: 4
+---
+
+```{r setup, include=FALSE}
+source("R/global.R")
+source("R/module_tournaments.R")
+source("R/module_download.R")
+```
+
+Tournament
+=====================================  
+
+Column {data-width=1000}
+-------------------------------------
+    
+### tournament list
+    
+```{r}
+autoWaiter()
+tournamentsUI("tournaments")
+# 先open才可以download
+# 回傳rv$data 為tournament detail
+rv <- tournamentsServer("tournaments", tournaments)
+```
+
+
+Download
+=====================================  
+
+```{r}
+# downloadUI("dl")
+# downloadServer("dl", rv)
+```
