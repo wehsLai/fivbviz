@@ -1,15 +1,12 @@
 tournamentsUI <- function(id) {
     ns <- NS(id)
-    fillCol(flex = c(NA,1),
-        fillRow(flex = c(NA,1,NA),
-            actionBttn(ns("open"), label = 'Open', style="bordered", color="primary"),
-            textOutput(ns("msg")),
-            downloadBttn(ns('dl_rds'), 'Download RDS', style="bordered", color="primary")),
+    fillCol(height = "820", flex = c(NA, 1), 
+        actionBttn(ns("open"), label = 'Open', style="bordered", color="primary", size="sm"),
         reactableOutput(ns("table"))
     )
 }
 
-tournamentsServer <- function(id, tourlist = NULL) {
+tournamentsServer <- function(id, tourlist = NULL, showSeason = TRUE) {
     moduleServer(id, function(input, output, session) {
         # render tournaments table
         output$table <- renderReactable({
@@ -36,26 +33,17 @@ tournamentsServer <- function(id, tourlist = NULL) {
         })
         
         # selected row
-        selected <- reactive(getReactableState("table", "selected"))
-        rv <- reactiveValues(data = NULL)
+        sel_row <- reactive(getReactableState("table", "selected"))
+        
         # open selected tournament
         observeEvent(input$open, {
             waiter_show(html = waiting_screen)
-            sel <- tournaments[selected(),]
-            # rv$data <- get_tournament_data(sel$no)
-            rv$data <- readRDS("data/data.rds")
-            output$msg <- renderText(paste0("  Using Dataset: ", sel$season, " - ", sel$shortNameOrName))
+            sel <- tournaments[sel_row(),]
+            # rv$ds <- get_tournament_data(sel$no)
+            rv$ds <- readRDS("data/data.rds")
+            rv$fds <- rv$ds
+            rv$marktext <- paste0(ifelse(showSeason, paste0(rv$ds$tournament$season, " - "), ""), rv$ds$tournament$shortNameOrName)
             waiter_hide()
         })
-        
-        output$dl_rds <- downloadHandler(
-            filename = function() {
-                "data.rds"
-            },
-            content = function(file) {
-                saveRDS(rv$data, file = file)
-            }
-        )
-        return(rv)
     })
 }

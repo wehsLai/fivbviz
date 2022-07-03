@@ -1,4 +1,3 @@
-library(downloadthis)
 library(dplyr)
 library(reactable)
 library(fivbvis)
@@ -9,9 +8,12 @@ library(waiter)
 
 # default value
 v_caching(FALSE)
-v_options(verbose = TRUE)
+
 Sys.setlocale(category = 'LC_ALL', locale = 'English_United States.1252')
 Y <- format(Sys.Date(), "%Y")
+rv <- reactiveValues()
+a_limit <- 0.15
+r_limit <- 0.2
 
 # waiter
 waiting_screen <- tagList(
@@ -51,24 +53,29 @@ get_tournament_data <- function(no) {
         cal_no <- matches$no[matches$resultType == 0]
         
         # teams
-        pl <- list(Fields = "No Code Name Version")
         cl <- list(Filter = c(NoTournament = no))
         teams <- v_get_volley_team_list(children = cl) %>% arrange(code)
 
         # players
-        cl <- list(Filter = c(NoTournament = no))
-        players <- v_get_volley_player_list(children = cl)
+        cl <- list(Filter = c(NoTournament = no), Relation = c(Name="Team", Fields="Code Name"))
+        players <- v_get_volley_player_list(children = cl) %>% arrange(team.code, noShirt)
         
         # Statistics
         pl <- list(Fields = paste0(v_fields("Volleyball Statistic"), collapse = " "),
                    Include = "PlayersSumByTeam", SumBy="Match")
         cl <- list(Filter = c(NoTournaments = no, MatchesToUse="MatchesFinished"),
-                   Relation = c(Name="Match", Fields="NoInTournament DateLocal TeamACode TeamBCode MatchResult"),
+                   Relation = c(Name="Match", Fields="NoInTournament DateLocal TeamACode TeamBCode MatchResultText"),
                    Relation = c(Name="Team", Fields="Code Name"),
                    Relation = c(Name="Player", Fields="TeamName FirstName LastName VolleyPosition")
         )
-        statistics <- v_get_volley_statistic_list(parent = pl, children = cl) %>%
+        statistics <- v_get_volley_statistic_list(parent = pl, children = cl) %>% filter(noMatch %in% cal_no) %>%
             split(as.factor(ifelse(is.na(.$team.code), "Player", "Team")))
+        
+        statistics$Player <- statistics$Player %>% 
+            left_join(players[,c("noPlayer", "team.code", "team.name")], by = c("noItem" = "noPlayer"), suffix = c("", ".y"), keep = FALSE) %>% 
+            mutate(team.code = team.code.y, team.name = team.name.y) %>% 
+            select(-"team.code.y",-"team.name.y")
+        
         
         out <- list(
             tournament = tournament,
@@ -83,3 +90,25 @@ get_tournament_data <- function(no) {
         stop("wrong tournament no")
     }
 }
+
+Percentage <- function(total, performance, digits = 2) {
+    ifelse(total == 0, NA, round((performance * 100) / total, digits))
+}
+
+Efficiency <- function(total, performance, fault, digits = 2) {
+    ifelse(total == 0, NA, round(((performance - fault) * 100) / total, digits))
+}
+
+Per <- function(nb, performance, digits = 2) {
+    ifelse(nb == 0, NA, round(performance / nb, digits))
+}
+
+Ranking <- function(performance, isDesc = TRUE, tie = "min"){
+    if(isDesc){
+        x <- desc(performance)
+    } else {
+        x <- performance
+    }
+    rank(x, ties.method = tie)
+}
+## TODO Rank with NA limit
