@@ -3,269 +3,195 @@ title: "fivbviz"
 runtime: shiny
 output: 
   flexdashboard::flex_dashboard:
-    vertical_layout: scroll
+    orientation: rows
+    vertical_layout: fill
+    # vertical_layout: scroll
     theme: 
       version: 4
+      base_font:
+        google: "Source Sans Pro"
+      code_font:
+        google: "Fira Code"
 ---
 
 ```{r setup, include=FALSE}
 source("R/global.R")
-source("R/mod_datafilter.R")
+source("R/data_transform.R")
+source("R/chart.R")
+source("R/mod_dataFilter.R")
 source("R/mod_download.R")
 source("R/mod_tournaments.R")
+source("R/mod_rankBySkill.R")
 autoWaiter()
 
+```
+
+```{r test, eval=FALSE, include=FALSE}
 rv <- list()
-# rv$ds <- get_tournament_data(1258)
-rv$ds <- readRDS("data/data.rds")
+# rv$ds <- get_tournament_data(1257)
 # saveRDS(rv$ds, "data/data.rds")
+rv$ds <- readRDS("data/data.rds")
 rv$fds <- rv$ds
+rv$marktext <- paste0(ifelse(TRUE, paste0(rv$ds$tournament$season, " - "), ""), rv$ds$tournament$shortNameOrName)
+agg <- get_agg(rv$fds$statistics)
+rv$fds$statistics$team_agg <- agg$team_agg
+rv$fds$statistics$player_agg <- agg$player_agg
+# spike
+data <- get_p5(agg$player_agg, type_p5[2], showAll = TRUE) %>% filter(`Load %` >= 5)
+data <- get_p5(agg$player_agg, type_p5[1], showAll = TRUE)
 
-pl.col <- c("team.code", "noShirt", "player.teamName", "player.lastName", "player.firstName", "player.volleyPosition")
-tl.col <- c("team.code", "team.name")
-plo.col <- c("timePlayed", "timePlayedPercentage", "nbRallies", "ralliesPercentage")
-te.col <- c("teamFault", "opponentError")
-ma.col <- c("match.noInTournament", "match.dateLocal", "match.teamACode", "match.teamBCode", "match.matchResultText")
-du.col <- c("nbMatches", "nbSets", "faultTotal", "attemptTotal")
-no.col <- c("no", "noItem", "noMatch", "noTournament", "noSet", "itemType")
-sc.col <- c("pointTotal", "scorerTotalFaults", "pointAverageBySet", "pointAverageByMatch", "scorerTotalAttempts", "scorerPointsPercentage")
-a.col <- c("spikePoint", "spikeFault", "spikeContinue", "spikeTotal", "spikePointPercentage", "spikeEfficiencyPercentage", "spikePointAverageBySet", "spikePointAverageByMatch", "spikeFaultPercentage", "spikeContinuePercentage", "spikeKey", "spikeFaultSideOut")
-bk.col <- c("backSpikePoint", "backSpikeFault", "backSpikeContinue", "backSpikeTotal", "backSpikePointPercentage", "backSpikeEfficiencyPercentage", "backSpikePointAverageBySet", "backSpikePointAverageByMatch", "backSpikeFaultPercentage", "backSpikeContinuePercentage", "backSpikeKey", "backSpikeFaultSideOut" )
-b.col <- c("blockPoint", "blockFault", "blockContinue", "blockTotal", "blockPointPercentage", "blockEfficiencyPercentage", "blockPointAverageBySet", "blockPointAverageByMatch", "blockFaultPercentage", "blockContinuePercentage", "blockKey")
-s.col <- c("servePoint", "serveFault", "serveContinue", "serveTotal", "servePointPercentage", "serveEfficiencyPercentage", "servePointAverageBySet", "servePointAverageByMatch", "serveFaultPercentage", "serveContinuePercentage", "serveKey")
-d.col <- c("digExcellent", "digFault", "digContinue", "digTotal", "digExcellentPercentage", "digEfficiencyPercentage", "digExcellentAverageBySet", "digExcellentAverageByMatch", "digFaultPercentage", "digContinuePercentage", "digKey")
-e.col <- c("setExcellent", "setFault", "setContinue", "setTotal", "setExcellentPercentage", "setEfficiencyPercentage", "setExcellentAverageBySet", "setExcellentAverageByMatch", "setFaultPercentage", "setContinuePercentage", "setKey")
-r.col <- c("receptionExcellent", "receptionFault", "receptionContinue", "receptionTotal", "receptionExcellentPercentage", "receptionEfficiencyPercentage", "receptionExcellentAverageBySet", "receptionExcellentAverageByMatch", "receptionFaultPercentage", "receptionContinuePercentage", "receptionKey")
-
-team_agg <- rv$ds$statistics$Team %>% group_by(team.code, team.name) %>% 
-    summarise(
-        # order by note, team.code, noShirt(player)
-        nbMatches = n(),
-        nbSets = sum(nbSets),
-        noMatch = "*",
-        noSet = "*",
-        
-        teamFault = sum(teamFault),
-        opponentError = sum(opponentError),
-        
-        # attemptTotal = sum(attemptTotal), # absder total
-        # faultTotal = sum(faultTotal), # absder fault
-        
-        pointTotal = sum(pointTotal), # abs point
-        scorerTotalFaults = sum(scorerTotalFaults), # abs fault
-        scorerTotalAttempts = sum(scorerTotalAttempts), # abs Total
-        pointPointAverageBySet = Per(nbSets, pointTotal),
-        pointPointAverageByMatch = Per(nbMatches, pointTotal),
-        # scorerRank = rank(pointTotal)
-        # scorerPointsPercentage = Percentage(scorerTotalAttempts, pointTotal),
-        
-        spikePoint = sum(spikePoint),
-        spikeFault = sum(spikeFault),
-        spikeContinue = sum(spikeContinue),
-        spikeTotal = sum(spikeTotal),
-        spikePointPercentage = Percentage(spikeTotal, spikePoint), # note
-        spikeEfficiencyPercentage = Efficiency(spikeTotal, spikePoint, spikeFault),
-        spikePointAverageBySet = Per(nbSets, spikePoint),
-        spikePointAverageByMatch = Per(nbMatches, spikePoint),
-        spikeFaultPercentage = Percentage(spikeTotal, spikeFault),
-        spikeContinuePercentage = Percentage(spikeTotal, spikeContinue),
-        spikeKey = sum(spikeKey),
-        # spikeFaultSideOut = sum(spikeFaultSideOut),
-        
-        blockPoint = sum(blockPoint),
-        blockFault = sum(blockFault),
-        blockContinue = sum(blockContinue),
-        blockTotal = sum(blockTotal),
-        blockPointPercentage = Percentage(blockTotal, blockPoint), 
-        blockEfficiencyPercentage = Efficiency(blockTotal, blockPoint, blockFault),
-        blockPointAverageBySet = Per(nbSets, blockPoint), # note
-        blockPointAverageByMatch = Per(nbMatches, blockPoint),
-        blockFaultPercentage = Percentage(blockTotal, blockFault),
-        blockContinuePercentage = Percentage(blockTotal, blockContinue),
-        blockKey = sum(blockKey),         
-        
-        servePoint = sum(servePoint),
-        serveFault = sum(serveFault),
-        serveContinue = sum(serveContinue),
-        serveTotal = sum(serveTotal),
-        servePointPercentage = Percentage(serveTotal, servePoint), 
-        serveEfficiencyPercentage = Efficiency(serveTotal, servePoint, serveFault),
-        servePointAverageBySet = Per(nbSets, servePoint), # note
-        servePointAverageByMatch = Per(nbMatches, servePoint),
-        serveFaultPercentage = Percentage(serveTotal, serveFault),
-        serveContinuePercentage = Percentage(serveTotal, serveContinue),
-        serveKey = sum(serveKey),   
-        
-        # backSpikePoint = sum(backSpikePoint),
-        # backSpikeFault = sum(backSpikeFault),
-        # backSpikeContinue = sum(backSpikeContinue),
-        # backSpikeTotal = sum(backSpikeTotal),
-        # backSpikePointPercentage = Percentage(backSpikeTotal, backSpikePoint), # note
-        # backSpikeEfficiencyPercentage = Efficiency(backSpikeTotal, backSpikePoint, backSpikeFault),
-        # backSpikePointAverageBySet = Per(nbSets, backSpikePoint),
-        # backSpikePointAverageByMatch = Per(nbMatches, backSpikePoint),
-        # backSpikeFaultPercentage = Percentage(backSpikeTotal, backSpikeFault),
-        # backSpikeContinuePercentage = Percentage(backSpikeTotal, backSpikeContinue),
-        # backSpikeKey = sum(backSpikeKey),
-        # backSpikeFaultSideOut = sum(backSpikeFaultSideOut),
-        
-        digExcellent = sum(digExcellent),
-        digFault = sum(digFault),
-        digContinue = sum(digContinue),
-        digTotal = sum(digTotal),
-        digExcellentPercentage = Percentage(digTotal, digExcellent), 
-        digEfficiencyPercentage = Efficiency(digTotal, digExcellent, digFault),
-        digExcellentAverageBySet = Per(nbSets, digExcellent), # note
-        digExcellentAverageByMatch = Per(nbMatches, digExcellent),
-        digFaultPercentage = Percentage(digTotal, digFault),
-        digContinuePercentage = Percentage(digTotal, digContinue),
-        digKey = sum(digKey),
-        
-        setExcellent = sum(setExcellent),
-        setFault = sum(setFault),
-        setContinue = sum(setContinue),
-        setTotal = sum(setTotal),
-        setExcellentPercentage = Percentage(setTotal, setExcellent),
-        setEfficiencyPercentage = Efficiency(setTotal, setExcellent, setFault),
-        setExcellentAverageBySet = Per(nbSets, setExcellent), # note
-        setExcellentAverageByMatch = Per(nbMatches, setExcellent),
-        setFaultPercentage = Percentage(setTotal, setFault),
-        setContinuePercentage = Percentage(setTotal, setContinue),
-        setKey = sum(setKey),
-        
-        receptionExcellent = sum(receptionExcellent),
-        receptionFault = sum(receptionFault),
-        receptionContinue = sum(receptionContinue),
-        receptionTotal = sum(receptionTotal),
-        receptionExcellentPercentage = Percentage(receptionTotal, receptionExcellent),
-        receptionEfficiencyPercentage = Efficiency(receptionTotal, receptionExcellent, receptionFault),
-        receptionExcellentAverageBySet = Per(nbSets, receptionExcellent), # note
-        receptionExcellentAverageByMatch = Per(nbMatches, receptionExcellent),
-        receptionFaultPercentage = Percentage(receptionTotal, receptionFault),
-        receptionContinuePercentage = Percentage(receptionTotal, receptionContinue),
-        receptionKey = sum(receptionKey),        
-        
-        # position = "",
-        # rank = ""
-    )
-
-pl <- list(No = 229, NumberOfScorers = 10, NumberOfPlayers = 10, Skills = "Block Dig Libero Reception Scorer Service Set Spike")
-  vb_team_ranking <- v_get_volley_team_ranking(parent = pl)
-  
-player_agg <- rv$ds$statistics$Player %>% group_by(team.code, noShirt, player.teamName, player.lastName, player.firstName, player.volleyPosition) %>% 
-    summarise(
-        nbMatches = n(),
-        nbSets = sum(nbSets),
-        spikePoint = sum(spikePoint),
-        spikeFault = sum(spikeFault),
-        spikeContinue = sum(spikeContinue),
-        spikeTotal = sum(spikeTotal),
-        pts_pc = Percentage(spikeTotal, spikePoint),
-        eff_pc = Efficiency(spikeTotal, spikePoint, spikeFault),
-        pts_ps = Per(nbSets, spikePoint),
-        pts_pm = Per(nbMatches, spikePoint)
-    )
+title <- "測試資料"
+subtitle <- rv$marktext
+# mx <- median(data$orgErr)
+# my <- median(data$orgPlus)
 
 ```
+
 
 Tournament
 =====================================  
 
-Filter {.sidebar}
+Control {.sidebar}
 -------------------------------------
+
+#### 
 
 ```{r}
 dataFilterUI("filter")
-dataFilterServer("filter")
+downloadUI("rds", "Download Full RDS")
+reactive({
+    if(!is.null(rv$ds)){
+        dataFilterServer("filter")
+        downloadServer("rds", TRUE)
+    }
+})
 ```
 
-Column
+Row {data-width=600}
 -------------------------------------
     
-### tournament list 
+### Tournaments
     
 ```{r}
 tournamentsUI("tournaments")
-tournamentsServer("tournaments", tournaments)
+tournamentsServer("tournaments")
 ```
 
 
-Player Charts {data-orientation=rows}
+Player Charts
 =====================================  
 
-Inputs {.sidebar}
+Row {.tabset}
 -------------------------------------
 
+### Best Scorers
+
 ```{r}
-# shiny inputs defined here
+rankBySkillUI("scorer")
+observe({
+    if(!is.null(rv$fds)) {
+        type <- "c"
+        f <- rankBySkillDfServer("scorer", rv$fds$statistics$player_agg, type = type, isTeam = FALSE)
+        rankBySkillChartServer("scorer", f, type = type, isTeam = FALSE)
+        rankBySkillTableServer("scorer", f, type = type, isTeam = FALSE)
+    }
+})
 ```
 
-Row {data-height=600} 
--------------------------------------
-    
-### Best Scorer Bar Chart
-    
-```{r}
+### Best Attackers
 
+```{r}
+rankBySkillUI("attacker")
+observe({
+    if(!is.null(rv$fds)) {
+        type <- "a"
+        f <- rankBySkillDfServer("attacker", rv$fds$statistics$player_agg, type = type, isTeam = FALSE)
+        rankBySkillChartServer("attacker", f, type = type, isTeam = FALSE)
+        rankBySkillTableServer("attacker", f, type = type, isTeam = FALSE)
+    }
+})
 ```
 
-### Best Scorer Table
-    
-```{r}
+### Best Blockers
 
+```{r}
+rankBySkillUI("blocker")
+observe({
+    if(!is.null(rv$fds)) {
+        type <- "b"
+        f <- rankBySkillDfServer("blocker", rv$fds$statistics$player_agg, type = type, isTeam = FALSE)
+        rankBySkillChartServer("blocker", f, type = type, isTeam = FALSE)
+        rankBySkillTableServer("blocker", f, type = type, isTeam = FALSE)
+    }
+})
 ```
 
+### Best Servers
 
-Row {data-height=600}
--------------------------------------
-    
-### Best Spiker Chart
-    
 ```{r}
-
+rankBySkillUI("server")
+observe({
+    if(!is.null(rv$fds)) {
+        type <- "s"
+        f <- rankBySkillDfServer("server", rv$fds$statistics$player_agg, type = type, isTeam = FALSE)
+        rankBySkillChartServer("server", f, type = type, isTeam = FALSE)
+        rankBySkillTableServer("server", f, type = type, isTeam = FALSE)
+    }
+})
 ```
 
-### Best Spiker Table
-    
-```{r}
+### Best Diggers
 
+```{r}
+rankBySkillUI("digger")
+observe({
+    if(!is.null(rv$fds)) {
+        type <- "d"
+        f <- rankBySkillDfServer("digger", rv$fds$statistics$player_agg, type = type, isTeam = FALSE)
+        rankBySkillChartServer("digger", f, type = type, isTeam = FALSE)
+        rankBySkillTableServer("digger", f, type = type, isTeam = FALSE)
+    }
+})
 ```
 
-Row {data-height=600}
--------------------------------------
+### Best Setters
 
-### Best Blocker Chart
-    
 ```{r}
-
+rankBySkillUI("setter")
+observe({
+    if(!is.null(rv$fds)) {
+        type <- "e"
+        f <- rankBySkillDfServer("setter", rv$fds$statistics$player_agg, type = type, isTeam = FALSE)
+        rankBySkillChartServer("setter", f, type = type, isTeam = FALSE)
+        rankBySkillTableServer("setter", f, type = type, isTeam = FALSE)
+    }
+})
 ```
 
-### Best Blocker Table
-    
-```{r}
+### Best Receivers
 
+```{r}
+rankBySkillUI("receiver")
+observe({
+    if(!is.null(rv$fds)) {
+        type <- "r"
+        f <- rankBySkillDfServer("receiver", rv$fds$statistics$player_agg, type = type, isTeam = FALSE)
+        rankBySkillChartServer("receiver", f, type = type, isTeam = FALSE)
+        rankBySkillTableServer("receiver", f, type = type, isTeam = FALSE)
+    }
+})
 ```
 
-Row {data-height=600}
--------------------------------------
-
-### Best Server Chart
-    
-```{r}
-
-```
-
-
-### Best Server Table
-    
-```{r}
-
-```
-
-Download
-=====================================  
+### Best Liberos
 
 ```{r}
-downloadUI("rds", "Download RDS")
-downloadServer("rds", TRUE)
+rankBySkillUI("libero")
+observe({
+    if(!is.null(rv$fds)) {
+        type <- "l"
+        f <- rankBySkillDfServer("libero", rv$fds$statistics$player_agg, type = type, isTeam = FALSE)
+        rankBySkillChartServer("libero", f, type = type, isTeam = FALSE)
+        rankBySkillTableServer("libero", f, type = type, isTeam = FALSE)
+    }
+})
 ```
