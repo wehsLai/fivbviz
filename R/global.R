@@ -12,8 +12,8 @@ library(waiter)
 # Clean ----
 rm(list = ls())
 # Default Value ----
-# v_caching(FALSE)
-v_options(verbose = TRUE)
+v_caching(FALSE)
+v_options(verbose = FALSE)
 Sys.setlocale(category = "LC_ALL", locale = "English_United States.1252")
 
 rv <- reactiveValues()

@@ -79,7 +79,8 @@ rankBySkillChartServer <- function(id, f, type, isTeam = FALSE, limit = 5) {
         "d" = "Best Diggers",
         "e" = "Best Setters",
         "r" = "Best Receivers",
-        "l" = "Team Errors",
+        "l" = "Best Liberos",
+        "f" = "Team Errors",
       )
     })
 
@@ -180,9 +181,12 @@ rankBySkillTableServer <- function(id, f, type, isTeam = FALSE, limit = 0, pageS
         data <- f %>%
           filter(`Load %` >= limit) %>%
           select(-player.teamName, -y, -x, -showText)
+      } else if (type == "c") {
+          data <- f %>%
+              select(-player.teamName, -showText)  
       } else {
         data <- f %>%
-          select(-player.teamName, -showText)
+          select(-player.teamName, -y, -x, -showText)
       }
 
       use.colDef <- list(

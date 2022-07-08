@@ -12,8 +12,8 @@ tournamentsServer <- function(id, showSeason = TRUE) {
     # get tournaments list  
     tournaments <- reactive({
         pl <- list(Fields = "No Season ShortNameOrName StartDate EndDate Gender OrganizerType Status")
-        readRDS("data/tournaments.rds")
-        # v_get_volley_tournament_list(parent = pl) %>% arrange(desc(startDate))
+        # readRDS("data/tournaments.rds")
+        v_get_volley_tournament_list(parent = pl) %>% arrange(desc(startDate))
     }) 
     
     # render tournaments table
@@ -57,8 +57,8 @@ tournamentsServer <- function(id, showSeason = TRUE) {
     observeEvent(input$open, {
       waiter_show(html = waiting_screen)
       sel <- tournaments()[sel_row(), ]
-      # rv$ds <- get_tournament_data(sel$no)
-      rv$ds <- readRDS("data/data.rds")
+      rv$ds <- get_tournament_data(sel$no)
+      # rv$ds <- readRDS("data/data.rds")
       rv$marktext <- paste0(ifelse(showSeason, paste0(rv$ds$tournament$season, " - "), ""), rv$ds$tournament$shortNameOrName)
       rv$fds <- rv$ds
       cal_fds()
