@@ -9,13 +9,13 @@ tournamentsUI <- function(id) {
 
 tournamentsServer <- function(id, showSeason = TRUE) {
   moduleServer(id, function(input, output, session) {
-    # get tournaments list  
+    # get tournaments list
     tournaments <- reactive({
-        pl <- list(Fields = "No Season ShortNameOrName StartDate EndDate Gender OrganizerType Status")
-        # readRDS("data/tournaments.rds")
-        v_get_volley_tournament_list(parent = pl) %>% arrange(desc(startDate))
-    }) 
-    
+      pl <- list(Fields = "No Season ShortNameOrName StartDate EndDate Gender OrganizerType Status")
+      # readRDS("data/tournaments.rds")
+      v_get_volley_tournament_list(parent = pl) %>% arrange(desc(startDate))
+    })
+
     # render tournaments table
     output$table <- renderReactable({
       tl.colDef <- list(
@@ -48,11 +48,11 @@ tournamentsServer <- function(id, showSeason = TRUE) {
     sel_row <- reactive(getReactableState("table", "selected"))
 
     cal_fds <- reactive({
-        agg <- get_agg(rv$fds$statistics)
-        rv$fds$statistics$team_agg <- agg$team_agg
-        rv$fds$statistics$player_agg <- agg$player_agg
+      agg <- get_agg(rv$fds$statistics)
+      rv$fds$statistics$team_agg <- agg$team_agg
+      rv$fds$statistics$player_agg <- agg$player_agg
     })
-    
+
     # open selected tournament
     observeEvent(input$open, {
       waiter_show(html = waiting_screen)

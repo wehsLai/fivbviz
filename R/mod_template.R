@@ -1,12 +1,10 @@
 XXXUI <- function(id) {
-    ns <- NS(id)
-    fillCol(
-
-    )
+  ns <- NS(id)
+  fillCol()
 }
 
 XXXServer <- function(id) {
-    moduleServer(id, function(input, output, session) {
+  moduleServer(id, function(input, output, session) {
 
-    })
+  })
 }
