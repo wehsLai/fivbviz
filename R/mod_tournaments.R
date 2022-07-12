@@ -47,21 +47,14 @@ tournamentsServer <- function(id, showSeason = TRUE) {
     # selected row
     sel_row <- reactive(getReactableState("table", "selected"))
 
-    cal_fds <- reactive({
-      agg <- get_agg(rv$fds$statistics)
-      rv$fds$statistics$team_agg <- agg$team_agg
-      rv$fds$statistics$player_agg <- agg$player_agg
-    })
-
     # open selected tournament
     observeEvent(input$open, {
       waiter_show(html = waiting_screen)
       sel <- tournaments()[sel_row(), ]
       rv$ds <- get_tournament_data(sel$no)
-      # rv$ds <- readRDS("data/data.rds")
       rv$marktext <- paste0(ifelse(showSeason, paste0(rv$ds$tournament$season, " - "), ""), rv$ds$tournament$shortNameOrName)
+      rv$ds$statistics <- add_agg(rv$ds$statistics)
       rv$fds <- rv$ds
-      cal_fds()
       waiter_hide()
     })
   })

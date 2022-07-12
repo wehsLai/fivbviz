@@ -1,11 +1,12 @@
 ---
-title: "fivbviz"
+title: "🏐fivbviz"
+author: "wehsLai"
 runtime: shiny
 output: 
   flexdashboard::flex_dashboard:
     orientation: rows
     vertical_layout: fill
-    # vertical_layout: scroll
+    source_code: "https://github.com/wehsLai/fivbviz"
     theme: 
       version: 4
       base_font:
@@ -18,6 +19,7 @@ output:
 source("R/global.R")
 source("R/data_transform.R")
 source("R/chart.R")
+source("R/helper.R")
 source("R/mod_dataFilter.R")
 source("R/mod_download.R")
 source("R/mod_tournaments.R")
@@ -25,45 +27,27 @@ source("R/mod_rankBySkill.R")
 autoWaiter()
 ```
 
-```{r test, eval=FALSE, include=FALSE}
-# rv <- list()
-# # rv$ds <- get_tournament_data(1257)
-# # saveRDS(rv$ds, "data/data.rds")
-# rv$ds <- readRDS("data/data.rds")
-# rv$fds <- rv$ds
-# rv$marktext <- paste0(ifelse(TRUE, paste0(rv$ds$tournament$season, " - "), ""), rv$ds$tournament$shortNameOrName)
-# agg <- get_agg(rv$fds$statistics)
-# rv$fds$statistics$team_agg <- agg$team_agg
-# rv$fds$statistics$player_agg <- agg$player_agg
-# # spike
-# # data <- get_p5(agg$player_agg, type_p5[2], showAll = TRUE)
-# data <- get_p6(agg$team_agg, "a", showAll = TRUE)
-# title <- "測試資料"
-# subtitle <- rv$marktext
-# mx <- median(data$x)
-# my <- median(data$y)
-# xtitle <- ""
-# ytitle <- ""
-```
+Tournament
+=====================================
 
-# Tournament
-
-## Control {.sidebar}
-
-#### 
+Control {.sidebar}
+-------------------------------------
 
 ```{r}
 dataFilterUI("filter")
-downloadUI("rds", "Download Full RDS")
+downloadUI("rds", "RDS")
+downloadUI("rp", "Report", color = "danger")
 reactive({
   if (!is.null(rv$ds)) {
     dataFilterServer("filter")
-    downloadServer("rds", TRUE)
+    downloadServer("rds", type = "ds")
+    downloadServer("rp", type = "report")
   }
 })
 ```
 
-## Row {data-width="600"}
+Row {data-width="600"}
+-------------------------------------
 
 ### Tournaments
 
@@ -72,9 +56,11 @@ tournamentsUI("tournaments")
 tournamentsServer("tournaments")
 ```
 
-# Player Charts
+Player Charts
+=====================================
 
-## Row {.tabset}
+Row {.tabset}
+-------------------------------------
 
 ### Best Scorers
 
@@ -196,9 +182,11 @@ observe({
 })
 ```
 
-# Team Charts
+Team Charts
+=====================================
 
-## Row {.tabset}
+Row {.tabset}
+-------------------------------------
 
 ### Best Scorers
 

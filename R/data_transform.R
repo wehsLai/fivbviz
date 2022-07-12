@@ -569,6 +569,22 @@ get_p6 <- function(team_agg, type = "c", showAll = FALSE, number = 10) {
   }
 }
 
+add_agg <- function(statistics) {
+  agg <- get_agg(statistics)
+  statistics$team_agg <- agg$team_agg
+  statistics$player_agg <- agg$player_agg
+  statistics
+}
+
+rankBySkillDf <- function(agg, type, isTeam = FALSE) {
+  if (isTeam) {
+    out <- get_p6(agg, type, showAll = TRUE)
+  } else {
+    out <- get_p5(agg, type, showAll = TRUE)
+  }
+  return(out)
+}
+
 get_teamFlag <- function(code, source = "VW", height = 30, width = 30) {
   if (source == "VW") {
     out <- sprintf("https://images.volleyballworld.com/image/upload/f_png/t_flag/assets/flags/flag_%s", code)

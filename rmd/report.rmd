@@ -1,0 +1,486 @@
+---
+title: "🏐fivbviz"
+author: "wehsLai"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: fill
+    theme: 
+      version: 4
+      base_font:
+        google: "Source Sans Pro"
+      code_font:
+        google: "Fira Code"
+params: 
+    ds: NULL
+    marktext: NULL
+---
+
+```{r setup, include=FALSE}
+showSeason <- TRUE
+
+ds <- params$ds
+marktext <- params$marktext
+
+```
+
+Player Charts
+=====================================
+
+Row {.tabset}
+-------------------------------------
+
+### Best Scorers
+
+```{r}
+# parameters
+id <- "scorer"
+ns <- NS(id)
+type <- "c"
+isTeam <- FALSE
+# data
+f <- rankBySkillDf(ds$statistics$player_agg, type, isTeam)
+# render
+fillRow(
+  flex = c(NA, 1),
+  column(
+    width = 12,
+    renPlotly(id, f, type, marktext, isTeam)
+  ),
+  tags$div(
+    fluidRow(
+      column(width = 9, align = "left", renTitle(type)),
+      column(width = 2, align = "right", renLimit(type)),
+      column(width = 1, align = "right", tags$button("CSV", onclick = sprintf("Reactable.downloadDataCSV('%s')", ns("table"))))
+    ),
+    renTable(id, f, type, isTeam)
+  )
+)
+```
+
+### Best Attackers
+
+```{r}
+# parameters
+id <- "attacker"
+ns <- NS(id)
+type <- "a"
+isTeam <- FALSE
+# data
+f <- rankBySkillDf(ds$statistics$player_agg, type, isTeam)
+# render
+fillRow(
+  flex = c(NA, 1),
+  column(
+    width = 12,
+    renPlotly(id, f, type, marktext, isTeam)
+  ),
+  tags$div(
+    fluidRow(
+      column(width = 9, align = "left", renTitle(type)),
+      column(width = 2, align = "right", renLimit(type)),
+      column(width = 1, align = "right", tags$button("CSV", onclick = sprintf("Reactable.downloadDataCSV('%s')", ns("table"))))
+    ),
+    renTable(id, f, type, isTeam)
+  )
+)
+```
+
+### Best Blockers
+
+```{r}
+# parameters
+id <- "blocker"
+ns <- NS(id)
+type <- "b"
+isTeam <- FALSE
+# data
+f <- rankBySkillDf(ds$statistics$player_agg, type, isTeam)
+# render
+fillRow(
+  flex = c(NA, 1),
+  column(
+    width = 12,
+    renPlotly(id, f, type, marktext, isTeam)
+  ),
+  tags$div(
+    fluidRow(
+      column(width = 9, align = "left", renTitle(type)),
+      column(width = 2, align = "right", renLimit(type)),
+      column(width = 1, align = "right", tags$button("CSV", onclick = sprintf("Reactable.downloadDataCSV('%s')", ns("table"))))
+    ),
+    renTable(id, f, type, isTeam)
+  )
+)
+```
+
+### Best Servers
+
+```{r}
+# parameters
+id <- "server"
+ns <- NS(id)
+type <- "s"
+isTeam <- FALSE
+# data
+f <- rankBySkillDf(ds$statistics$player_agg, type, isTeam)
+# render
+fillRow(
+  flex = c(NA, 1),
+  column(
+    width = 12,
+    renPlotly(id, f, type, marktext, isTeam)
+  ),
+  tags$div(
+    fluidRow(
+      column(width = 9, align = "left", renTitle(type)),
+      column(width = 2, align = "right", renLimit(type)),
+      column(width = 1, align = "right", tags$button("CSV", onclick = sprintf("Reactable.downloadDataCSV('%s')", ns("table"))))
+    ),
+    renTable(id, f, type, isTeam)
+  )
+)
+```
+
+### Best Diggers
+
+```{r}
+# parameters
+id <- "digger"
+ns <- NS(id)
+type <- "d"
+isTeam <- FALSE
+# data
+f <- rankBySkillDf(ds$statistics$player_agg, type, isTeam)
+# render
+fillRow(
+  flex = c(NA, 1),
+  column(
+    width = 12,
+    renPlotly(id, f, type, marktext, isTeam)
+  ),
+  tags$div(
+    fluidRow(
+      column(width = 9, align = "left", renTitle(type)),
+      column(width = 2, align = "right", renLimit(type)),
+      column(width = 1, align = "right", tags$button("CSV", onclick = sprintf("Reactable.downloadDataCSV('%s')", ns("table"))))
+    ),
+    renTable(id, f, type, isTeam)
+  )
+)
+```
+
+### Best Setters
+
+```{r}
+# parameters
+id <- "setter"
+ns <- NS(id)
+type <- "e"
+isTeam <- FALSE
+# data
+f <- rankBySkillDf(ds$statistics$player_agg, type, isTeam)
+# render
+fillRow(
+  flex = c(NA, 1),
+  column(
+    width = 12,
+    renPlotly(id, f, type, marktext, isTeam)
+  ),
+  tags$div(
+    fluidRow(
+      column(width = 9, align = "left", renTitle(type)),
+      column(width = 2, align = "right", renLimit(type)),
+      column(width = 1, align = "right", tags$button("CSV", onclick = sprintf("Reactable.downloadDataCSV('%s')", ns("table"))))
+    ),
+    renTable(id, f, type, isTeam)
+  )
+)
+```
+
+### Best Receivers
+
+```{r}
+# parameters
+id <- "receiver"
+ns <- NS(id)
+type <- "r"
+isTeam <- FALSE
+# data
+f <- rankBySkillDf(ds$statistics$player_agg, type, isTeam)
+# render
+fillRow(
+  flex = c(NA, 1),
+  column(
+    width = 12,
+    renPlotly(id, f, type, marktext, isTeam)
+  ),
+  tags$div(
+    fluidRow(
+      column(width = 9, align = "left", renTitle(type)),
+      column(width = 2, align = "right", renLimit(type)),
+      column(width = 1, align = "right", tags$button("CSV", onclick = sprintf("Reactable.downloadDataCSV('%s')", ns("table"))))
+    ),
+    renTable(id, f, type, isTeam)
+  )
+)
+```
+
+### Best Liberos
+
+```{r}
+# parameters
+id <- "libero"
+ns <- NS(id)
+type <- "l"
+isTeam <- FALSE
+# data
+f <- rankBySkillDf(ds$statistics$player_agg, type, isTeam)
+# render
+fillRow(
+  flex = c(NA, 1),
+  column(
+    width = 12,
+    renPlotly(id, f, type, marktext, isTeam)
+  ),
+  tags$div(
+    fluidRow(
+      column(width = 9, align = "left", renTitle(type)),
+      column(width = 2, align = "right", renLimit(type)),
+      column(width = 1, align = "right", tags$button("CSV", onclick = sprintf("Reactable.downloadDataCSV('%s')", ns("table"))))
+    ),
+    renTable(id, f, type, isTeam)
+  )
+)
+```
+
+Team Charts
+=====================================
+
+Row {.tabset}
+-------------------------------------
+
+### Best Scorers
+
+```{r}
+# parameters
+id <- "scorer-team"
+ns <- NS(id)
+type <- "c"
+isTeam <- TRUE
+# data
+f <- rankBySkillDf(ds$statistics$team_agg, type, isTeam)
+# render
+fillRow(
+  flex = c(NA, 1),
+  column(
+    width = 12,
+    renPlotly(id, f, type, marktext, isTeam)
+  ),
+  tags$div(
+    fluidRow(
+      column(width = 9, align = "left", renTitle(type)),
+      column(width = 2, align = "right", renLimit(type)),
+      column(width = 1, align = "right", tags$button("CSV", onclick = sprintf("Reactable.downloadDataCSV('%s')", ns("table"))))
+    ),
+    renTable(id, f, type, isTeam)
+  )
+)
+```
+
+### Best Attackers
+
+```{r}
+# parameters
+id <- "attacker-team"
+ns <- NS(id)
+type <- "a"
+isTeam <- TRUE
+# data
+f <- rankBySkillDf(ds$statistics$team_agg, type, isTeam)
+# render
+fillRow(
+  flex = c(NA, 1),
+  column(
+    width = 12,
+    renPlotly(id, f, type, marktext, isTeam)
+  ),
+  tags$div(
+    fluidRow(
+      column(width = 9, align = "left", renTitle(type)),
+      column(width = 2, align = "right", renLimit(type)),
+      column(width = 1, align = "right", tags$button("CSV", onclick = sprintf("Reactable.downloadDataCSV('%s')", ns("table"))))
+    ),
+    renTable(id, f, type, isTeam)
+  )
+)
+```
+
+### Best Blockers
+
+```{r}
+# parameters
+id <- "blocker-team"
+ns <- NS(id)
+type <- "b"
+isTeam <- TRUE
+# data
+f <- rankBySkillDf(ds$statistics$team_agg, type, isTeam)
+# render
+fillRow(
+  flex = c(NA, 1),
+  column(
+    width = 12,
+    renPlotly(id, f, type, marktext, isTeam)
+  ),
+  tags$div(
+    fluidRow(
+      column(width = 9, align = "left", renTitle(type)),
+      column(width = 2, align = "right", renLimit(type)),
+      column(width = 1, align = "right", tags$button("CSV", onclick = sprintf("Reactable.downloadDataCSV('%s')", ns("table"))))
+    ),
+    renTable(id, f, type, isTeam)
+  )
+)
+```
+
+### Best Servers
+
+```{r}
+# parameters
+id <- "server-team"
+ns <- NS(id)
+type <- "s"
+isTeam <- TRUE
+# data
+f <- rankBySkillDf(ds$statistics$team_agg, type, isTeam)
+# render
+fillRow(
+  flex = c(NA, 1),
+  column(
+    width = 12,
+    renPlotly(id, f, type, marktext, isTeam)
+  ),
+  tags$div(
+    fluidRow(
+      column(width = 9, align = "left", renTitle(type)),
+      column(width = 2, align = "right", renLimit(type)),
+      column(width = 1, align = "right", tags$button("CSV", onclick = sprintf("Reactable.downloadDataCSV('%s')", ns("table"))))
+    ),
+    renTable(id, f, type, isTeam)
+  )
+)
+```
+
+### Best Diggers
+
+```{r}
+# parameters
+id <- "digger-team"
+ns <- NS(id)
+type <- "d"
+isTeam <- TRUE
+# data
+f <- rankBySkillDf(ds$statistics$team_agg, type, isTeam)
+# render
+fillRow(
+  flex = c(NA, 1),
+  column(
+    width = 12,
+    renPlotly(id, f, type, marktext, isTeam)
+  ),
+  tags$div(
+    fluidRow(
+      column(width = 9, align = "left", renTitle(type)),
+      column(width = 2, align = "right", renLimit(type)),
+      column(width = 1, align = "right", tags$button("CSV", onclick = sprintf("Reactable.downloadDataCSV('%s')", ns("table"))))
+    ),
+    renTable(id, f, type, isTeam)
+  )
+)
+```
+
+### Best Setters
+
+```{r}
+# parameters
+id <- "setter-team"
+ns <- NS(id)
+type <- "e"
+isTeam <- TRUE
+# data
+f <- rankBySkillDf(ds$statistics$team_agg, type, isTeam)
+# render
+fillRow(
+  flex = c(NA, 1),
+  column(
+    width = 12,
+    renPlotly(id, f, type, marktext, isTeam)
+  ),
+  tags$div(
+    fluidRow(
+      column(width = 9, align = "left", renTitle(type)),
+      column(width = 2, align = "right", renLimit(type)),
+      column(width = 1, align = "right", tags$button("CSV", onclick = sprintf("Reactable.downloadDataCSV('%s')", ns("table"))))
+    ),
+    renTable(id, f, type, isTeam)
+  )
+)
+```
+
+### Best Receivers
+
+```{r}
+# parameters
+id <- "receiver-team"
+ns <- NS(id)
+type <- "r"
+isTeam <- TRUE
+# data
+f <- rankBySkillDf(ds$statistics$team_agg, type, isTeam)
+# render
+fillRow(
+  flex = c(NA, 1),
+  column(
+    width = 12,
+    renPlotly(id, f, type, marktext, isTeam)
+  ),
+  tags$div(
+    fluidRow(
+      column(width = 9, align = "left", renTitle(type)),
+      column(width = 2, align = "right", renLimit(type)),
+      column(width = 1, align = "right", tags$button("CSV", onclick = sprintf("Reactable.downloadDataCSV('%s')", ns("table"))))
+    ),
+    renTable(id, f, type, isTeam)
+  )
+)
+```
+
+### Team Errors
+
+```{r}
+# parameters
+id <- "error-team"
+ns <- NS(id)
+type <- "f"
+isTeam <- TRUE
+# data
+f <- rankBySkillDf(ds$statistics$team_agg, type, isTeam)
+# render
+fillRow(
+  flex = c(NA, 1),
+  column(
+    width = 12,
+    renPlotly(id, f, type, marktext, isTeam)
+  ),
+  tags$div(
+    fluidRow(
+      column(width = 9, align = "left", renTitle(type)),
+      column(width = 2, align = "right", renLimit(type)),
+      column(width = 1, align = "right", tags$button("CSV", onclick = sprintf("Reactable.downloadDataCSV('%s')", ns("table"))))
+    ),
+    renTable(id, f, type, isTeam)
+  )
+)
+```
+

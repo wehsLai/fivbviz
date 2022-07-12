@@ -1,4 +1,4 @@
-hline <- function(y = 0, color = "#aaa") {
+hline <- function(y = 0, color = "#AAA") {
   list(
     name = paste0("Value: ", y),
     type = "line",
@@ -8,11 +8,11 @@ hline <- function(y = 0, color = "#aaa") {
     xref = "paper",
     y0 = y,
     y1 = y,
-    line = list(color = color, opacity = .5)
+    line = list(color = color, opacity = 1)
   )
 }
 
-vline <- function(x = 0, color = "#aaa") {
+vline <- function(x = 0, color = "#AAA") {
   list(
     name = paste0("Value: ", x),
     type = "line",
@@ -22,12 +22,12 @@ vline <- function(x = 0, color = "#aaa") {
     yref = "paper",
     x0 = x,
     x1 = x,
-    line = list(color = color, opacity = .5)
+    line = list(color = color, opacity = 1)
   )
 }
 
 # draw player XY chart
-playerXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", ytitle = "", bgcolor = "#EBEBEB") {
+playerXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", ytitle = "") {
   if (missing(data)) stop("playerXyChart must input data")
 
   mx <- median(data$origData()$x)
@@ -53,6 +53,7 @@ playerXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", y
     ) %>%
     layout(
       title = list(
+        xref = "paper",
         y = 0.95,
         text = paste0(
           "<b>",
@@ -66,25 +67,27 @@ playerXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", y
         title = list(text = xtitle),
         autorange = "reversed",
         showgrid = TRUE,
-        gridcolor = grid.color
+        gridcolor = plotlyColor$grid
       ),
       yaxis = list(
         title = list(text = ytitle),
         showgrid = TRUE,
-        gridcolor = grid.color
+        gridcolor = plotlyColor$grid
       ),
-      shapes = list(hline(my, median.color), vline(mx, median.color)),
+      legend = list(itemsizing = "constant"),
+      shapes = list(hline(my, plotlyColor$medianline), vline(mx, plotlyColor$medianline)),
       margin = list(
         t = 80
       ),
       font = list(family = "Source Sans Pro"),
-      plot_bgcolor = bgcolor,
-      width = 650, height = 650
+      plot_bgcolor = plotlyColor$bg,
+      width = 650,
+      height = 650
     )
 }
 
 # draw player Bar chart
-playerBarChart <- function(data, title = "", subtitle = "", xtitle = "", ytitle = "", bgcolor = "#EBEBEB") {
+playerBarChart <- function(data, title = "", subtitle = "", xtitle = "", ytitle = "") {
   if (missing(data)) stop("playerBarChart must input data")
 
   plot_ly(data, type = "bar", orientation = "h") %>%
@@ -117,12 +120,13 @@ playerBarChart <- function(data, title = "", subtitle = "", xtitle = "", ytitle 
       y = ~player.teamName,
       text = ~Total,
       textposition = "right",
-      showlegend = F,
+      showlegend = FALSE,
       name = "Total"
     ) %>%
     layout(
       barmode = "stack",
       title = list(
+        xref = "paper",
         y = 0.95,
         text = paste0(
           "<b>",
@@ -135,30 +139,35 @@ playerBarChart <- function(data, title = "", subtitle = "", xtitle = "", ytitle 
       xaxis = list(
         title = list(text = ""),
         showgrid = TRUE,
-        gridcolor = grid.color
+        gridcolor = plotlyColor$grid
       ),
       yaxis = list(
         title = list(text = ""),
         showgrid = FALSE,
-        gridcolor = grid.color
+        gridcolor = plotlyColor$grid
       ),
+      legend = list(itemsizing = "constant"),
       margin = list(
         t = 80
       ),
       font = list(family = "Source Sans Pro"),
-      plot_bgcolor = bgcolor,
-      width = 650, height = 650
+      plot_bgcolor = plotlyColor$bg,
+      width = 650,
+      height = 650
     )
 }
 
 # draw team XY chart
-teamXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", ytitle = "", bgcolor = "#EBEBEB") {
+teamXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", ytitle = "") {
   if (missing(data)) stop("teamXyChart must input data")
 
   mx <- median(data$x)
   my <- median(data$y)
 
-  s <- max(diff(range(data$x)), diff(range(data$y))) * 0.05
+  # Use the ideal sizeref value
+  desired_maximum_marker_size <- 10
+  sizerefx <- 5 * diff(range(data$x)) / (desired_maximum_marker_size**2)
+  sizerefy <- 5 * diff(range(data$y)) / (desired_maximum_marker_size**2)
 
   imglist <- map(c(1:nrow(data)), function(i) {
     list(
@@ -169,8 +178,8 @@ teamXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", yti
       yanchor = "middle",
       x = data$x[i],
       y = data$y[i],
-      sizex = s,
-      sizey = s,
+      sizex = sizerefx,
+      sizey = sizerefy,
       opacity = .7,
       layer = "above"
     )
@@ -189,6 +198,7 @@ teamXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", yti
     ) %>%
     layout(
       title = list(
+        xref = "paper",
         y = 0.95,
         text = paste0(
           "<b>",
@@ -202,26 +212,28 @@ teamXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", yti
         title = list(text = xtitle),
         autorange = "reversed",
         showgrid = TRUE,
-        gridcolor = grid.color
+        gridcolor = plotlyColor$grid
       ),
       yaxis = list(
         title = list(text = ytitle),
         showgrid = TRUE,
-        gridcolor = grid.color
+        gridcolor = plotlyColor$grid
       ),
-      shapes = list(hline(my, median.color), vline(mx, median.color)),
+      legend = list(itemsizing = "constant"),
+      shapes = list(hline(my, plotlyColor$medianline), vline(mx, plotlyColor$medianline)),
       images = imglist,
       margin = list(
         t = 80
       ),
       font = list(family = "Source Sans Pro"),
-      plot_bgcolor = bgcolor,
-      width = 650, height = 650
+      plot_bgcolor = plotlyColor$bg,
+      width = 650,
+      height = 650
     )
 }
 
 # draw team Bar chart
-teamBarChart <- function(data, title = "", subtitle = "", xtitle = "", ytitle = "", bgcolor = "#EBEBEB") {
+teamBarChart <- function(data, title = "", subtitle = "", xtitle = "", ytitle = "") {
   if (missing(data)) stop("teamBarChart must input data")
 
   plot_ly(data, type = "bar", orientation = "h") %>%
@@ -254,12 +266,13 @@ teamBarChart <- function(data, title = "", subtitle = "", xtitle = "", ytitle = 
       y = ~team.code,
       text = ~Total,
       textposition = "right",
-      showlegend = F,
+      showlegend = FALSE,
       name = "Total"
     ) %>%
     layout(
       barmode = "stack",
       title = list(
+        xref = "paper",
         y = 0.95,
         text = paste0(
           "<b>",
@@ -272,18 +285,20 @@ teamBarChart <- function(data, title = "", subtitle = "", xtitle = "", ytitle = 
       xaxis = list(
         title = list(text = ""),
         showgrid = TRUE,
-        gridcolor = grid.color
+        gridcolor = plotlyColor$grid
       ),
       yaxis = list(
         title = list(text = ""),
         showgrid = FALSE,
-        gridcolor = grid.color
+        gridcolor = plotlyColor$grid
       ),
+      legend = list(itemsizing = "constant"),
       margin = list(
         t = 80
       ),
       font = list(family = "Source Sans Pro"),
-      plot_bgcolor = bgcolor,
-      width = 650, height = 650
+      plot_bgcolor = plotlyColor$bg,
+      width = 650,
+      height = 650
     )
 }

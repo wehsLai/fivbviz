@@ -22,10 +22,13 @@ spike_limit <- 0.15
 reception_limit <- 0.2
 type_p5 <- c("c", "a", "b", "s", "d", "e", "r", "l")
 type_p6 <- c("c", "a", "b", "s", "d", "e", "r", "f")
-grid.color <- "#d6d6d6"
-median.color <- "#fddd60"
 pos.color <- RColorBrewer::brewer.pal(6, "Set2")
 names(pos.color) <- c("MB", "OP", "OH", "S", "L", "U")
+plotlyColor <- list(
+  bg = "#EBEBEB",
+  grid = "#FFFFFF",
+  medianline = "#FDDD60"
+)
 p.col <- c(No = "noShirt", Name = "name", "player.teamName", `Pos.` = "player.volleyPosition", Team = "team.code")
 t.col <- c(Team = "team", "team.code")
 scorer.col <- c(Attack = "spikePoint", Block = "blockPoint", Serve = "servePoint", Total = "pointTotal", `Avg. by set` = "pointPointAverageBySet")
