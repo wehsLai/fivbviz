@@ -1,41 +1,309 @@
 ---
-title: "fivbviz"
+title: "🏐fivbviz"
+author: "wehsLai"
 runtime: shiny
 output: 
   flexdashboard::flex_dashboard:
-    orientation: columns
-    # vertical_layout: fill or scroll
+    orientation: rows
+    vertical_layout: fill
+    source_code: "https://github.com/wehsLai/fivbviz"
     theme: 
       version: 4
+      base_font:
+        google: "Source Sans Pro"
+      code_font:
+        google: "Fira Code"
 ---
 
 ```{r setup, include=FALSE}
 source("R/global.R")
-source("R/module_tournaments.R")
-source("R/module_download.R")
+source("R/data_transform.R")
+source("R/chart.R")
+source("R/helper.R")
+source("R/mod_dataFilter.R")
+source("R/mod_download.R")
+source("R/mod_tournaments.R")
+source("R/mod_rankBySkill.R")
+autoWaiter()
 ```
 
 Tournament
-=====================================  
+=====================================
 
-Column {data-width=1000}
+Control {.sidebar}
 -------------------------------------
-    
-### tournament list
-    
+
 ```{r}
-autoWaiter()
-tournamentsUI("tournaments")
-# 先open才可以download
-# 回傳rv$data 為tournament detail
-rv <- tournamentsServer("tournaments", tournaments)
+dataFilterUI("filter")
+downloadUI("rds", "RDS")
+downloadUI("rp", "Report", color = "danger")
+reactive({
+  if (!is.null(rv$ds)) {
+    dataFilterServer("filter")
+    downloadServer("rds", type = "ds")
+    downloadServer("rp", type = "report")
+  }
+})
 ```
 
+Row {data-width="600"}
+-------------------------------------
 
-Download
-=====================================  
+### Tournaments
 
 ```{r}
-# downloadUI("dl")
-# downloadServer("dl", rv)
+tournamentsUI("tournaments")
+tournamentsServer("tournaments")
+```
+
+Player Charts
+=====================================
+
+Row {.tabset}
+-------------------------------------
+
+### Best Scorers
+
+```{r}
+rankBySkillUI("scorer")
+observe({
+  if (!is.null(rv$fds)) {
+    type <- "c"
+    isTeam <- FALSE
+    f <- rankBySkillDfServer("scorer", rv$fds$statistics$player_agg, type = type, isTeam = isTeam)
+    rankBySkillChartServer("scorer", f, type = type, isTeam = isTeam)
+    rankBySkillTableServer("scorer", f, type = type, isTeam = isTeam)
+  }
+})
+```
+
+### Best Attackers
+
+```{r}
+rankBySkillUI("attacker")
+observe({
+  if (!is.null(rv$fds)) {
+    type <- "a"
+    isTeam <- FALSE
+    f <- rankBySkillDfServer("attacker", rv$fds$statistics$player_agg, type = type, isTeam = isTeam)
+    rankBySkillChartServer("attacker", f, type = type, isTeam = isTeam)
+    rankBySkillTableServer("attacker", f, type = type, isTeam = isTeam)
+  }
+})
+```
+
+### Best Blockers
+
+```{r}
+rankBySkillUI("blocker")
+observe({
+  if (!is.null(rv$fds)) {
+    type <- "b"
+    isTeam <- FALSE
+    f <- rankBySkillDfServer("blocker", rv$fds$statistics$player_agg, type = type, isTeam = isTeam)
+    rankBySkillChartServer("blocker", f, type = type, isTeam = isTeam)
+    rankBySkillTableServer("blocker", f, type = type, isTeam = isTeam)
+  }
+})
+```
+
+### Best Servers
+
+```{r}
+rankBySkillUI("server")
+observe({
+  if (!is.null(rv$fds)) {
+    type <- "s"
+    isTeam <- FALSE
+    f <- rankBySkillDfServer("server", rv$fds$statistics$player_agg, type = type, isTeam = isTeam)
+    rankBySkillChartServer("server", f, type = type, isTeam = isTeam)
+    rankBySkillTableServer("server", f, type = type, isTeam = isTeam)
+  }
+})
+```
+
+### Best Diggers
+
+```{r}
+rankBySkillUI("digger")
+observe({
+  if (!is.null(rv$fds)) {
+    type <- "d"
+    isTeam <- FALSE
+    f <- rankBySkillDfServer("digger", rv$fds$statistics$player_agg, type = type, isTeam = isTeam)
+    rankBySkillChartServer("digger", f, type = type, isTeam = isTeam)
+    rankBySkillTableServer("digger", f, type = type, isTeam = isTeam)
+  }
+})
+```
+
+### Best Setters
+
+```{r}
+rankBySkillUI("setter")
+observe({
+  if (!is.null(rv$fds)) {
+    type <- "e"
+    isTeam <- FALSE
+    f <- rankBySkillDfServer("setter", rv$fds$statistics$player_agg, type = type, isTeam = isTeam)
+    rankBySkillChartServer("setter", f, type = type, isTeam = isTeam)
+    rankBySkillTableServer("setter", f, type = type, isTeam = isTeam)
+  }
+})
+```
+
+### Best Receivers
+
+```{r}
+rankBySkillUI("receiver")
+observe({
+  if (!is.null(rv$fds)) {
+    type <- "r"
+    isTeam <- FALSE
+    f <- rankBySkillDfServer("receiver", rv$fds$statistics$player_agg, type = type, isTeam = isTeam)
+    rankBySkillChartServer("receiver", f, type = type, isTeam = isTeam)
+    rankBySkillTableServer("receiver", f, type = type, isTeam = isTeam)
+  }
+})
+```
+
+### Best Liberos
+
+```{r}
+rankBySkillUI("libero")
+observe({
+  if (!is.null(rv$fds)) {
+    type <- "l"
+    isTeam <- FALSE
+    f <- rankBySkillDfServer("libero", rv$fds$statistics$player_agg, type = type, isTeam = isTeam)
+    rankBySkillChartServer("libero", f, type = type, isTeam = isTeam)
+    rankBySkillTableServer("libero", f, type = type, isTeam = isTeam)
+  }
+})
+```
+
+Team Charts
+=====================================
+
+Row {.tabset}
+-------------------------------------
+
+### Best Scorers
+
+```{r}
+rankBySkillUI("scorer-team")
+observe({
+  if (!is.null(rv$fds)) {
+    type <- "c"
+    isTeam <- TRUE
+    f <- rankBySkillDfServer("scorer-team", rv$fds$statistics$team_agg, type = type, isTeam = isTeam)
+    rankBySkillChartServer("scorer-team", f, type = type, isTeam = isTeam)
+    rankBySkillTableServer("scorer-team", f, type = type, isTeam = isTeam)
+  }
+})
+```
+
+### Best Attackers
+
+```{r}
+rankBySkillUI("attacker-team")
+observe({
+  if (!is.null(rv$fds)) {
+    type <- "a"
+    isTeam <- TRUE
+    f <- rankBySkillDfServer("attacker-team", rv$fds$statistics$team_agg, type = type, isTeam = isTeam)
+    rankBySkillChartServer("attacker-team", f, type = type, isTeam = isTeam)
+    rankBySkillTableServer("attacker-team", f, type = type, isTeam = isTeam)
+  }
+})
+```
+
+### Best Blockers
+
+```{r}
+rankBySkillUI("blocker-team")
+observe({
+  if (!is.null(rv$fds)) {
+    type <- "b"
+    isTeam <- TRUE
+    f <- rankBySkillDfServer("blocker-team", rv$fds$statistics$team_agg, type = type, isTeam = isTeam)
+    rankBySkillChartServer("blocker-team", f, type = type, isTeam = isTeam)
+    rankBySkillTableServer("blocker-team", f, type = type, isTeam = isTeam)
+  }
+})
+```
+
+### Best Servers
+
+```{r}
+rankBySkillUI("server-team")
+observe({
+  if (!is.null(rv$fds)) {
+    type <- "s"
+    isTeam <- TRUE
+    f <- rankBySkillDfServer("server-team", rv$fds$statistics$team_agg, type = type, isTeam = isTeam)
+    rankBySkillChartServer("server-team", f, type = type, isTeam = isTeam)
+    rankBySkillTableServer("server-team", f, type = type, isTeam = isTeam)
+  }
+})
+```
+
+### Best Diggers
+
+```{r}
+rankBySkillUI("digger-team")
+observe({
+  if (!is.null(rv$fds)) {
+    type <- "d"
+    isTeam <- TRUE
+    f <- rankBySkillDfServer("digger-team", rv$fds$statistics$team_agg, type = type, isTeam = isTeam)
+    rankBySkillChartServer("digger-team", f, type = type, isTeam = isTeam)
+    rankBySkillTableServer("digger-team", f, type = type, isTeam = isTeam)
+  }
+})
+```
+
+### Best Setters
+
+```{r}
+rankBySkillUI("setter-team")
+observe({
+  if (!is.null(rv$fds)) {
+    type <- "e"
+    isTeam <- TRUE
+    f <- rankBySkillDfServer("setter-team", rv$fds$statistics$team_agg, type = type, isTeam = isTeam)
+    rankBySkillChartServer("setter-team", f, type = type, isTeam = isTeam)
+    rankBySkillTableServer("setter-team", f, type = type, isTeam = isTeam)
+  }
+})
+```
+
+### Best Receivers
+
+```{r}
+rankBySkillUI("receiver-team")
+observe({
+  if (!is.null(rv$fds)) {
+    type <- "r"
+    isTeam <- TRUE
+    f <- rankBySkillDfServer("receiver-team", rv$fds$statistics$team_agg, type = type, isTeam = isTeam)
+    rankBySkillChartServer("receiver-team", f, type = type, isTeam = isTeam)
+    rankBySkillTableServer("receiver-team", f, type = type, isTeam = isTeam)
+  }
+})
+```
+
+### Team Errors
+
+```{r}
+rankBySkillUI("error-team")
+observe({
+  if (!is.null(rv$fds)) {
+    type <- "f"
+    isTeam <- TRUE
+    f <- rankBySkillDfServer("error-team", rv$fds$statistics$team_agg, type = type, isTeam = isTeam)
+    rankBySkillChartServer("error-team", f, type = type, isTeam = isTeam)
+    rankBySkillTableServer("error-team", f, type = type, isTeam = isTeam)
+  }
+})
 ```
