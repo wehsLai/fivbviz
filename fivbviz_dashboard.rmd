@@ -4,9 +4,9 @@ author: "wehsLai"
 runtime: shiny
 output: 
   flexdashboard::flex_dashboard:
+    source_code: "https://github.com/wehsLai/fivbviz"
     orientation: rows
     vertical_layout: fill
-    source_code: "https://github.com/wehsLai/fivbviz"
     theme: 
       version: 4
       base_font:

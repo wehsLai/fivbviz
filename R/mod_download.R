@@ -10,7 +10,7 @@ downloadServer <- function(id, type) {
     if (type == "ds") {
       output$dl <- downloadHandler(
         filename = function() {
-          t <- paste0(markText, ".rds")
+          t <- paste0(tolower(rv$ds$tournament$code), ".rds")
         },
         content = function(file) {
           saveRDS(rv$ds, file = file)
@@ -19,7 +19,7 @@ downloadServer <- function(id, type) {
     } else if (type == "report") {
       output$dl <- downloadHandler(
         filename = function() {
-          t <- gsub(" ", "_", paste0(rv$marktext, ".html"))
+          t <- gsub(" ", "_", paste0(tolower(rv$ds$tournament$code), ".html"))
         },
         content = function(file) {
           # Copy the report file to a temporary directory before processing it, in

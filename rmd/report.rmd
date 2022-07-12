@@ -3,6 +3,7 @@ title: "🏐fivbviz"
 author: "wehsLai"
 output: 
   flexdashboard::flex_dashboard:
+    source_code: "https://github.com/wehsLai/fivbviz"
     orientation: rows
     vertical_layout: fill
     theme: 
