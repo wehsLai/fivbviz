@@ -1,7 +1,7 @@
 tournamentsUI <- function(id) {
   ns <- NS(id)
   fillCol(
-    height = "790", flex = c(NA, 1),
+    height = "790px", flex = c(NA, 1),
     actionBttn(ns("open"), label = "Open", style = "bordered", color = "primary", size = "sm"),
     reactableOutput(ns("table"))
   )
@@ -12,7 +12,6 @@ tournamentsServer <- function(id, showSeason = TRUE) {
     # get tournaments list
     tournaments <- reactive({
       pl <- list(Fields = "No Season ShortNameOrName StartDate EndDate Gender OrganizerType Status")
-      # readRDS("data/tournaments.rds")
       v_get_volley_tournament_list(parent = pl) %>% arrange(desc(startDate))
     })
 
@@ -49,13 +48,17 @@ tournamentsServer <- function(id, showSeason = TRUE) {
 
     # open selected tournament
     observeEvent(input$open, {
+      if(is.null(sel_row())) {
+          stop("Select one tournament")
+      } else {
       waiter_show(html = waiting_screen)
       sel <- tournaments()[sel_row(), ]
       rv$ds <- get_tournament_data(sel$no)
-      rv$marktext <- paste0(ifelse(showSeason, paste0(rv$ds$tournament$season, " - "), ""), rv$ds$tournament$shortNameOrName)
       rv$ds$statistics <- add_agg(rv$ds$statistics)
+      rv$marktext <- paste0(ifelse(showSeason, paste0(rv$ds$tournament$season, " - "), ""), rv$ds$tournament$shortNameOrName)
       rv$fds <- rv$ds
       waiter_hide()
+      }
     })
   })
 }

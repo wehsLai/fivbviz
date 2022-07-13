@@ -1,5 +1,5 @@
 ---
-title: "🏐fivbviz"
+title: "fivbviz🏐"
 author: "wehsLai"
 runtime: shiny
 output: 
@@ -33,25 +33,29 @@ Tournament
 Control {.sidebar}
 -------------------------------------
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 dataFilterUI("filter")
-downloadUI("rds", "RDS")
-downloadUI("rp", "Report", color = "danger")
+downloadUI("rds", "RDS", color = "success")
+fluidRow(
+    column(width = 7, downloadUI("dashboard", "dashboard", color = "danger")), 
+    column(width = 5, downloadUI("html", "html", color = "danger"))
+)
 reactive({
   if (!is.null(rv$ds)) {
     dataFilterServer("filter")
     downloadServer("rds", type = "ds")
-    downloadServer("rp", type = "report")
+    downloadServer("dashboard", type = "dashboard")
+    downloadServer("html", type = "html")
   }
 })
 ```
 
-Row {data-width="600"}
+Row
 -------------------------------------
 
 ### Tournaments
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 tournamentsUI("tournaments")
 tournamentsServer("tournaments")
 ```
@@ -63,8 +67,7 @@ Row {.tabset}
 -------------------------------------
 
 ### Best Scorers
-
-```{r}
+```{r message=FALSE, warning=FALSE}
 rankBySkillUI("scorer")
 observe({
   if (!is.null(rv$fds)) {
@@ -79,7 +82,7 @@ observe({
 
 ### Best Attackers
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 rankBySkillUI("attacker")
 observe({
   if (!is.null(rv$fds)) {
@@ -94,7 +97,7 @@ observe({
 
 ### Best Blockers
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 rankBySkillUI("blocker")
 observe({
   if (!is.null(rv$fds)) {
@@ -109,7 +112,7 @@ observe({
 
 ### Best Servers
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 rankBySkillUI("server")
 observe({
   if (!is.null(rv$fds)) {
@@ -124,7 +127,7 @@ observe({
 
 ### Best Diggers
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 rankBySkillUI("digger")
 observe({
   if (!is.null(rv$fds)) {
@@ -139,7 +142,7 @@ observe({
 
 ### Best Setters
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 rankBySkillUI("setter")
 observe({
   if (!is.null(rv$fds)) {
@@ -154,7 +157,7 @@ observe({
 
 ### Best Receivers
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 rankBySkillUI("receiver")
 observe({
   if (!is.null(rv$fds)) {
@@ -169,7 +172,7 @@ observe({
 
 ### Best Liberos
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 rankBySkillUI("libero")
 observe({
   if (!is.null(rv$fds)) {
@@ -190,7 +193,7 @@ Row {.tabset}
 
 ### Best Scorers
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 rankBySkillUI("scorer-team")
 observe({
   if (!is.null(rv$fds)) {
@@ -205,7 +208,7 @@ observe({
 
 ### Best Attackers
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 rankBySkillUI("attacker-team")
 observe({
   if (!is.null(rv$fds)) {
@@ -220,7 +223,7 @@ observe({
 
 ### Best Blockers
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 rankBySkillUI("blocker-team")
 observe({
   if (!is.null(rv$fds)) {
@@ -235,7 +238,7 @@ observe({
 
 ### Best Servers
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 rankBySkillUI("server-team")
 observe({
   if (!is.null(rv$fds)) {
@@ -250,7 +253,7 @@ observe({
 
 ### Best Diggers
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 rankBySkillUI("digger-team")
 observe({
   if (!is.null(rv$fds)) {
@@ -265,7 +268,7 @@ observe({
 
 ### Best Setters
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 rankBySkillUI("setter-team")
 observe({
   if (!is.null(rv$fds)) {
@@ -280,7 +283,7 @@ observe({
 
 ### Best Receivers
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 rankBySkillUI("receiver-team")
 observe({
   if (!is.null(rv$fds)) {
@@ -295,7 +298,7 @@ observe({
 
 ### Team Errors
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 rankBySkillUI("error-team")
 observe({
   if (!is.null(rv$fds)) {

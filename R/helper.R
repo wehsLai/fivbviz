@@ -27,23 +27,28 @@ renLimit <- function(type) {
 renPlotly <- function(id, f, type, marktext, isTeam = FALSE, limit = 5) {
   ns <- NS(id)
   if (isTeam) {
-    if (type %in% c("c")) {
+    if (type == "c") {
       data <- f %>%
         filter(Rk <= 30) %>%
-        arrange(desc(Rk))
+        arrange(desc(Rk), team.code) %>%
+        select(team.code, Attack, Block, Serve, Total, showText)
     } else {
-      data <- f
+      data <- f %>% select(x, y, team.code, showText)
     }
   } else {
     if (type == "c") {
       data <- f %>%
         filter(Rk <= 30) %>%
-        arrange(desc(Rk))
+        arrange(desc(Rk), Team) %>%
+        select(player.teamName, Attack, Block, Serve, Total, showText)
     } else if (type == "l") {
-      data <- f %>% highlight_key(~Name, ns("select"))
+      data <- f %>%
+        select(x, y, Name, player.teamName, `Pos.`, Total, showText) %>%
+        highlight_key(~Name, ns("select"))
     } else {
       data <- f %>%
         filter(`Load %` >= limit) %>%
+        select(x, y, Name, player.teamName, `Pos.`, Total, showText) %>%
         highlight_key(~Name, ns("select"))
     }
   }
@@ -111,7 +116,7 @@ renPlotly <- function(id, f, type, marktext, isTeam = FALSE, limit = 5) {
       # pxy
       highlight(
         playerXyChart(data, title, subtitle = marktext, xtitle = xtitle, ytitle = ytitle),
-        selectize = TRUE, persistent = TRUE
+        on = "plotly_selected", off = "plotly_deselect", selectize = TRUE, persistent = TRUE
       )
     }
   }

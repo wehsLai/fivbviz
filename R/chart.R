@@ -166,8 +166,8 @@ teamXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", yti
 
   # Use the ideal sizeref value
   desired_maximum_marker_size <- 10
-  sizerefx <- 5 * diff(range(data$x)) / (desired_maximum_marker_size**2)
-  sizerefy <- 5 * diff(range(data$y)) / (desired_maximum_marker_size**2)
+  sizerefx <- 7 * diff(range(data$x)) / (desired_maximum_marker_size**2)
+  sizerefy <- 7 * diff(range(data$y)) / (desired_maximum_marker_size**2)
 
   imglist <- map(c(1:nrow(data)), function(i) {
     list(
@@ -192,6 +192,7 @@ teamXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", yti
       x = ~x,
       y = ~y,
       text = "",
+      # text = ~team.code,
       size = 30,
       hoverinfo = "x+y+text",
       hovertext = ~showText
@@ -201,11 +202,7 @@ teamXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", yti
         xref = "paper",
         y = 0.95,
         text = paste0(
-          "<b>",
-          title,
-          "</b><br><sub>",
-          subtitle,
-          "</sub>"
+          "<b>", title, "</b><br><sub>", subtitle, "</sub>"
         )
       ),
       xaxis = list(

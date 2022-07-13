@@ -1,10 +1,8 @@
 dataFilterUI <- function(id) {
   ns <- NS(id)
-  # fillCol(
-  #   flex = c(NA, NA, 1),
   tagList(
     pickerInput(ns("round_pick"),
-      label = "Round", choices = c(),
+      label = "Round", choices = c(), selected = NULL,
       multiple = TRUE, options = list(`actions-box` = TRUE), width = "fit", inline = TRUE
     ),
     actionBttn(ns("filter"), label = "Filter", style = "bordered", color = "primary", size = "sm"),
@@ -19,10 +17,12 @@ dataFilterServer <- function(id, showSeason = TRUE) {
     })
 
     observe({
-      updatePickerInput(session = session, inputId = "round_pick", choices = unique(rv$ds$matches$poolRoundName))
+      # print(rv$ds$tournament$no)
+      updatePickerInput(session = session, inputId = "round_pick", choices = unique(rv$ds$matches$poolRoundName), selected = character(0))
     })
 
-    pick <- reactive(input$round_pick)
+    pick <- reactive({
+        input$round_pick})
 
     # filter by selected round
     observeEvent(input$filter, {

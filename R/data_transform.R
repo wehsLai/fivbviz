@@ -448,8 +448,7 @@ get_p6 <- function(team_agg, type = "c", showAll = FALSE, number = 10) {
       "c" = {
         out <- team_agg %>%
           mutate(showText = paste0(
-            "<b>", team.name, "<br>",
-            team.code, "</b><br>",
+            "<b>", team.code, " - ", team.name, "</b><br>",
             "Rank: ", scoreRank, "<br>",
             "Attack: ", spikePoint, "<br>",
             "Block: ", blockPoint, "<br>",
@@ -462,8 +461,7 @@ get_p6 <- function(team_agg, type = "c", showAll = FALSE, number = 10) {
       "a" = {
         out <- team_agg %>%
           mutate(showText = paste0(
-            "<b>", team.name, "<br>",
-            team.code, "</b><br>",
+            "<b>", team.code, " - ", team.name, "</b><br>",
             "Rank: ", spikeRank, "<br>",
             "Attacks: ", spikePoint, "<br>",
             "Faults: ", spikeFault, "<br>",
@@ -477,8 +475,7 @@ get_p6 <- function(team_agg, type = "c", showAll = FALSE, number = 10) {
       "b" = {
         out <- team_agg %>%
           mutate(showText = paste0(
-            "<b>", team.name, "<br>",
-            team.code, "</b><br>",
+            "<b>", team.code, " - ", team.name, "</b><br>",
             "Rank: ", blockRank, "<br>",
             "Kill Blocks: ", blockPoint, "<br>",
             "Faults: ", blockFault, "<br>",
@@ -492,8 +489,7 @@ get_p6 <- function(team_agg, type = "c", showAll = FALSE, number = 10) {
       "s" = {
         out <- team_agg %>%
           mutate(showText = paste0(
-            "<b>", team.name, "<br>",
-            team.code, "</b><br>",
+            "<b>", team.code, " - ", team.name, "</b><br>",
             "Rank: ", serveRank, "<br>",
             "Aces: ", servePoint, "<br>",
             "Faults: ", serveFault, "<br>",
@@ -507,8 +503,7 @@ get_p6 <- function(team_agg, type = "c", showAll = FALSE, number = 10) {
       "d" = {
         out <- team_agg %>%
           mutate(showText = paste0(
-            "<b>", team.name, "<br>",
-            team.code, "</b><br>",
+            "<b>", team.code, " - ", team.name, "</b><br>",
             "Rank: ", digRank, "<br>",
             "Digs: ", digExcellent, "<br>",
             "Faults: ", digFault, "<br>",
@@ -522,8 +517,7 @@ get_p6 <- function(team_agg, type = "c", showAll = FALSE, number = 10) {
       "e" = {
         out <- team_agg %>%
           mutate(showText = paste0(
-            "<b>", team.name, "<br>",
-            team.code, "</b><br>",
+            "<b>", team.code, " - ", team.name, "</b><br>",
             "Rank: ", setRank, "<br>",
             "Running Sets: ", setExcellent, "<br>",
             "Faults: ", setFault, "<br>",
@@ -537,8 +531,7 @@ get_p6 <- function(team_agg, type = "c", showAll = FALSE, number = 10) {
       "r" = {
         out <- team_agg %>%
           mutate(showText = paste0(
-            "<b>", team.name, "<br>",
-            team.code, "</b><br>",
+            "<b>", team.code, " - ", team.name, "</b><br>",
             "Rank: ", receptionRank, "<br>",
             "Excellents: ", receptionExcellent, "<br>",
             "Faults: ", receptionFault, "<br>",
@@ -552,8 +545,7 @@ get_p6 <- function(team_agg, type = "c", showAll = FALSE, number = 10) {
       "f" = {
         out <- team_agg %>%
           mutate(showText = paste0(
-            "<b>", team.name, "<br>",
-            team.code, "</b><br>",
+            "<b>", team.code, " - ", team.name, "</b><br>",
             "Rank: ", tfRank, "<br>",
             "Team Errors: ", teamFault, "<br>",
             "Opp. Errors: ", opponentError, "<br>",

@@ -1,25 +1,28 @@
 rankBySkillChartUI <- function(id) {
   ns <- NS(id)
-  fillCol(
+  # fillRow(
     plotlyOutput(ns("chart"))
-  )
+  # )
 }
 
 rankBySkillTableUI <- function(id) {
   ns <- NS(id)
-  fillCol(
-    reactableOutput(ns("table"))
-  )
+  # fillRow(
+    tags$div(
+      fluidRow(
+        column(width = 9, align = "left", textOutput(ns("title"))),
+        column(width = 2, align = "right", textOutput(ns("limit"))),
+        column(width = 1, align = "right", tags$button("CSV", onclick = sprintf("Reactable.downloadDataCSV('%s')", ns("table"))))
+      ),
+      reactableOutput(ns("table"))
+    )
+  # )
 }
 
 rankBySkillUI <- function(id) {
   ns <- NS(id)
-  fillRow(
-    flex = c(NA, 1),
-    column(
-      width = 12,
-      plotlyOutput(ns("chart"))
-    ),
+  fillRow(flex = c(NA, 1),
+    plotlyOutput(ns("chart")),
     tags$div(
       fluidRow(
         column(width = 9, align = "left", textOutput(ns("title"))),

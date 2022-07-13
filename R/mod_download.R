@@ -16,7 +16,7 @@ downloadServer <- function(id, type) {
           saveRDS(rv$ds, file = file)
         }
       )
-    } else if (type == "report") {
+    } else if (type == "dashboard") {
       output$dl <- downloadHandler(
         filename = function() {
           t <- gsub(" ", "_", paste0(tolower(rv$ds$tournament$code), ".html"))
@@ -25,8 +25,8 @@ downloadServer <- function(id, type) {
           # Copy the report file to a temporary directory before processing it, in
           # case we don't have write permissions to the current working dir (which
           # can happen when deployed).
-          tempReport <- file.path(tempdir(), "report.Rmd")
-          file.copy("rmd/report.Rmd", tempReport, overwrite = TRUE)
+          tempReport <- file.path(tempdir(), "report_dashboard.Rmd")
+          file.copy("rmd/report_dashboard.Rmd", tempReport, overwrite = TRUE)
 
           # Set up parameters to pass to Rmd document
           params <- list(
@@ -45,6 +45,35 @@ downloadServer <- function(id, type) {
           )
         }
       )
+    } else if (type == "html") {
+        output$dl <- downloadHandler(
+            filename = function() {
+                t <- gsub(" ", "_", paste0(tolower(rv$ds$tournament$code), ".html"))
+            },
+            content = function(file) {
+                # Copy the report file to a temporary directory before processing it, in
+                # case we don't have write permissions to the current working dir (which
+                # can happen when deployed).
+                tempReport <- file.path(tempdir(), "report_html.Rmd")
+                file.copy("rmd/report_html.Rmd", tempReport, overwrite = TRUE)
+                
+                # Set up parameters to pass to Rmd document
+                params <- list(
+                    ds = rv$ds,
+                    marktext = rv$marktext
+                )
+                print(params$marktext)
+                # Knit the document, passing in the `params` list, and eval it in a
+                # child of the global environment (this isolates the code in the document
+                # from the code in this app).
+                rmarkdown::render(
+                    tempReport,
+                    output_file = file,
+                    params = params,
+                    envir = new.env(parent = globalenv())
+                )
+            }
+        )
     }
   })
 }
