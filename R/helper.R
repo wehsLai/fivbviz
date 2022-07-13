@@ -300,7 +300,7 @@ renTable <- function(id, f, type, isTeam = FALSE, limit = 0, pageSize = 20) {
     data,
     columns = use.colDef,
     defaultColDef = my.colDef,
-    style = list(fontFamily = "Source Sans Pro", fontSize = "0.875rem"),
+    style = list(fontFamily = "Source Sans Pro", fontSize = "0.875rem", minWidth = 650),
     defaultPageSize = pageSize,
     resizable = TRUE,
     highlight = TRUE,
