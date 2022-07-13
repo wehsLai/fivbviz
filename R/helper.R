@@ -96,8 +96,8 @@ renPlotly <- function(id, f, type, marktext, isTeam = FALSE, limit = 5) {
     },
     "f" = {
       title <- "Team Error"
-      xtitle <- "Team Error %"
-      ytitle <- "Opponent Error %"
+      xtitle <- "Error Avg. by set"
+      ytitle <- "Opp. Error Avg. by set"
     }
   )
   out <- if (isTeam) {
