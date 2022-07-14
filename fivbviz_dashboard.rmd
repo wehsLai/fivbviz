@@ -36,10 +36,9 @@ Control {.sidebar}
 ```{r message=FALSE, warning=FALSE}
 dataFilterUI("filter")
 downloadUI("rds", "RDS", color = "success")
-fluidRow(
-    column(width = 7, downloadUI("dashboard", "dashboard", color = "danger")), 
-    column(width = 5, downloadUI("html", "html", color = "danger"))
-)
+downloadUI("dashboard", "dashboard", color = "danger")
+downloadUI("html", "html", color = "danger")
+
 reactive({
   if (!is.null(rv$ds)) {
     dataFilterServer("filter")
