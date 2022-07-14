@@ -31,7 +31,7 @@ downloadServer <- function(id, type) {
 
           # Set up parameters to pass to Rmd document
           params <- list(
-            ds = rv$ds,
+            ds = rv$fds,
             marktext = rv$marktext
           )
 
@@ -62,7 +62,7 @@ downloadServer <- function(id, type) {
 
           # Set up parameters to pass to Rmd document
           params <- list(
-            ds = rv$ds,
+            ds = rv$fds,
             marktext = rv$marktext
           )
           print(params$marktext)
