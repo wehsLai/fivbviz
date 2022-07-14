@@ -166,7 +166,7 @@ renTable <- function(id, f, type, isTeam = FALSE, limit = 0, pageSize = 20) {
           tags$select(
             onchange = sprintf("Reactable.setFilter('%s', '%s', event.target.value || undefined)", ns("table"), name),
             tags$option(value = "", "All"),
-            lapply(unique(values), tags$option),
+            map(unique(values), tags$option),
             "aria-label" = sprintf("Filter %s", name),
             style = "width: 100%; height: 28px;"
           )
@@ -178,7 +178,7 @@ renTable <- function(id, f, type, isTeam = FALSE, limit = 0, pageSize = 20) {
           tags$select(
             onchange = sprintf("Reactable.setFilter('%s', '%s', event.target.value || undefined)", ns("table"), name),
             tags$option(value = "", "All"),
-            lapply(unique(values), tags$option),
+            map(unique(values), tags$option),
             "aria-label" = sprintf("Filter %s", name),
             style = "width: 100%; height: 28px;"
           )

@@ -1,13 +1,13 @@
 rankBySkillChartUI <- function(id) {
   ns <- NS(id)
-  # fillRow(
+  fillRow(
     plotlyOutput(ns("chart"))
-  # )
+  )
 }
 
 rankBySkillTableUI <- function(id) {
   ns <- NS(id)
-  # fillRow(
+  fillRow(
     tags$div(
       fluidRow(
         column(width = 9, align = "left", textOutput(ns("title"))),
@@ -16,12 +16,13 @@ rankBySkillTableUI <- function(id) {
       ),
       reactableOutput(ns("table"))
     )
-  # )
+  )
 }
 
 rankBySkillUI <- function(id) {
   ns <- NS(id)
-  fillRow(flex = c(NA, 1),
+  fillRow(
+    flex = c(NA, 1),
     plotlyOutput(ns("chart")),
     tags$div(
       fluidRow(

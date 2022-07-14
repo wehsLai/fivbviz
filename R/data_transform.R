@@ -284,6 +284,7 @@ get_agg <- function(statistics) {
     group_by(team.code, team.name, noShirt, player.teamName, player.lastName, player.firstName, name = paste(player.lastName, player.firstName), player.volleyPosition) %>%
     calculate_agg(isTeam = FALSE) %>%
     ungroup()
+
   out <- list(
     team_agg = team_agg,
     player_agg = player_agg
@@ -432,6 +433,10 @@ get_p5 <- function(player_agg, type = "c", showAll = FALSE, number = 10) {
       }
     )
     out <- out %>% arrange(Rk, Team, No)
+    out$Name <- factor(sort(out$Name))
+    out$player.teamName <- factor(sort(out$player.teamName))
+    out$Team <- factor(sort(out$Team))
+    out$`Pos.` <- factor(sort(out$`Pos.`))
     if (!showAll) out <- out %>% head(number)
 
     out
@@ -556,6 +561,8 @@ get_p6 <- function(team_agg, type = "c", showAll = FALSE, number = 10) {
       }
     )
     out <- out %>% arrange(Rk, Team)
+    out$Team <- factor(sort(out$Team))
+    out$team.code <- factor(sort(out$team.code))
     if (!showAll) out <- out %>% head(number)
     out
   }
