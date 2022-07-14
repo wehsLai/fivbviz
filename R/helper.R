@@ -30,7 +30,7 @@ renPlotly <- function(id, f, type, marktext, isTeam = FALSE, limit = 5) {
     if (type == "c") {
       data <- f %>%
         filter(Rk <= 30) %>%
-        arrange(desc(Rk), team.code) %>%
+        arrange(desc(Rk), desc(team.code)) %>%
         select(team.code, Attack, Block, Serve, Total, showText)
     } else {
       data <- f %>% select(x, y, team.code, showText)
@@ -39,7 +39,7 @@ renPlotly <- function(id, f, type, marktext, isTeam = FALSE, limit = 5) {
     if (type == "c") {
       data <- f %>%
         filter(Rk <= 30) %>%
-        arrange(desc(Rk), Team) %>%
+        arrange(desc(Rk), desc(Team)) %>%
         select(player.teamName, Attack, Block, Serve, Total, showText)
     } else if (type == "l") {
       data <- f %>%
@@ -166,7 +166,7 @@ renTable <- function(id, f, type, isTeam = FALSE, limit = 0, pageSize = 20) {
           tags$select(
             onchange = sprintf("Reactable.setFilter('%s', '%s', event.target.value || undefined)", ns("table"), name),
             tags$option(value = "", "All"),
-            map(unique(values), tags$option),
+            map(sort(unique(values)), tags$option),
             "aria-label" = sprintf("Filter %s", name),
             style = "width: 100%; height: 28px;"
           )
@@ -178,7 +178,7 @@ renTable <- function(id, f, type, isTeam = FALSE, limit = 0, pageSize = 20) {
           tags$select(
             onchange = sprintf("Reactable.setFilter('%s', '%s', event.target.value || undefined)", ns("table"), name),
             tags$option(value = "", "All"),
-            map(unique(values), tags$option),
+            map(sort(unique(values)), tags$option),
             "aria-label" = sprintf("Filter %s", name),
             style = "width: 100%; height: 28px;"
           )

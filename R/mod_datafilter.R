@@ -22,7 +22,8 @@ dataFilterServer <- function(id, showSeason = TRUE) {
     })
 
     pick <- reactive({
-        input$round_pick})
+      input$round_pick
+    })
 
     # filter by selected round
     observeEvent(input$filter, {
@@ -31,10 +32,12 @@ dataFilterServer <- function(id, showSeason = TRUE) {
         rv$marktext <- paste0(ifelse(showSeason, paste0(rv$ds$tournament$season, " - "), ""), rv$ds$tournament$shortNameOrName)
         rv$fds <- rv$ds
       } else {
-        rv$marktext <- paste0(
-          ifelse(showSeason, paste0(rv$ds$tournament$season, " - "), ""),
-          rv$ds$tournament$shortNameOrName, " - ", paste0(pick(), collapse = ", ")
-        )
+        if (addPoolName) {
+          rv$marktext <- paste0(
+            ifelse(showSeason, paste0(rv$ds$tournament$season, " - "), ""),
+            rv$ds$tournament$shortNameOrName, " - ", paste0(pick(), collapse = ", ")
+          )
+        }
         rv$fds$matches <- rv$ds$matches[rv$ds$matches$poolRoundName %in% pick(), ]
         rv$fds$statistics$Player <- rv$ds$statistics$Player[rv$ds$statistics$Player$noMatch %in% rv$fds$matches$no, ]
         rv$fds$statistics$Team <- rv$ds$statistics$Team[rv$ds$statistics$Team$noMatch %in% rv$fds$matches$no, ]

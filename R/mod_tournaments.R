@@ -48,16 +48,16 @@ tournamentsServer <- function(id, showSeason = TRUE) {
 
     # open selected tournament
     observeEvent(input$open, {
-      if(is.null(sel_row())) {
-          stop("Select one tournament")
+      if (is.null(sel_row())) {
+        stop("Select one tournament")
       } else {
-      waiter_show(html = waiting_screen)
-      sel <- tournaments()[sel_row(), ]
-      rv$ds <- get_tournament_data(sel$no)
-      rv$ds$statistics <- add_agg(rv$ds$statistics)
-      rv$marktext <- paste0(ifelse(showSeason, paste0(rv$ds$tournament$season, " - "), ""), rv$ds$tournament$shortNameOrName)
-      rv$fds <- rv$ds
-      waiter_hide()
+        waiter_show(html = waiting_screen)
+        sel <- tournaments()[sel_row(), ]
+        rv$ds <- get_tournament_data(sel$no)
+        rv$ds$statistics <- add_agg(rv$ds$statistics)
+        rv$marktext <- paste0(ifelse(showSeason, paste0(rv$ds$tournament$season, " - "), ""), rv$ds$tournament$shortNameOrName)
+        rv$fds <- rv$ds
+        waiter_hide()
       }
     })
   })

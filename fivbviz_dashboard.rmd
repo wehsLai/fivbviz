@@ -36,8 +36,8 @@ Control {.sidebar}
 ```{r message=FALSE, warning=FALSE}
 dataFilterUI("filter")
 downloadUI("rds", "RDS", color = "success")
-downloadUI("dashboard", "dashboard", color = "danger")
-downloadUI("html", "html", color = "danger")
+downloadUI("dashboard", "dashboard", color = "warning")
+downloadUI("html", "html", color = "warning")
 
 reactive({
   if (!is.null(rv$ds)) {
