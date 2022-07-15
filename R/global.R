@@ -24,7 +24,7 @@ names(pos.color) <- c("MB", "OP", "OH", "S", "L", "U")
 plotlyColor <- list(
   bg = "#EBEBEB",
   grid = "#FFFFFF",
-  medianline = "#FFD73D"
+  medianline = "#FDDD60"
 )
 
 p.col <- c(No = "noShirt", Name = "name", "player.teamName", `Pos.` = "player.volleyPosition", Team = "team.code")
