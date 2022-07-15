@@ -12,7 +12,6 @@ rm(list = ls())
 # Default Value ----
 v_caching(FALSE)
 v_options(verbose = FALSE)
-addPoolName <- TRUE
 
 rv <- reactiveValues()
 
@@ -25,7 +24,7 @@ names(pos.color) <- c("MB", "OP", "OH", "S", "L", "U")
 plotlyColor <- list(
   bg = "#EBEBEB",
   grid = "#FFFFFF",
-  medianline = "#FDDD60"
+  medianline = "#FFD73D"
 )
 
 p.col <- c(No = "noShirt", Name = "name", "player.teamName", `Pos.` = "player.volleyPosition", Team = "team.code")
