@@ -128,33 +128,16 @@ renTable <- function(id, f, type, isTeam = FALSE, limit = 0, pageSize = 20) {
 
   border <- "1px solid rgba(0, 0, 0, 0.1)"
 
+  data <- rankBySkillshow(f, type, isTeam, limit)
+
   # Define data and basic colDef
   if (isTeam) {
-    # team data
-    if (type == "c") {
-      data <- f %>%
-        select(-team.code, -showText)
-    } else {
-      data <- f %>% select(-team.code, -y, -x, -showText)
-    }
     # team colDef
     use.colDef <- list(
       Rk = colDef(minWidth = 60, headerStyle = list(borderRight = border), style = list(borderRight = border)),
       Team = colDef(minWidth = 200, headerStyle = list(borderRight = border), style = list(borderRight = border), filterable = TRUE)
     )
   } else {
-    # player data
-    if (type == "c") {
-      data <- f %>%
-        select(-player.teamName, -showText)
-    } else if (type %in% c("a", "b", "s", "d", "e", "r")) {
-      data <- f %>%
-        filter(`Load %` >= limit) %>%
-        select(-player.teamName, -y, -x, -showText)
-    } else {
-      data <- f %>%
-        select(-player.teamName, -y, -x, -showText)
-    }
     # player colDef
     use.colDef <- list(
       Rk = colDef(minWidth = 45, headerStyle = list(borderRight = border), style = list(borderRight = border)),

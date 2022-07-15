@@ -5,6 +5,14 @@ downloadUI <- function(id, label = "Download RDS", color = "primary") {
   )
 }
 
+showRkUI <- function(id, label = "showAll", color = "primary", number = 20) {
+  ns <- NS(id)
+  fluidRow(
+    column(width = 4, prettySwitch(ns("switch"), label, status = color, fill = TRUE)),
+    column(width = 6, offset = 2, numericInput(ns("number"), label = "Players", number, min = 0))
+  )
+}
+
 downloadServer <- function(id, type) {
   moduleServer(id, function(input, output, session) {
     if (type == "ds") {
@@ -64,6 +72,38 @@ downloadServer <- function(id, type) {
           params <- list(
             ds = rv$fds,
             marktext = rv$marktext
+          )
+          # Knit the document, passing in the `params` list, and eval it in a
+          # child of the global environment (this isolates the code in the document
+          # from the code in this app).
+          rmarkdown::render(
+            tempReport,
+            output_file = file,
+            params = params,
+            envir = new.env(parent = globalenv())
+          )
+          waiter_hide()
+        }
+      )
+    } else if (type == "p56") {
+      output$dl <- downloadHandler(
+        filename = function() {
+          t <- gsub(" ", "_", paste0(tolower(rv$ds$tournament$code), "_p56.html"))
+        },
+        content = function(file) {
+          waiter_show(html = waiting_screen)
+          # Copy the report file to a temporary directory before processing it, in
+          # case we don't have write permissions to the current working dir (which
+          # can happen when deployed).
+          tempReport <- file.path(tempdir(), "p56.Rmd")
+          file.copy("rmd/p56.Rmd", tempReport, overwrite = TRUE)
+
+          # Set up parameters to pass to Rmd document
+          params <- list(
+            ds = rv$fds,
+            marktext = rv$marktext,
+            showAll = input$switch,
+            number = input$number
           )
           print(params$marktext)
           # Knit the document, passing in the `params` list, and eval it in a

@@ -1,18 +1,21 @@
 dataFilterUI <- function(id) {
   ns <- NS(id)
   tagList(
-    pickerInput(ns("round_pick"),
-      label = "Round", choices = c(), selected = NULL,
-      multiple = TRUE, options = list(`actions-box` = TRUE), width = "fit", inline = TRUE
+    fluidRow(
+      pickerInput(ns("round_pick"),
+        label = "Round", choices = c(), selected = NULL,
+        multiple = TRUE, options = list(`actions-box` = TRUE), width = "fit", inline = TRUE
+      )
     ),
-    actionBttn(ns("filter"), label = "Filter", style = "bordered", color = "primary", size = "sm"),
-    inputPanel(textOutput(ns("msg")))
+    fluidRow(actionBttn(ns("filter"), label = "Filter", style = "bordered", color = "primary", size = "sm")),
+    fluidRow(inputPanel(textOutput(ns("msg"))))
   )
 }
 
-dataFilterServer <- function(id, showSeason = TRUE) {
+dataFilterServer <- function(id, showSeason) {
   moduleServer(id, function(input, output, session) {
     observe({
+      print(rv$marktext)
       output$msg <- renderText(rv$marktext)
     })
 

@@ -12,9 +12,10 @@ output:
         code_font:
           google: "Fira Code"
       toc: true
-      toc_depth: 2
+      toc_depth: 3
       toc_float:
         collapsed: false
+        smooth_scroll: false
       fig_width: 8
       fig_height: 6.5        
 params: 

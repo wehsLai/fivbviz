@@ -35,10 +35,10 @@ rankBySkillUI <- function(id) {
   )
 }
 
-rankBySkillDfServer <- function(id, agg, type, isTeam = FALSE) {
+rankBySkillDfServer <- function(id, agg, type, isTeam = FALSE, showAll = TRUE, number = 10) {
   moduleServer(id, function(input, output, session) {
     f <- reactive({
-      rankBySkillDf(agg, type, isTeam)
+      rankBySkillDf(agg, type, isTeam, showAll, number)
     })
     return(f())
   })

@@ -433,7 +433,7 @@ get_p5 <- function(player_agg, type = "c", showAll = FALSE, number = 10) {
       }
     )
     out <- out %>% arrange(Rk, Team, No)
-    if (!showAll) out <- out %>% head(number)
+    if (!showAll) out <- out %>% filter(Rk <= number)
 
     out
   }
@@ -557,7 +557,8 @@ get_p6 <- function(team_agg, type = "c", showAll = FALSE, number = 10) {
       }
     )
     out <- out %>% arrange(Rk, Team)
-    if (!showAll) out <- out %>% head(number)
+    # Do not filter teams
+    # if (!showAll) out <- out %>% filter(Rk <= number)
     out
   }
 }
@@ -569,13 +570,122 @@ add_agg <- function(statistics) {
   statistics
 }
 
-rankBySkillDf <- function(agg, type, isTeam = FALSE) {
+rankBySkillDf <- function(agg, type, isTeam = FALSE, showAll = TRUE, number = 10) {
   if (isTeam) {
-    out <- get_p6(agg, type, showAll = TRUE)
+    out <- get_p6(agg, type, showAll, number)
   } else {
-    out <- get_p5(agg, type, showAll = TRUE)
+    out <- get_p5(agg, type, showAll, number)
   }
   return(out)
+}
+
+rankBySkillshow <- function(f, type, isTeam = FALSE, limit = 0) {
+  if (isTeam) {
+    # team data
+    if (type == "c") {
+      data <- f %>%
+        select(-team.code, -showText)
+    } else {
+      data <- f %>% select(-team.code, -y, -x, -showText)
+    }
+  } else {
+    # player data
+    if (type == "c") {
+      data <- f %>%
+        select(-player.teamName, -showText)
+    } else if (type %in% c("a", "b", "s", "d", "e", "r")) {
+      data <- f %>%
+        filter(`Load %` >= limit) %>%
+        select(-player.teamName, -y, -x, -showText)
+    } else {
+      data <- f %>%
+        select(-player.teamName, -y, -x, -showText)
+    }
+  }
+}
+
+gtstyle <- function(data, type, isTeam = FALSE, title = "", subtitle = "", spike_limit = .15, reception_limit = .20) {
+  if (missing(title) || title == "") {
+    switch(type,
+      "c" = {
+        title <- "Best Scorers"
+        border <- c("Rk", "Team", "Serve")
+      },
+      "a" = {
+        title <- "Best Attackers"
+        subtitle <- paste0(subtitle, "<br>", sprintf("Load Limit: %0.f %%", spike_limit * 100))
+        border <- c("Rk", "Team", "Total")
+      },
+      "b" = {
+        title <- "Best Blockers"
+        border <- c("Rk", "Team", "Total")
+      },
+      "s" = {
+        title <- "Best Servers"
+        border <- c("Rk", "Team", "Total")
+      },
+      "d" = {
+        title <- "Best Diggers"
+        border <- c("Rk", "Team", "Total")
+      },
+      "e" = {
+        title <- "Best Setters"
+        border <- c("Rk", "Team", "Total")
+      },
+      "r" = {
+        title <- "Best Receivers"
+        subtitle <- paste0(subtitle, "<br>", sprintf("Load Limit: %0.f %%", reception_limit * 100))
+        border <- c("Rk", "Team", "Total")
+      },
+      "l" = {
+        title <- "Best Liberos"
+        border <- c("Rk", "Team", "Total")
+      },
+      "f" = {
+        title <- "Team Errors"
+        border <- c("Rk", "Team", "Opp. Errors")
+      }
+    )
+  }
+
+  out <- data %>%
+    gt() %>%
+    tab_header(
+      title = md(sprintf("**%s**", title)),
+      subtitle = md(subtitle)
+    ) %>%
+    tab_style(
+      style = list(
+        cell_text(weight = "bold")
+      ),
+      locations = cells_column_labels(everything())
+    ) %>%
+    tab_style(
+      style = list(
+        cell_borders(
+          side = c("right"),
+          color = "#eee",
+          weight = px(1.5)
+        )
+      ),
+      locations = cells_body(
+        columns = border
+      )
+    ) %>%
+    tab_style(
+      style = list(
+        cell_borders(
+          side = c("right"),
+          color = "#eee",
+          weight = px(1.5)
+        )
+      ),
+      locations = cells_column_labels(
+        columns = border
+      )
+    ) %>%
+    tab_options(table.width = "100%")
+  out
 }
 
 get_teamFlag <- function(code, source = "VW", height = 30, width = 30) {

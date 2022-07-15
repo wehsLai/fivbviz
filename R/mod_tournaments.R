@@ -2,12 +2,23 @@ tournamentsUI <- function(id) {
   ns <- NS(id)
   fillCol(
     height = "790px", flex = c(NA, 1),
-    actionBttn(ns("open"), label = "Open", style = "bordered", color = "primary", size = "sm"),
+    fluidRow(
+      column(width = 1, actionBttn(ns("open"), label = "Open", style = "bordered", color = "primary", size = "sm")),
+      column(width = 3, offset = 0, materialSwitch(ns("switch"), inline = FALSE, label = "Show Season", right = FALSE, value = TRUE, status = "primary"))
+    ),
     reactableOutput(ns("table"))
   )
 }
 
-tournamentsServer <- function(id, showSeason = TRUE) {
+showSeasonVal <- function(id) {
+  moduleServer(id, function(input, output, session) {
+    # show Season in marktext
+    showSeason <- reactive(input$switch)
+    return(showSeason)
+  })
+}
+
+tournamentsServer <- function(id, showSeason) {
   moduleServer(id, function(input, output, session) {
     # get tournaments list
     tournaments <- reactive({

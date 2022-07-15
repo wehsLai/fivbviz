@@ -1,0 +1,258 @@
+---
+title: "`r params$marktext`"
+author: "wehsLai"
+url: "https://github.com/wehsLai/fivbviz"
+date: "`r Sys.Date()`"
+output: 
+    html_document:
+      theme:
+        version: 4
+        base_font:
+          google: "Source Sans Pro"
+        code_font:
+          google: "Fira Code"
+      toc: true
+      toc_depth: 3
+      toc_float:
+        collapsed: false
+        smooth_scroll: false
+params: 
+    ds: NULL
+    marktext: NULL
+    showAll: FALSE
+    number: 20
+---
+
+```{r setup, include=FALSE}
+ds <- params$ds
+marktext <- params$marktext
+showAll <- params$showAll
+number <- params$number
+```
+
+## [P5] Players ranking by skills
+
+### Best Scorers
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# parameters
+type <- "c"
+isTeam <- FALSE
+# data
+f <- rankBySkillDf(ds$statistics$player_agg, type, isTeam, showAll = showAll, number= number)
+# render
+rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$marktext)
+```
+
+<br>
+
+### Best Attackers
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# parameters
+type <- "a"
+isTeam <- FALSE
+# data
+f <- rankBySkillDf(ds$statistics$player_agg, type, isTeam, showAll = showAll, number= number)
+# render
+rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$marktext)
+```
+
+<br>
+
+### Best Blockers
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# parameters
+type <- "b"
+isTeam <- FALSE
+# data
+f <- rankBySkillDf(ds$statistics$player_agg, type, isTeam, showAll = showAll, number= number)
+# render
+rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$marktext)
+```
+
+<br>
+
+### Best Servers
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# parameters
+type <- "s"
+isTeam <- FALSE
+# data
+f <- rankBySkillDf(ds$statistics$player_agg, type, isTeam, showAll = showAll, number= number)
+# render
+rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$marktext)
+```
+
+<br>
+
+### Best Diggers
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# parameters
+type <- "d"
+isTeam <- FALSE
+# data
+f <- rankBySkillDf(ds$statistics$player_agg, type, isTeam, showAll = showAll, number= number)
+# render
+rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$marktext)
+```
+
+<br>
+
+### Best Setters
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# parameters
+type <- "e"
+isTeam <- FALSE
+# data
+f <- rankBySkillDf(ds$statistics$player_agg, type, isTeam, showAll = showAll, number= number)
+# render
+rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$marktext)
+```
+
+<br>
+
+### Best Receivers
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# parameters
+type <- "r"
+isTeam <- FALSE
+# data
+f <- rankBySkillDf(ds$statistics$player_agg, type, isTeam, showAll = showAll, number= number)
+# render
+rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$marktext)
+```
+
+<br>
+
+### Best Liberos
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# parameters
+type <- "l"
+isTeam <- FALSE
+# data
+f <- rankBySkillDf(ds$statistics$player_agg, type, isTeam, showAll = showAll, number= number)
+# render
+rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$marktext)
+```
+
+\newpage
+## [P6] Teams ranking by skills
+
+### Best Scorers
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# parameters
+type <- "c"
+isTeam <- TRUE
+# data
+f <- rankBySkillDf(ds$statistics$team_agg, type, isTeam, showAll = showAll, number= number)
+# render
+rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$marktext)
+```
+
+<br>
+
+### Best Attackers
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# parameters
+type <- "a"
+isTeam <- TRUE
+# data
+f <- rankBySkillDf(ds$statistics$team_agg, type, isTeam, showAll = showAll, number= number)
+# render
+rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$marktext)
+```
+
+<br>
+
+### Best Blockers
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# parameters
+type <- "b"
+isTeam <- TRUE
+# data
+f <- rankBySkillDf(ds$statistics$team_agg, type, isTeam, showAll = showAll, number= number)
+# render
+rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$marktext)
+```
+
+<br>
+
+### Best Servers
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# parameters
+type <- "s"
+isTeam <- TRUE
+# data
+f <- rankBySkillDf(ds$statistics$team_agg, type, isTeam, showAll = showAll, number= number)
+# render
+rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$marktext)
+```
+
+<br>
+
+### Best Diggers
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# parameters
+type <- "d"
+isTeam <- TRUE
+# data
+f <- rankBySkillDf(ds$statistics$team_agg, type, isTeam, showAll = showAll, number= number)
+# render
+rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$marktext)
+```
+
+<br>
+
+### Best Setters
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# parameters
+type <- "e"
+isTeam <- TRUE
+# data
+f <- rankBySkillDf(ds$statistics$team_agg, type, isTeam, showAll = showAll, number= number)
+# render
+rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$marktext)
+```
+
+<br>
+
+### Best Receivers
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# parameters
+type <- "r"
+isTeam <- TRUE
+# data
+f <- rankBySkillDf(ds$statistics$team_agg, type, isTeam, showAll = showAll, number= number)
+# render
+rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$marktext)
+```
+
+<br>
+
+### Team Errors
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# parameters
+type <- "f"
+isTeam <- TRUE
+# data
+f <- rankBySkillDf(ds$statistics$team_agg, type, isTeam, showAll = showAll, number= number)
+# render
+rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$marktext)
+```
+
+<br>

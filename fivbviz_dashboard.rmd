@@ -38,13 +38,16 @@ dataFilterUI("filter")
 downloadUI("rds", "RDS", color = "success")
 downloadUI("dashboard", "dashboard", color = "warning")
 downloadUI("html", "html", color = "warning")
+downloadUI("p56", "p56", color = "warning")
+showRkUI("p56", "showAll", color = "warning")
 
 reactive({
   if (!is.null(rv$ds)) {
-    dataFilterServer("filter")
+    dataFilterServer("filter", showSeason())
     downloadServer("rds", type = "ds")
     downloadServer("dashboard", type = "dashboard")
     downloadServer("html", type = "html")
+    downloadServer("p56", type = "p56")
   }
 })
 ```
@@ -56,7 +59,8 @@ Row
 
 ```{r message=FALSE, warning=FALSE}
 tournamentsUI("tournaments")
-tournamentsServer("tournaments")
+showSeason <- showSeasonVal("tournaments")
+tournamentsServer("tournaments", showSeason())
 ```
 
 Player Charts
