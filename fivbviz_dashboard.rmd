@@ -43,7 +43,7 @@ showRkUI("p56", "showAll", color = "warning")
 
 reactive({
   if (!is.null(rv$ds)) {
-    dataFilterServer("filter", showSeason())
+    dataFilterServer("filter", showSeason(), addPoolName = TRUE)
     downloadServer("rds", type = "ds")
     downloadServer("dashboard", type = "dashboard")
     downloadServer("html", type = "html")

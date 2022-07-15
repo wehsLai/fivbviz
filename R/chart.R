@@ -8,7 +8,7 @@ hline <- function(y = 0, color = "#AAA") {
     xref = "paper",
     y0 = y,
     y1 = y,
-    line = list(color = color, opacity = 1)
+    line = list(color = color, width = 3)
   )
 }
 
@@ -22,7 +22,7 @@ vline <- function(x = 0, color = "#AAA") {
     yref = "paper",
     x0 = x,
     x1 = x,
-    line = list(color = color, opacity = 1)
+    line = list(color = color, width = 3)
   )
 }
 

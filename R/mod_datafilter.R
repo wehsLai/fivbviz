@@ -12,15 +12,13 @@ dataFilterUI <- function(id) {
   )
 }
 
-dataFilterServer <- function(id, showSeason) {
+dataFilterServer <- function(id, showSeason, addPoolName = TRUE) {
   moduleServer(id, function(input, output, session) {
     observe({
-      print(rv$marktext)
       output$msg <- renderText(rv$marktext)
     })
 
     observe({
-      # print(rv$ds$tournament$no)
       updatePickerInput(session = session, inputId = "round_pick", choices = unique(rv$ds$matches$poolRoundName), selected = character(0))
     })
 

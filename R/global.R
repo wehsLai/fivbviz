@@ -12,7 +12,6 @@ rm(list = ls())
 # Default Value ----
 v_caching(FALSE)
 v_options(verbose = FALSE)
-addPoolName <- TRUE
 
 rv <- reactiveValues()
 
