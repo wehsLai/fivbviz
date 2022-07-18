@@ -38,7 +38,10 @@ get_tournament_data <- function(no) {
       mutate(team.code = team.code.y, team.name = team.name.y) %>%
       select(-"team.code.y", -"team.name.y")
 
-
+    statistics$Team <- statistics$Team %>% 
+        group_by(noMatch) %>% 
+        mutate(teamError = sum(opponentError) - opponentError)
+    
     out <- list(
       tournament = tournament,
       matches = matches,
@@ -99,9 +102,9 @@ calculate_agg <- function(gpd_df, isTeam = TRUE) {
   if (isTeam) {
     out <- gpd_df %>% summarise(
       nbSets = sum(nbSets),
-      teamFault = sum(teamFault),
-      teamFaultAverageBySet = Per(nbSets, teamFault),
-      teamFaultOrgAverageBySet = OrgPer(nbSets, teamFault),
+      teamError = sum(teamError),
+      teamErrorAverageBySet = Per(nbSets, teamError),
+      teamErrorOrgAverageBySet = OrgPer(nbSets, teamError),
       opponentError = sum(opponentError),
       opponentErrorAverageBySet = Per(nbSets, opponentError),
       opponentErrorOrgAverageBySet = OrgPer(nbSets, opponentError),
@@ -170,7 +173,7 @@ calculate_agg <- function(gpd_df, isTeam = TRUE) {
     out$digRank <- Ranking(OrgPer(out$nbSets, out$digExcellent)) # note
     out$setRank <- Ranking(OrgPer(out$nbSets, out$setExcellent)) # note
     out$receptionRank <- Ranking(OrgEfficiency(out$receptionTotal, out$receptionExcellent, out$receptionFault)) # note
-    out$tfRank <- Ranking(OrgPer(out$nbSets, out$teamFault), isDesc = FALSE)
+    out$tfRank <- Ranking(OrgPer(out$nbSets, out$teamError), isDesc = FALSE)
   } else {
     out <- gpd_df %>% summarise(
       # order by note, team.code, noShirt(player)
@@ -548,9 +551,9 @@ get_p6 <- function(team_agg, type = "c", showAll = FALSE, number = 10) {
           mutate(showText = paste0(
             "<b>", team.code, " - ", team.name, "</b><br>",
             "Rank: ", tfRank, "<br>",
-            "Team Errors: ", teamFault, "<br>",
+            "Team Errors: ", teamError, "<br>",
             "Opp. Errors: ", opponentError, "<br>",
-            "Avg. by set: ", teamFaultAverageBySet, "<br>",
+            "Avg. by set: ", teamErrorAverageBySet, "<br>",
             "Opp. Avg. by set: ", opponentErrorAverageBySet
           )) %>%
           select(Rk = "tfRank", all_of(t.col), all_of(tf.col), showText)

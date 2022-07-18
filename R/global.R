@@ -37,7 +37,7 @@ digger.col <- c(`Digs` = "digExcellent", Faults = "digFault", Receptions = "digC
 setter.col <- c(`Running Sets` = "setExcellent", Faults = "setFault", `Still Sets` = "setContinue", Total = "setTotal", `RS. %` = "setExcellentPercentage", `Eff. %` = "setEfficiencyPercentage", `Avg. by set` = "setExcellentAverageBySet", y = "setExcellentOrgPercentage", x = "setFaultOrgPercentage")
 receiver.col <- c(`Excellents` = "receptionExcellent", Faults = "receptionFault", `Serve Receptions` = "receptionContinue", Total = "receptionTotal", `Exc. %` = "receptionExcellentPercentage", `Eff. %` = "receptionEfficiencyPercentage", `Avg. by set` = "receptionExcellentAverageBySet", y = "receptionExcellentOrgPercentage", x = "receptionFaultOrgPercentage")
 libero.col <- c(`Excellents` = "liberoExcellent", Faults = "liberoFault", `In Play` = "liberoContinue", Total = "liberoTotal", `Exc. %` = "liberoExcellentPercentage", `Eff. %` = "liberoEfficiencyPercentage", `Avg. by set` = "liberoExcellentAverageBySet", y = "liberoExcellentOrgPercentage", x = "liberoFaultOrgPercentage")
-tf.col <- c(`Team Errors` = "teamFault", `Opp. Errors` = "opponentError", `Avg. by set` = "teamFaultAverageBySet", `Opp. Avg. by set` = "opponentErrorAverageBySet", y = "opponentErrorOrgAverageBySet", x = "teamFaultOrgAverageBySet")
+tf.col <- c(`Team Errors` = "teamError", `Opp. Errors` = "opponentError", `Avg. by set` = "teamErrorAverageBySet", `Opp. Avg. by set` = "opponentErrorAverageBySet", y = "opponentErrorOrgAverageBySet", x = "teamErrorOrgAverageBySet")
 
 # waiter
 waiting_screen <- tagList(
