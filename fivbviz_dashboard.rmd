@@ -24,6 +24,7 @@ source("R/mod_dataFilter.R")
 source("R/mod_download.R")
 source("R/mod_tournaments.R")
 source("R/mod_rankBySkill.R")
+source("R/mod_roster.R")
 autoWaiter()
 ```
 
@@ -312,4 +313,25 @@ observe({
     rankBySkillTableServer("error-team", f, type = type, isTeam = isTeam)
   }
 })
+```
+
+Info
+=====================================
+
+Row {.tabset}
+-------------------------------------
+
+### Roster
+```{r message=FALSE, warning=FALSE}
+rosterUI("roster")
+observe({
+  if (!is.null(rv$fds)) {
+    rosterServer("roster")
+  }
+})
+```
+
+### Schedule
+```{r message=FALSE, warning=FALSE}
+# TODO
 ```

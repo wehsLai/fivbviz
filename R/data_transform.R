@@ -38,10 +38,10 @@ get_tournament_data <- function(no) {
       mutate(team.code = team.code.y, team.name = team.name.y) %>%
       select(-"team.code.y", -"team.name.y")
 
-    statistics$Team <- statistics$Team %>% 
-        group_by(noMatch) %>% 
-        mutate(teamError = sum(opponentError) - opponentError)
-    
+    statistics$Team <- statistics$Team %>%
+      group_by(noMatch) %>%
+      mutate(teamError = sum(opponentError) - opponentError)
+
     out <- list(
       tournament = tournament,
       matches = matches,
