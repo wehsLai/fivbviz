@@ -5,42 +5,58 @@ get_tournament_data <- function(no) {
     pl <- list(No = no, Fields = paste0(v_fields("Volleyball Tournament"), collapse = " "))
     tournament <- v_get_volley_tournament(parent = pl)
 
+    matches <- tibble()
+    teams <- tibble()
+    players <- tibble()
+    statistics <- tibble()
+
     # matches
     cl <- list(Filter = c(NoTournament = no))
     matches <- v_get_volley_match_list(children = cl)
-    cal_no <- matches$no[matches$resultType == 0]
 
     # teams
     cl <- list(Filter = c(NoTournament = no))
-    teams <- v_get_volley_team_list(children = cl) %>% arrange(code)
+    teams <- v_get_volley_team_list(children = cl)
+    if (nrow(teams) > 0) {
+      teams <- teams %>% arrange(code)
 
-    # players
-    cl <- list(Filter = c(NoTournament = no), Relation = c(Name = "Team", Fields = "Code Name"))
-    players <- v_get_volley_player_list(children = cl) %>% arrange(team.code, noShirt)
+      # players
+      cl <- list(Filter = c(NoTournament = no), Relation = c(Name = "Team", Fields = "Code Name"))
+      players <- v_get_volley_player_list(children = cl)
+      if (nrow(players) > 0) {
+        players <- players %>% arrange(team.code, noShirt)
 
-    # Statistics
-    pl <- list(
-      Fields = paste0(v_fields("Volleyball Statistic"), collapse = " "),
-      Include = "PlayersSumByTeam", SumBy = "Match"
-    )
-    cl <- list(
-      Filter = c(NoTournaments = no, MatchesToUse = "MatchesFinished"),
-      Relation = c(Name = "Match", Fields = "NoInTournament DateLocal TeamACode TeamBCode MatchResultText"),
-      Relation = c(Name = "Team", Fields = "Code Name"),
-      Relation = c(Name = "Player", Fields = "TeamName FirstName LastName VolleyPosition")
-    )
-    statistics <- v_get_volley_statistic_list(parent = pl, children = cl) %>%
-      filter(noMatch %in% cal_no) %>%
-      split(as.factor(ifelse(is.na(.$team.code), "Player", "Team")))
+        if (nrow(matches) > 0) {
+          cal_no <- matches$no[matches$resultType == 0]
+          # Statistics
+          pl <- list(
+            Fields = paste0(v_fields("Volleyball Statistic"), collapse = " "),
+            Include = "PlayersSumByTeam", SumBy = "Match"
+          )
+          cl <- list(
+            Filter = c(NoTournaments = no, MatchesToUse = "MatchesFinished"),
+            Relation = c(Name = "Match", Fields = "NoInTournament DateLocal TeamACode TeamBCode MatchResultText"),
+            Relation = c(Name = "Team", Fields = "Code Name"),
+            Relation = c(Name = "Player", Fields = "TeamName FirstName LastName VolleyPosition")
+          )
+          statistics <- v_get_volley_statistic_list(parent = pl, children = cl)
+          if (nrow(statistics) > 0) {
+            statistics <- statistics %>%
+              filter(noMatch %in% cal_no) %>%
+              split(as.factor(ifelse(is.na(.$team.code), "Player", "Team")))
 
-    statistics$Player <- statistics$Player %>%
-      left_join(players[, c("noPlayer", "team.code", "team.name")], by = c("noItem" = "noPlayer"), suffix = c("", ".y"), keep = FALSE) %>%
-      mutate(team.code = team.code.y, team.name = team.name.y) %>%
-      select(-"team.code.y", -"team.name.y")
+            statistics$Player <- statistics$Player %>%
+              left_join(players[, c("noPlayer", "team.code", "team.name")], by = c("noItem" = "noPlayer"), suffix = c("", ".y"), keep = FALSE) %>%
+              mutate(team.code = team.code.y, team.name = team.name.y) %>%
+              select(-"team.code.y", -"team.name.y")
 
-    statistics$Team <- statistics$Team %>%
-      group_by(noMatch) %>%
-      mutate(teamError = sum(opponentError) - opponentError)
+            statistics$Team <- statistics$Team %>%
+              group_by(noMatch) %>%
+              mutate(teamError = sum(opponentError) - opponentError)
+          }
+        }
+      }
+    }
 
     out <- list(
       tournament = tournament,

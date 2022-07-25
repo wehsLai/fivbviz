@@ -65,7 +65,7 @@ tournamentsServer <- function(id, showSeason) {
         waiter_show(html = waiting_screen)
         sel <- tournaments()[sel_row(), ]
         rv$ds <- get_tournament_data(sel$no)
-        if(!is.null(rv$ds$statistics)) {
+        if(nrow(rv$ds$statistics) > 0) {
             rv$ds$statistics <- add_agg(rv$ds$statistics)
         }
         rv$marktext <- paste0(ifelse(showSeason, paste0(rv$ds$tournament$season, " - "), ""), rv$ds$tournament$shortNameOrName)
