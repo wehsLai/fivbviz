@@ -48,14 +48,6 @@ rankBySkillChartServer <- function(id, f, type, isTeam = FALSE, limit = 5) {
   moduleServer(id, function(input, output, session) {
     ns <- NS(id)
 
-    output$title <- renderText({
-      renTitle(type)
-    })
-
-    output$limit <- renderText({
-      renLimit(type)
-    })
-
     output$chart <- renderPlotly({
       renPlotly(id, f, type, rv$marktext, isTeam, limit)
     })
@@ -64,6 +56,14 @@ rankBySkillChartServer <- function(id, f, type, isTeam = FALSE, limit = 5) {
 
 rankBySkillTableServer <- function(id, f, type, isTeam = FALSE, limit = 0, pageSize = 20) {
   moduleServer(id, function(input, output, session) {
+    output$title <- renderText({
+      renTitle(type)
+    })
+
+    output$limit <- renderText({
+      renLimit(type)
+    })
+
     output$table <- renderReactable({
       renTable(id, f, type, isTeam, limit, pageSize)
     })

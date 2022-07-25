@@ -39,10 +39,12 @@ dataFilterServer <- function(id, showSeason, addPoolName = TRUE) {
             rv$ds$tournament$shortNameOrName, " - ", paste0(pick(), collapse = ", ")
           )
         }
-        rv$fds$matches <- rv$ds$matches[rv$ds$matches$poolRoundName %in% pick(), ]
-        rv$fds$statistics$Player <- rv$ds$statistics$Player[rv$ds$statistics$Player$noMatch %in% rv$fds$matches$no, ]
-        rv$fds$statistics$Team <- rv$ds$statistics$Team[rv$ds$statistics$Team$noMatch %in% rv$fds$matches$no, ]
-        rv$fds$statistics <- add_agg(rv$fds$statistics)
+        if (!is.null(rv$ds) && all(map_lgl(rv$ds$statistics, ~nrow(.x) > 0)) == TRUE) {
+          rv$fds$matches <- rv$ds$matches[rv$ds$matches$poolRoundName %in% pick(), ]
+          rv$fds$statistics$Player <- rv$ds$statistics$Player[rv$ds$statistics$Player$noMatch %in% rv$fds$matches$no, ]
+          rv$fds$statistics$Team <- rv$ds$statistics$Team[rv$ds$statistics$Team$noMatch %in% rv$fds$matches$no, ]
+          rv$fds$statistics <- add_agg(rv$fds$statistics)
+        }
       }
       waiter_hide()
     })
