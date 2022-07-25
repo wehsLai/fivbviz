@@ -8,7 +8,8 @@ get_tournament_data <- function(no) {
     matches <- tibble()
     teams <- tibble()
     players <- tibble()
-    statistics <- tibble()
+    statistics <- list(Player = tibble(),
+                       Team = tibble())
 
     # matches
     cl <- list(Filter = c(NoTournament = no))
