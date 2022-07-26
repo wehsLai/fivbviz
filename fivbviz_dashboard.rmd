@@ -24,6 +24,7 @@ source("R/mod_dataFilter.R")
 source("R/mod_download.R")
 source("R/mod_tournaments.R")
 source("R/mod_rankBySkill.R")
+source("R/mod_match.R")
 source("R/mod_roster.R")
 autoWaiter()
 ```
@@ -326,6 +327,16 @@ Info
 Row {.tabset}
 -------------------------------------
 
+### Schedule
+```{r message=FALSE, warning=FALSE}
+matchUI("match")
+observe({
+  if (!is.null(rv$fds) && nrow(rv$fds$matches) > 0) {
+    matchServer("match")
+  }
+})
+```
+
 ### Roster
 ```{r message=FALSE, warning=FALSE}
 rosterUI("roster")
@@ -334,9 +345,4 @@ observe({
     rosterServer("roster")
   }
 })
-```
-
-### Schedule
-```{r message=FALSE, warning=FALSE}
-# TODO
 ```
