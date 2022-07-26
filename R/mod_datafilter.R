@@ -1,14 +1,12 @@
 dataFilterUI <- function(id) {
   ns <- NS(id)
   tagList(
-    fluidRow(
-      pickerInput(ns("round_pick"),
+    pickerInput(ns("round_pick"),
         label = "Round", choices = c(), selected = NULL,
-        multiple = TRUE, options = list(`actions-box` = TRUE), width = "fit", inline = TRUE
-      )
+        multiple = TRUE, options = list(`actions-box` = TRUE), width = "fit", inline = FALSE
     ),
-    fluidRow(actionBttn(ns("filter"), label = "Filter", style = "bordered", color = "primary", size = "sm")),
-    fluidRow(inputPanel(textOutput(ns("msg"))))
+    actionBttn(ns("filter"), label = "Filter", style = "bordered", color = "primary", size = "sm"),
+    inputPanel(textOutput(ns("msg")))
   )
 }
 

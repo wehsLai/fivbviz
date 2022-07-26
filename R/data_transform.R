@@ -54,6 +54,9 @@ get_tournament_data <- function(no) {
             statistics$Team <- statistics$Team %>%
               group_by(noMatch) %>%
               mutate(teamError = sum(opponentError) - opponentError)
+          } else {
+              statistics <- list(Player = tibble(),
+                                 Team = tibble())
           }
         }
       }

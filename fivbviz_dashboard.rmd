@@ -33,6 +33,11 @@ Tournament
 
 Control {.sidebar}
 -------------------------------------
+How to Use:
+
+1. Select a tournament >> OPEN
+
+2. (option)Select Round >> Filter
 
 ```{r message=FALSE, warning=FALSE}
 dataFilterUI("filter")
