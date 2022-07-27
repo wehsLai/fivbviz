@@ -8,8 +8,10 @@ get_tournament_data <- function(no) {
     matches <- tibble()
     teams <- tibble()
     players <- tibble()
-    statistics <- list(Player = tibble(),
-                       Team = tibble())
+    statistics <- list(
+      Player = tibble(),
+      Team = tibble()
+    )
 
     # matches
     cl <- list(Filter = c(NoTournament = no))
@@ -31,32 +33,90 @@ get_tournament_data <- function(no) {
           cal_no <- matches$no[matches$resultType == 0]
           # Statistics
           pl <- list(
-            Fields = paste0(v_fields("Volleyball Statistic"), collapse = " "),
-            Include = "PlayersSumByTeam", SumBy = "Match"
+            Fields = paste0(v_fields("Volleyball Statistic"), collapse = " "), SumBy = "Match"
           )
           cl <- list(
             Filter = c(NoTournaments = no, MatchesToUse = "MatchesFinished"),
             Relation = c(Name = "Match", Fields = "NoInTournament DateLocal TeamACode TeamBCode MatchResultText"),
-            Relation = c(Name = "Team", Fields = "Code Name"),
             Relation = c(Name = "Player", Fields = "TeamName FirstName LastName VolleyPosition")
           )
-          statistics <- v_get_volley_statistic_list(parent = pl, children = cl)
-          if (nrow(statistics) > 0) {
-            statistics <- statistics %>%
-              filter(noMatch %in% cal_no) %>%
-              split(as.factor(ifelse(is.na(.$team.code), "Player", "Team")))
+          temp <- v_get_volley_statistic_list(parent = pl, children = cl)
+          if (nrow(temp) > 0) {
+            # select Player records only
+            statistics$Player <- temp %>%
+              filter(noMatch %in% cal_no & itemType == 45) %>%
+              left_join(players[, c("noPlayer", "team.code", "team.name")], by = c("noItem" = "noPlayer"), suffix = c("", ".y"), keep = FALSE)
+            # calculate Team records per match through Player records
+            statistics$Team <- statistics$Player %>%
+              group_by(noMatch, team.code, team.name) %>%
+              summarise(
+                nbSets = first(nbSets),
+                pointTotal = sum(pointTotal), # abs point
+                pointPointAverageBySet = Per(nbSets, pointTotal),
+                spikePoint = sum(spikePoint),
+                spikeFault = sum(spikeFault),
+                spikeContinue = sum(spikeContinue),
+                spikeTotal = sum(spikeTotal),
+                spikePointPercentage = Percentage(spikeTotal, spikePoint), # note
+                spikeEfficiencyPercentage = Efficiency(spikeTotal, spikePoint, spikeFault),
+                spikePointAverageBySet = Per(nbSets, spikePoint),
+                blockPoint = sum(blockPoint),
+                blockFault = sum(blockFault),
+                blockContinue = sum(blockContinue),
+                blockTotal = sum(blockTotal),
+                blockPointPercentage = Percentage(blockTotal, blockPoint),
+                blockEfficiencyPercentage = Efficiency(blockTotal, blockPoint, blockFault),
+                blockPointAverageBySet = Per(nbSets, blockPoint), # note
+                servePoint = sum(servePoint),
+                serveFault = sum(serveFault),
+                serveContinue = sum(serveContinue),
+                serveTotal = sum(serveTotal),
+                servePointPercentage = Percentage(serveTotal, servePoint),
+                serveEfficiencyPercentage = Efficiency(serveTotal, servePoint, serveFault),
+                servePointAverageBySet = Per(nbSets, servePoint), # note
+                digExcellent = sum(digExcellent),
+                digFault = sum(digFault),
+                digContinue = sum(digContinue),
+                digTotal = sum(digTotal),
+                digExcellentPercentage = Percentage(digTotal, digExcellent),
+                digEfficiencyPercentage = Efficiency(digTotal, digExcellent, digFault),
+                digExcellentAverageBySet = Per(nbSets, digExcellent), # note
+                setExcellent = sum(setExcellent),
+                setFault = sum(setFault),
+                setContinue = sum(setContinue),
+                setTotal = sum(setTotal),
+                setExcellentPercentage = Percentage(setTotal, setExcellent),
+                setEfficiencyPercentage = Efficiency(setTotal, setExcellent, setFault),
+                setExcellentAverageBySet = Per(nbSets, setExcellent), # note
+                receptionExcellent = sum(receptionExcellent),
+                receptionFault = sum(receptionFault),
+                receptionContinue = sum(receptionContinue),
+                receptionTotal = sum(receptionTotal),
+                receptionExcellentPercentage = Percentage(receptionTotal, receptionExcellent),
+                receptionEfficiencyPercentage = Efficiency(receptionTotal, receptionExcellent, receptionFault), # note
+                receptionExcellentAverageBySet = Per(nbSets, receptionExcellent),
+              ) %>%
+              ungroup()
 
-            statistics$Player <- statistics$Player %>%
-              left_join(players[, c("noPlayer", "team.code", "team.name")], by = c("noItem" = "noPlayer"), suffix = c("", ".y"), keep = FALSE) %>%
-              mutate(team.code = team.code.y, team.name = team.name.y) %>%
-              select(-"team.code.y", -"team.name.y")
+            # total points of each team
+            points <- matches %>% mutate(
+              pointsTeamATotal = rowSums(select(matches, starts_with("pointsTeamA")), na.rm = TRUE),
+              pointsTeamBTotal = rowSums(select(matches, starts_with("pointsTeamB")), na.rm = TRUE)
+            )
+
+            points <- bind_rows(
+              select(points, no, team.code = teamACode, pointsTeamTotal = pointsTeamATotal),
+              select(points, no, team.code = teamBCode, pointsTeamTotal = pointsTeamBTotal)
+            )
 
             statistics$Team <- statistics$Team %>%
+              left_join(points, by = c("noMatch" = "no", "team.code" = "team.code")) %>%
               group_by(noMatch) %>%
-              mutate(teamError = sum(opponentError) - opponentError)
-          } else {
-              statistics <- list(Player = tibble(),
-                                 Team = tibble())
+              mutate(
+                opponentError = pointsTeamTotal - pointTotal,
+                teamError = sum(opponentError) - opponentError
+              ) %>%
+              ungroup()
           }
         }
       }
