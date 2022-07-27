@@ -22,7 +22,7 @@ tournamentsServer <- function(id, showSeason) {
   moduleServer(id, function(input, output, session) {
     # get tournaments list
     tournaments <- reactive({
-      pl <- list(Fields = "No Season ShortNameOrName StartDate EndDate Gender OrganizerType Status")
+      pl <- list(Fields = "No Season ShortNameOrName StartDate EndDate Gender OrganizerType Status DeadlineO2 DeadlineO2bis")
       v_get_volley_tournament_list(parent = pl) %>% arrange(desc(startDate))
     })
 
@@ -37,7 +37,8 @@ tournamentsServer <- function(id, showSeason) {
         tournaments(),
         columns = tl.colDef,
         defaultColDef = df.colDef,
-        defaultPageSize = 15,
+        style = list(fontFamily = "Source Sans Pro", fontSize = "0.875rem", minWidth = 650),
+        defaultPageSize = 20,
         resizable = TRUE,
         filterable = TRUE,
         highlight = TRUE,

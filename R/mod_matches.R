@@ -1,9 +1,9 @@
-matchUI <- function(id) {
+matchesUI <- function(id) {
   ns <- NS(id)
   reactableOutput(ns("table"))
 }
 
-matchServer <- function(id) {
+matchesServer <- function(id) {
   moduleServer(id, function(input, output, session) {
     output$table <- renderReactable({
       fmt <- paste0("%0", nchar(as.character(max(rv$ds$matches$noInTournament))), "s")
@@ -13,16 +13,16 @@ matchServer <- function(id) {
         arrange(dateTimeUtc) %>%
         mutate(
           noInTournament = sprintf(fmt, noInTournament),
-          dateTimeClient = format(dateTimeUtc, tz = Sys.timezone()),
-          resultText = sprintf("%s %s", matchResultText, setsResultsText)
+          dateTimeClient = format(dateTimeUtc, tz = Sys.timezone(), format = "%Y-%m-%d %H:%M"),
+          resultText = sprintf("%s %s", stringr::str_replace_na(matchResultText, ""), stringr::str_replace_na(setsResultsText, ""))
         ) %>%
-        select(noInTournament, dateTimeClient, countryName, city, poolName, teamACode, teamBCode, resultText, status)
+        select(noInTournament, dateTimeClient, countryName, city, poolName, teamAName, teamBName, resultText, status)
 
-      teams <- sort(unique(c(data$teamACode, data$teamBCode)))
+      teams <- sort(unique(c(data$teamAName, data$teamBName)))
 
       match.colDef <- list(
         noInTournament = colDef(name = "No", minWidth = 55),
-        dateTimeClient = colDef(name = "Date", minWidth = 150),
+        dateTimeClient = colDef(name = paste0("Date ", format(Sys.time(), format = "%Z")), minWidth = 130),
         countryName = colDef(
           name = "Country", minWidth = 150, filterable = TRUE,
           filterInput = function(values, name) {
@@ -48,7 +48,7 @@ matchServer <- function(id) {
           }
         ),
         poolName = colDef(
-          name = "Pool", filterable = TRUE,
+          name = "Pool", minWidth = 100, filterable = TRUE,
           filterInput = function(values, name) {
             tags$select(
               onchange = sprintf("Reactable.setFilter('%s', '%s', event.target.value || undefined)", "table", name),
@@ -59,8 +59,8 @@ matchServer <- function(id) {
             )
           }
         ),
-        teamACode = colDef(
-          name = "Team A", filterable = TRUE,
+        teamAName = colDef(
+          name = "Team A", minWidth = 150, filterable = TRUE,
           filterInput = function(values, name) {
             tags$select(
               onchange = sprintf("Reactable.setFilter('%s', '%s', event.target.value || undefined)", "table", name),
@@ -72,13 +72,14 @@ matchServer <- function(id) {
           },
           filterMethod = JS("function(rows, columnId, filterValue) {
                                return rows.filter(function(row) {
-                                                    return (row.values['teamACode'] == filterValue || row.values['teamBCode'] == filterValue)
+                                                    return (row.values['teamAName'] == filterValue || row.values['teamBName'] == filterValue)
                                                   })
                              }")
         ),
-        teamBCode = colDef(name = "Team B"),
+        teamBName = colDef(name = "Team B", minWidth = 150),
         resultText = colDef(name = "Result", minWidth = 250),
-        status = colDef(name = "Status"))
+        status = colDef(name = "Status", minWidth = 100)
+      )
 
       reactable(
         data,

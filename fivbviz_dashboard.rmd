@@ -24,7 +24,7 @@ source("R/mod_dataFilter.R")
 source("R/mod_download.R")
 source("R/mod_tournaments.R")
 source("R/mod_rankBySkill.R")
-source("R/mod_match.R")
+source("R/mod_matches.R")
 source("R/mod_roster.R")
 autoWaiter()
 ```
@@ -34,11 +34,11 @@ Tournament
 
 Control {.sidebar}
 -------------------------------------
-How to Use:
+<font size="2">How to Use:</font>
 
-1. Select a tournament >> OPEN
+<font size="2">1. Select a tournament >> OPEN</font>
 
-2. (option)Select Round >> Filter
+<font size="2">2. (option)Select Round >> Filter</font>
 
 ```{r message=FALSE, warning=FALSE}
 dataFilterUI("filter")
@@ -329,10 +329,10 @@ Row {.tabset}
 
 ### Schedule
 ```{r message=FALSE, warning=FALSE}
-matchUI("match")
+matchesUI("matches")
 observe({
   if (!is.null(rv$fds) && nrow(rv$fds$matches) > 0) {
-    matchServer("match")
+    matchesServer("matches")
   }
 })
 ```
