@@ -6,7 +6,7 @@ clipboardUI <- function(id) {
       prettyCheckbox(ns("selected"), label = "Selected", value = TRUE, status = "primary", icon = icon("check")),
       prettyCheckbox(ns("shortName"), label = "Team Name", value = TRUE, status = "primary", icon = icon("check")),
       prettyCheckbox(ns("numShirt"), label = "No Shirt", value = TRUE, status = "primary", icon = icon("check")),
-      actionButton(ns("copy"), label = "Copy", icon = icon("fa-light fa-copy"), `data-clipboard-target` = sprintf("#%s", ns("board"))),
+      actionButton(ns("copy"), label = "Copy", icon = fontawesome::fa_i(name = "copy"), `data-clipboard-target` = sprintf("#%s", ns("board"))),
       # trigger clipboard.js, place it at the end of the column
       uiOutput(ns("clip"), style = "visibility: hidden")
     ),

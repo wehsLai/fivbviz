@@ -36,7 +36,7 @@ get_tournament_data <- function(no) {
             Fields = paste0(v_fields("Volleyball Statistic"), collapse = " "), SumBy = "Match"
           )
           cl <- list(
-            Filter = c(NoTournaments = no, MatchesToUse = "MatchesFinished"),
+            Filter = c(NoTournaments = no, MatchesToUse = "MatchesStarted"),
             Relation = c(Name = "Match", Fields = "NoInTournament DateLocal TeamACode TeamBCode MatchResultText"),
             Relation = c(Name = "Player", Fields = "TeamName FirstName LastName VolleyPosition")
           )
@@ -356,18 +356,22 @@ calculate_agg <- function(gpd_df, isTeam = TRUE) {
 }
 
 get_agg <- function(statistics) {
-  team_agg <- statistics$Team %>%
-    group_by(team.code, team.name, team = paste(team.code, team.name)) %>%
-    calculate_agg(isTeam = TRUE) %>%
-    ungroup()
-  player_agg <- statistics$Player %>%
-    left_join(team_agg[, c("team.code", "nbSets", "spikeTotal", "blockTotal", "serveTotal", "digTotal", "setTotal", "receptionTotal")],
-      by = c("team.code" = "team.code"), suffix = c("", ".t"), keep = FALSE
-    ) %>%
-    group_by(team.code, team.name, noShirt, player.teamName, player.lastName, player.firstName, name = paste(player.lastName, player.firstName), player.volleyPosition) %>%
-    calculate_agg(isTeam = FALSE) %>%
-    ungroup()
+  team_agg <- tibble()
+  player_agg <- tibble()
 
+  if (nrow(statistics$Team) > 0) {
+    team_agg <- statistics$Team %>%
+      group_by(team.code, team.name, team = paste(team.code, team.name)) %>%
+      calculate_agg(isTeam = TRUE) %>%
+      ungroup()
+    player_agg <- statistics$Player %>%
+      left_join(team_agg[, c("team.code", "nbSets", "spikeTotal", "blockTotal", "serveTotal", "digTotal", "setTotal", "receptionTotal")],
+        by = c("team.code" = "team.code"), suffix = c("", ".t"), keep = FALSE
+      ) %>%
+      group_by(team.code, team.name, noShirt, player.teamName, player.lastName, player.firstName, name = paste(player.lastName, player.firstName), player.volleyPosition) %>%
+      calculate_agg(isTeam = FALSE) %>%
+      ungroup()
+  }
   out <- list(
     team_agg = team_agg,
     player_agg = player_agg

@@ -13,7 +13,13 @@ dataFilterUI <- function(id) {
 dataFilterServer <- function(id, showSeason, addPoolName = TRUE) {
   moduleServer(id, function(input, output, session) {
     observe({
-      output$msg <- renderText(rv$marktext)
+      output$msg <- renderText({
+          out <- paste0(rv$marktext, "\n",
+          sprintf("matches: %s\nteams: %s\nplayers:  %s\nstatistics$Player: %s\nstatistics$Team: %s\n", 
+                  nrow(rv$fds$matches), nrow(rv$fds$teams), nrow(rv$fds$players), 
+                  nrow(rv$fds$statistics$Player), nrow(rv$fds$statistics$Team)))
+          out
+      })
     })
 
     observe({

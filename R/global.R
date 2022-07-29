@@ -11,15 +11,13 @@ library(waiter)
 # Clean ----
 rm(list = ls())
 # Default Value ----
-v_caching(FALSE)
+v_caching(TRUE)
 v_options(verbose = FALSE)
 
 rv <- reactiveValues()
 
 spike_limit <- 0.15
 reception_limit <- 0.2
-type_p5 <- c("c", "a", "b", "s", "d", "e", "r", "l")
-type_p6 <- c("c", "a", "b", "s", "d", "e", "r", "f")
 pos.color <- RColorBrewer::brewer.pal(6, "Set2")
 names(pos.color) <- c("MB", "OP", "OH", "S", "L", "U")
 plotlyColor <- list(

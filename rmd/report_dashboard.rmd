@@ -1,6 +1,6 @@
 ---
 title: "fivbviz🏐"
-author: '`r fontawesome::fa_i(name = "user")` wehsLai'
+author: "wehsLai"
 output: 
   flexdashboard::flex_dashboard:
     source_code: "https://github.com/wehsLai/fivbviz"
@@ -11,7 +11,7 @@ output:
       base_font:
         google: "Source Sans Pro"
       code_font:
-        google: "Fira Code"
+        google: "Source Sans Pro"
 params: 
     ds: NULL
     marktext: NULL

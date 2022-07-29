@@ -317,7 +317,7 @@ textRoster <- function(players, selected = TRUE, shortName = TRUE, numShirt = TR
     out <- map(unique(players$team.code), function(y) {
       sel_team <- temp %>% filter(team.code == y)
       if (nrow(sel_team) > 0) {
-        pos_players <- map(c("S", "OP", "OH", "MB", "L"), function(z) {
+        pos_players <- map(c("S", "OP", "OH", "MB", "L", "U", "_"), function(z) {
           sel_pos <- sel_team %>% filter(position == z)
           if (nrow(sel_pos) > 0) {
             paste0(z, ": ", paste(sel_pos$player_text, collapse = ", "))
@@ -325,12 +325,12 @@ textRoster <- function(players, selected = TRUE, shortName = TRUE, numShirt = TR
             NA_character_
           }
         })
-        paste0(y, " - ", first(sel_team$team.name), "\n", paste(pos_players, collapse = "\n"))
+        paste0(y, " - ", first(sel_team$team.name), "\n", paste(pos_players[!is.na(pos_players)], collapse = "\n"))
       } else {
         NA_character_
       }
     })
-    out <- paste0(out, collapse = "\n\n")
+    out <- paste0(out[!is.na(out)], collapse = "\n\n")
   }
   out
 }
