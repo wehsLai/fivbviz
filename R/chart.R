@@ -26,6 +26,14 @@ vline <- function(x = 0, color = "#AAA") {
   )
 }
 
+title.font <- list(
+  size = 18
+)
+
+axis.font <- list(
+  size = 14
+)
+
 # draw player XY chart
 playerXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", ytitle = "") {
   if (missing(data)) stop("playerXyChart must input data")
@@ -55,13 +63,8 @@ playerXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", y
       title = list(
         xref = "paper",
         y = 0.95,
-        text = paste0(
-          "<b>",
-          title,
-          "</b><br><sub>",
-          subtitle,
-          "</sub>"
-        )
+        text = paste0("<b>", title, "</b><br><sub>", subtitle, "</sub>"),
+        font = title.font
       ),
       xaxis = list(
         title = list(text = xtitle),
@@ -128,13 +131,8 @@ playerBarChart <- function(data, title = "", subtitle = "", xtitle = "", ytitle 
       title = list(
         xref = "paper",
         y = 0.95,
-        text = paste0(
-          "<b>",
-          title,
-          "</b><br><sub>",
-          subtitle,
-          "</sub>"
-        )
+        text = paste0("<b>", title, "</b><br><sub>", subtitle, "</sub>"),
+        font = title.font
       ),
       xaxis = list(
         title = list(text = ""),
@@ -201,9 +199,8 @@ teamXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", yti
       title = list(
         xref = "paper",
         y = 0.95,
-        text = paste0(
-          "<b>", title, "</b><br><sub>", subtitle, "</sub>"
-        )
+        text = paste0("<b>", title, "</b><br><sub>", subtitle, "</sub>"),
+        font = title.font
       ),
       xaxis = list(
         title = list(text = xtitle),
@@ -271,13 +268,8 @@ teamBarChart <- function(data, title = "", subtitle = "", xtitle = "", ytitle = 
       title = list(
         xref = "paper",
         y = 0.95,
-        text = paste0(
-          "<b>",
-          title,
-          "</b><br><sub>",
-          subtitle,
-          "</sub>"
-        )
+        text = paste0("<b>", title, "</b><br><sub>", subtitle, "</sub>"),
+        font = title.font
       ),
       xaxis = list(
         title = list(text = ""),

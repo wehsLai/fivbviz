@@ -1,16 +1,15 @@
 ---
 title: "`r params$marktext`"
-author: "wehsLai"
-url: "https://github.com/wehsLai/fivbviz"
-date: "`r Sys.Date()`"
+author: '`r fontawesome::fa_i(name = "user")` wehsLai'
+date: '`r fontawesome::fa_i(name = "calendar-day")` `r Sys.time()`'
 output: 
     html_document:
+      includes:
+        after_body: footer.html  
       theme:
         version: 4
         base_font:
           google: "Source Sans Pro"
-        code_font:
-          google: "Fira Code"
       toc: true
       toc_depth: 3
       toc_float:
@@ -22,6 +21,20 @@ params:
     showAll: FALSE
     number: 20
 ---
+
+<style type="text/css">
+div.main-container {  
+  max-width: 1600px; 
+}
+
+h1.title {
+  font-size: 2.25rem;
+}
+
+h4.author, h4.date {
+  font-size: 1.25rem;
+}
+</style>
 
 ```{r setup, include=FALSE}
 ds <- params$ds

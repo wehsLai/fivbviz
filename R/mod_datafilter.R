@@ -3,10 +3,10 @@ dataFilterUI <- function(id) {
   tagList(
     pickerInput(ns("round_pick"),
         label = "Round", choices = c(), selected = NULL,
-        multiple = TRUE, options = list(`actions-box` = TRUE), width = "fit", inline = FALSE
+        multiple = TRUE, options = list(`actions-box` = TRUE), width = "fit"
     ),
     actionBttn(ns("filter"), label = "Filter", style = "bordered", color = "primary", size = "sm"),
-    inputPanel(textOutput(ns("msg")))
+    verbatimTextOutput(ns("msg"), placeholder = TRUE)
   )
 }
 

@@ -4,7 +4,7 @@ tournamentsUI <- function(id) {
     height = "790px", flex = c(NA, 1),
     fluidRow(
       column(width = 1, actionBttn(ns("open"), label = "Open", style = "bordered", color = "primary", size = "sm")),
-      column(width = 3, offset = 0, materialSwitch(ns("switch"), inline = FALSE, label = "Show Season", right = FALSE, value = TRUE, status = "primary"))
+      column(width = 3, offset = 0, prettyCheckbox(ns("check"), label = "Show Season", value = TRUE, status = "primary", icon = icon("check")))
     ),
     reactableOutput(ns("table"))
   )
@@ -13,7 +13,7 @@ tournamentsUI <- function(id) {
 showSeasonVal <- function(id) {
   moduleServer(id, function(input, output, session) {
     # show Season in marktext
-    showSeason <- reactive(input$switch)
+    showSeason <- reactive(input$check)
     return(showSeason)
   })
 }
@@ -30,14 +30,16 @@ tournamentsServer <- function(id, showSeason) {
     output$table <- renderReactable({
       tl.colDef <- list(
         no = colDef(minWidth = 50, align = "left"),
-        shortNameOrName = colDef(name = "Tournament", minWidth = 280)
+        shortNameOrName = colDef(name = "Tournament", minWidth = 280),
+        startDate = colDef(minWidth = 85),
+        endDate = colDef(minWidth = 85)
       )
 
       reactable(
         tournaments(),
         columns = tl.colDef,
         defaultColDef = df.colDef,
-        style = list(fontFamily = "Source Sans Pro", fontSize = "0.875rem", minWidth = 650),
+        style = list(fontFamily = "Source Sans Pro", minWidth = 650),
         defaultPageSize = 20,
         resizable = TRUE,
         filterable = TRUE,

@@ -13,7 +13,6 @@ rosterServer <- function(id) {
       data <- rv$fds$players %>%
         mutate(
           isCaptain = ifelse(isCaptain == "0", "", "C"),
-          isLibero = ifelse(isLibero == "0", "", "L"),
           nbSelTotal = nbSelWC + nbSelOG + nbSelOther,
           weight = weight / 1000000,
           height = height / 10000,
@@ -100,7 +99,7 @@ rosterServer <- function(id) {
         data,
         columns = roster.colDef,
         defaultColDef = df.colDef,
-        style = list(fontFamily = "Source Sans Pro", fontSize = "0.875rem", minWidth = 650),
+        style = list(fontFamily = "Source Sans Pro", minWidth = 650),
         defaultPageSize = 25,
         resizable = TRUE,
         highlight = TRUE,

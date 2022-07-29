@@ -1,6 +1,6 @@
 ---
 title: "fivbviz🏐"
-author: "wehsLai"
+author: '`r fontawesome::fa_i(name = "user")` wehsLai'
 output: 
   flexdashboard::flex_dashboard:
     source_code: "https://github.com/wehsLai/fivbviz"

@@ -7,9 +7,10 @@ downloadUI <- function(id, label = "Download RDS", color = "primary") {
 
 showRkUI <- function(id, label = "showAll", color = "primary", number = 20) {
   ns <- NS(id)
-  fluidRow(
-    column(width = 4, prettySwitch(ns("switch"), label, status = color, fill = TRUE)),
-    column(width = 6, offset = 2, numericInput(ns("number"), label = "Players", number, min = 0))
+  fillRow(
+    flex = c(2, 3),
+    prettyCheckbox(ns("check"), label, status = color, icon = icon("check")),
+    numericInputIcon(ns("number"), label = NULL, number, min = 0, icon = list("Players"), size = "sm")
   )
 }
 
@@ -35,7 +36,7 @@ downloadServer <- function(id, type) {
           # case we don't have write permissions to the current working dir (which
           # can happen when deployed).
           tempReport <- file.path(tempdir(), "report_dashboard.Rmd")
-          file.copy("rmd/report_dashboard.Rmd", tempReport, overwrite = TRUE)
+          file.copy("rmd/report_dashboard.Rmd", tempdir(), overwrite = TRUE)
 
           # Set up parameters to pass to Rmd document
           params <- list(
@@ -66,7 +67,7 @@ downloadServer <- function(id, type) {
           # case we don't have write permissions to the current working dir (which
           # can happen when deployed).
           tempReport <- file.path(tempdir(), "report_html.Rmd")
-          file.copy("rmd/report_html.Rmd", tempReport, overwrite = TRUE)
+          file.copy(c("rmd/report_html.Rmd", "template/footer.html"), tempdir(), overwrite = TRUE)
 
           # Set up parameters to pass to Rmd document
           params <- list(
@@ -96,13 +97,13 @@ downloadServer <- function(id, type) {
           # case we don't have write permissions to the current working dir (which
           # can happen when deployed).
           tempReport <- file.path(tempdir(), "p56.Rmd")
-          file.copy("rmd/p56.Rmd", tempReport, overwrite = TRUE)
+          file.copy(c("rmd/p56.Rmd", "template/footer.html"), tempdir(), overwrite = TRUE)
 
           # Set up parameters to pass to Rmd document
           params <- list(
             ds = rv$fds,
             marktext = rv$marktext,
-            showAll = input$switch,
+            showAll = input$check,
             number = input$number
           )
           print(params$marktext)

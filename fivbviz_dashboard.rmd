@@ -12,8 +12,35 @@ output:
       base_font:
         google: "Source Sans Pro"
       code_font:
-        google: "Fira Code"
+        google: "Source Sans Pro"
 ---
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.10/clipboard.min.js"></script>
+
+<style type="text/css">
+#dashboard-container {
+  font-size: 15px;
+}
+
+.btn, dropdown, .bttn-bordered.bttn-sm {
+  font-size: 15px;
+}
+
+.form-group {
+    margin-bottom: 2px;
+}
+
+.shiny-input-panel {
+    padding-top: 6px;
+    padding-right: 8px;
+    padding-bottom: 10px;
+    padding-left: 8px;
+}
+
+pre.shiny-text-output {
+  white-space: pre-wrap;
+}
+</style>
 
 ```{r setup, include=FALSE}
 source("R/global.R")
@@ -26,28 +53,29 @@ source("R/mod_tournaments.R")
 source("R/mod_rankBySkill.R")
 source("R/mod_matches.R")
 source("R/mod_roster.R")
+source("R/mod_clipboard.R")
 autoWaiter()
 ```
 
-Tournament
-=====================================
+# Tournament
 
-Control {.sidebar}
--------------------------------------
-<font size="2">How to Use:</font>
+## Control {.sidebar}
 
-<font size="2">1. Select a tournament >> OPEN</font>
-
-<font size="2">2. (option)Select Round >> Filter</font>
+How to Use:  
+1. Select Tournament → OPEN  
+2. (option)Select Round → Filter  
 
 ```{r message=FALSE, warning=FALSE}
+inputPanel(
 dataFilterUI("filter")
-downloadUI("rds", "RDS", color = "success")
-downloadUI("dashboard", "dashboard", color = "warning")
-downloadUI("html", "html", color = "warning")
-downloadUI("p56", "p56", color = "warning")
-showRkUI("p56", "showAll", color = "warning")
-
+)
+inputPanel(
+downloadUI("rds", "RDS", color = "success"),
+downloadUI("dashboard", "dashboard", color = "warning"),
+downloadUI("html", "html", color = "warning"),
+downloadUI("p56", "p56", color = "warning"),
+showRkUI("p56", "P56 All", color = "warning"),
+)
 reactive({
   if (!is.null(rv$ds)) {
     dataFilterServer("filter", showSeason(), addPoolName = TRUE)
@@ -59,8 +87,7 @@ reactive({
 })
 ```
 
-Row
--------------------------------------
+## Row
 
 ### Tournaments
 
@@ -70,13 +97,12 @@ showSeason <- showSeasonVal("tournaments")
 tournamentsServer("tournaments", showSeason())
 ```
 
-Player Charts
-=====================================
+# Player Charts
 
-Row {.tabset}
--------------------------------------
+## Row {.tabset}
 
 ### Best Scorers
+
 ```{r message=FALSE, warning=FALSE}
 rankBySkillUI("scorer")
 observe({
@@ -195,11 +221,9 @@ observe({
 })
 ```
 
-Team Charts
-=====================================
+# Team Charts
 
-Row {.tabset}
--------------------------------------
+## Row {.tabset}
 
 ### Best Scorers
 
@@ -321,28 +345,38 @@ observe({
 })
 ```
 
-Info
-=====================================
+# Info
 
-Row {.tabset}
--------------------------------------
+## Row {.tabset}
 
 ### Schedule
+
 ```{r message=FALSE, warning=FALSE}
 matchesUI("matches")
 observe({
-  if (!is.null(rv$fds) && nrow(rv$fds$matches) > 0) {
+  if (!is.null(rv$ds) && nrow(rv$ds$matches) > 0) {
     matchesServer("matches")
   }
 })
 ```
 
 ### Roster
+
 ```{r message=FALSE, warning=FALSE}
 rosterUI("roster")
 observe({
-  if (!is.null(rv$fds) && nrow(rv$fds$players) > 0) {
+  if (!is.null(rv$ds) && nrow(rv$ds$players) > 0) {
     rosterServer("roster")
+  }
+})
+```
+
+### Clipboard
+```{r message=FALSE, warning=FALSE}
+clipboardUI("clipboard")
+observe({
+  if (!is.null(rv$ds) && nrow(rv$ds$players) > 0) {
+    clipboardServer("clipboard")
   }
 })
 ```

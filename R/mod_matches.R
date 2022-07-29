@@ -85,7 +85,7 @@ matchesServer <- function(id) {
         data,
         columns = match.colDef,
         defaultColDef = df.colDef,
-        style = list(fontFamily = "Source Sans Pro", fontSize = "0.875rem", minWidth = 650),
+        style = list(fontFamily = "Source Sans Pro", minWidth = 650),
         defaultPageSize = 20,
         resizable = TRUE,
         highlight = TRUE,

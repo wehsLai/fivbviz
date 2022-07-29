@@ -283,7 +283,7 @@ renTable <- function(id, f, type, isTeam = FALSE, limit = 0, pageSize = 20) {
     data,
     columns = use.colDef,
     defaultColDef = my.colDef,
-    style = list(fontFamily = "Source Sans Pro", fontSize = "0.875rem", minWidth = 650),
+    style = list(fontFamily = "Source Sans Pro", minWidth = 650),
     defaultPageSize = pageSize,
     resizable = TRUE,
     highlight = TRUE,
@@ -292,5 +292,45 @@ renTable <- function(id, f, type, isTeam = FALSE, limit = 0, pageSize = 20) {
     defaultSorted = "Rk",
     elementId = ns("table")
   )
+  out
+}
+
+textRoster <- function(players, selected = TRUE, shortName = TRUE, numShirt = TRUE) {
+  out <- ""
+  if (!missing(players) && nrow(players) > 0) {
+    if (selected) {
+      temp <- players %>% filter(isSelected == 1)
+    } else {
+      temp <- players %>% filter(isPreselected == 1)
+    }
+
+    temp <- temp %>%
+      mutate(
+        no_text = case_when(numShirt ~ paste0("(", noShirt, ")"), TRUE ~ ""),
+        player_text = case_when(
+          shortName ~ paste0(trimws(teamNamePlayer), no_text),
+          TRUE ~ paste0(trimws(lastNamePlayer), " ", trimws(firstNamePlayer), no_text)
+        )
+      ) %>%
+      select(team.code, team.name, position, player_text)
+
+    out <- map(unique(players$team.code), function(y) {
+      sel_team <- temp %>% filter(team.code == y)
+      if (nrow(sel_team) > 0) {
+        pos_players <- map(c("S", "OP", "OH", "MB", "L"), function(z) {
+          sel_pos <- sel_team %>% filter(position == z)
+          if (nrow(sel_pos) > 0) {
+            paste0(z, ": ", paste(sel_pos$player_text, collapse = ", "))
+          } else {
+            NA_character_
+          }
+        })
+        paste0(y, " - ", first(sel_team$team.name), "\n", paste(pos_players, collapse = "\n"))
+      } else {
+        NA_character_
+      }
+    })
+    out <- paste0(out, collapse = "\n\n")
+  }
   out
 }
