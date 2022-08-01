@@ -295,6 +295,98 @@ renTable <- function(id, f, type, isTeam = FALSE, limit = 0, pageSize = 20) {
   out
 }
 
+gtstyle <- function(data, type, isTeam = FALSE, title = "", subtitle = "", spike_limit = .15, reception_limit = .20) {
+  if (missing(title) || title == "") {
+    switch(type,
+      "c" = {
+        title <- "Best Scorers"
+        border <- c("Rk", "Team", "Serve")
+      },
+      "a" = {
+        title <- "Best Attackers"
+        subtitle <- paste0(subtitle, "<br>", sprintf("Load Limit: %0.f %%", spike_limit * 100))
+        border <- c("Rk", "Team", "Total")
+      },
+      "b" = {
+        title <- "Best Blockers"
+        border <- c("Rk", "Team", "Total")
+      },
+      "s" = {
+        title <- "Best Servers"
+        border <- c("Rk", "Team", "Total")
+      },
+      "d" = {
+        title <- "Best Diggers"
+        border <- c("Rk", "Team", "Total")
+      },
+      "e" = {
+        title <- "Best Setters"
+        border <- c("Rk", "Team", "Total")
+      },
+      "r" = {
+        title <- "Best Receivers"
+        subtitle <- paste0(subtitle, "<br>", sprintf("Load Limit: %0.f %%", reception_limit * 100))
+        border <- c("Rk", "Team", "Total")
+      },
+      "l" = {
+        title <- "Best Liberos"
+        border <- c("Rk", "Team", "Total")
+      },
+      "f" = {
+        title <- "Team Errors"
+        border <- c("Rk", "Team", "Opp. Errors")
+      }
+    )
+  }
+
+  out <- data %>%
+    gt() %>%
+    tab_header(
+      title = md(sprintf("**%s**", title)),
+      subtitle = md(subtitle)
+    ) %>%
+    tab_style(
+      style = list(
+        cell_text(weight = "bold")
+      ),
+      locations = cells_column_labels(everything())
+    ) %>%
+    tab_style(
+      style = list(
+        cell_borders(
+          side = c("right"),
+          color = "#eee",
+          weight = px(1.5)
+        )
+      ),
+      locations = cells_body(
+        columns = border
+      )
+    ) %>%
+    tab_style(
+      style = list(
+        cell_borders(
+          side = c("right"),
+          color = "#eee",
+          weight = px(1.5)
+        )
+      ),
+      locations = cells_column_labels(
+        columns = border
+      )
+    ) %>%
+    tab_options(table.width = "100%")
+  out
+}
+
+get_teamFlag <- function(code, source = "VW", height = 30, width = 30) {
+  if (source == "VW") {
+    out <- sprintf("https://images.volleyballworld.com/image/upload/f_png/t_flag/assets/flags/flag_%s", code)
+  } else {
+    out <- sprintf("https://www.fivb.com/~/media/flags/flag_%s.png?h=%d&w=%d", code, height, width)
+  }
+}
+
 textRoster <- function(players, selected = TRUE, shortName = TRUE, numShirt = TRUE) {
   out <- ""
   if (!missing(players) && nrow(players) > 0) {
