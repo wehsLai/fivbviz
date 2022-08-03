@@ -63,7 +63,9 @@ autoWaiter()
 
 How to Use:  
 1. Select Tournament → OPEN  
-2. (option)Select Round → Filter  
+2. (option)Select Round → Filter
+
+If there are players not on the roster, Team stats and Load column of Player stats will not be the correct number.
 
 ```{r message=FALSE, warning=FALSE}
 inputPanel(

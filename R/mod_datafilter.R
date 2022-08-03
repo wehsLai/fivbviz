@@ -2,8 +2,8 @@ dataFilterUI <- function(id) {
   ns <- NS(id)
   tagList(
     pickerInput(ns("round_pick"),
-        label = "Round", choices = c(), selected = NULL,
-        multiple = TRUE, options = list(`actions-box` = TRUE), width = "fit"
+      label = "Round", choices = c(), selected = NULL,
+      multiple = TRUE, options = list(`actions-box` = TRUE), width = "fit"
     ),
     actionBttn(ns("filter"), label = "Filter", style = "bordered", color = "primary", size = "sm"),
     verbatimTextOutput(ns("msg"), placeholder = TRUE)
@@ -14,11 +14,16 @@ dataFilterServer <- function(id, showSeason, addPoolName = TRUE) {
   moduleServer(id, function(input, output, session) {
     observe({
       output$msg <- renderText({
-          out <- paste0(rv$marktext, "\n",
-          sprintf("matches: %s\nteams: %s\nplayers:  %s\nstatistics$Player: %s\nstatistics$Team: %s\n", 
-                  nrow(rv$fds$matches), nrow(rv$fds$teams), nrow(rv$fds$players), 
-                  nrow(rv$fds$statistics$Player), nrow(rv$fds$statistics$Team)))
-          out
+        out <- paste0(
+          rv$marktext, "\n",
+          sprintf(
+            "matches: %s\nteams: %s\nplayers:  %s\nstatistics$Player: %s\nstatistics$Team: %s\nNot on roster: %s",
+            nrow(rv$fds$matches), nrow(rv$fds$teams), nrow(rv$fds$players),
+            nrow(rv$fds$statistics$Player), nrow(rv$fds$statistics$Team),
+            nrow(rv$fds$statistics$Player %>% group_by(player.teamName) %>% slice(1) %>% filter(is.na(team.code)))
+          )
+        )
+        out
       })
     })
 
@@ -43,7 +48,7 @@ dataFilterServer <- function(id, showSeason, addPoolName = TRUE) {
             rv$ds$tournament$shortNameOrName, " - ", paste0(pick(), collapse = ", ")
           )
         }
-        if (!is.null(rv$ds) && all(map_lgl(rv$ds$statistics, ~nrow(.x) > 0)) == TRUE) {
+        if (!is.null(rv$ds) && all(map_lgl(rv$ds$statistics, ~ nrow(.x) > 0)) == TRUE) {
           rv$fds$matches <- rv$ds$matches[rv$ds$matches$poolRoundName %in% pick(), ]
           rv$fds$statistics$Player <- rv$ds$statistics$Player[rv$ds$statistics$Player$noMatch %in% rv$fds$matches$no, ]
           rv$fds$statistics$Team <- rv$ds$statistics$Team[rv$ds$statistics$Team$noMatch %in% rv$fds$matches$no, ]
