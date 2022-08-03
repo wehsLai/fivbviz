@@ -17,11 +17,11 @@ dataFilterServer <- function(id, showSeason, addPoolName = TRUE) {
         if (nrow(rv$fds$players) == 0 | nrow(rv$fds$statistics$Player) == 0) {
           notOnRoster <- 0
         } else {
-          notOnRoster <- rv$fds$statistics$Player %>% 
-              group_by(player.teamName) %>% 
-              slice(1) %>% 
-              filter(is.na(team.code)) %>% 
-              nrow()
+          notOnRoster <- rv$fds$statistics$Player %>%
+            group_by(player.teamName) %>%
+            slice(1) %>%
+            filter(is.na(team.code)) %>%
+            nrow()
         }
         out <- paste0(
           rv$marktext, "\n",
