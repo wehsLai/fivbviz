@@ -14,13 +14,21 @@ dataFilterServer <- function(id, showSeason, addPoolName = TRUE) {
   moduleServer(id, function(input, output, session) {
     observe({
       output$msg <- renderText({
+        if (nrow(rv$fds$players) == 0 | nrow(rv$fds$statistics$Player) == 0) {
+          notOnRoster <- 0
+        } else {
+          notOnRoster <- rv$fds$statistics$Player %>% 
+              group_by(player.teamName) %>% 
+              slice(1) %>% 
+              filter(is.na(team.code)) %>% 
+              nrow()
+        }
         out <- paste0(
           rv$marktext, "\n",
           sprintf(
             "matches: %s\nteams: %s\nplayers:  %s\nstatistics$Player: %s\nstatistics$Team: %s\nNot on roster: %s",
             nrow(rv$fds$matches), nrow(rv$fds$teams), nrow(rv$fds$players),
-            nrow(rv$fds$statistics$Player), nrow(rv$fds$statistics$Team),
-            nrow(rv$fds$statistics$Player %>% group_by(player.teamName) %>% slice(1) %>% filter(is.na(team.code)))
+            nrow(rv$fds$statistics$Player), nrow(rv$fds$statistics$Team), notOnRoster
           )
         )
         out
