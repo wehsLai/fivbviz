@@ -54,7 +54,11 @@ clipboardP3Server <- function(id) {
       out <- cho() %>%
         ungroup() %>%
         filter(no == input$match_pick)
-      out$showText
+      if (input$latin1) {
+          iconv(out$showText, "UTF8", "latin1")
+      } else {
+          out$showText
+      }
     })
 
     output$board <- renderText({
