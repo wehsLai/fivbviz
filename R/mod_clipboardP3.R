@@ -5,7 +5,7 @@ clipboardP3UI <- function(id) {
     tagList(
       prettyCheckbox(ns("official"), label = "Official", value = TRUE, status = "primary", icon = icon("check"), inline = T),
       prettyCheckbox(ns("latin1"), label = "latin1", value = TRUE, status = "primary", icon = icon("check"), inline = T),
-      selectizeInput(ns("match_pick"), label = NULL, choices = c(), width = "100%"),
+      selectizeInput(ns("match_pick"), label = NULL, choices = c()),
       actionButton(ns("copy_match"), label = "Copy Match", icon = fontawesome::fa_i(name = "copy"), `data-clipboard-target` = sprintf("#%s", ns("match_name"))),
       actionButton(ns("copy_p3"), label = "Copy P3", icon = fontawesome::fa_i(name = "copy"), `data-clipboard-target` = sprintf("#%s", ns("board"))),
       # trigger clipboard.js, place it at the end of the column
@@ -30,8 +30,8 @@ clipboardP3Server <- function(id) {
         mutate(
           dateClient = format(dateTimeUtc, tz = Sys.timezone(), format = "%Y-%m-%d"),
           timeClient = format(dateTimeUtc, tz = Sys.timezone(), format = "%H:%M"),
-          resultText = sprintf("%s %s", stringr::str_replace_na(matchResultText, ""), stringr::str_replace_na(setsResultsText, "")),
-          showText = sprintf("%s %s %s-%s %s", noInTournament, poolName, teamACode, teamBCode, resultText)
+          matchResultText = stringr::str_replace_na(matchResultText, ""),
+          showText = sprintf("%s %s %s-%s %s", noInTournament, poolName, teamACode, teamBCode, matchResultText)
         ) %>%
         select(no, showText, dateClient) %>%
         group_by(dateClient)
@@ -54,6 +54,7 @@ clipboardP3Server <- function(id) {
       out <- cho() %>%
         ungroup() %>%
         filter(no == input$match_pick)
+      # convert to latin1
       if (input$latin1) {
           iconv(out$showText, "UTF8", "latin1")
       } else {
