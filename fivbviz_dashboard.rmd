@@ -48,6 +48,7 @@ pre.shiny-text-output {
 </style>
 
 ```{r setup, include=FALSE}
+options(encoding = 'UTF-8')
 source("R/global.R")
 source("R/data_transform.R")
 source("R/chart.R")
