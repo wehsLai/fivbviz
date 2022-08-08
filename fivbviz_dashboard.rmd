@@ -12,7 +12,7 @@ output:
       base_font:
         google: "Source Sans Pro"
       code_font:
-        google: "Source Sans Pro"
+        google: "Fira Code"
 ---
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.10/clipboard.min.js"></script>
@@ -27,7 +27,11 @@ output:
 }
 
 .form-group {
-    margin-bottom: 2px;
+  margin-bottom: 2px;
+}
+
+.selectize-dropdown-content {
+  max-height: 400px
 }
 
 .shiny-input-panel {
@@ -40,6 +44,7 @@ output:
 pre.shiny-text-output {
   white-space: pre-wrap;
 }
+
 </style>
 
 ```{r setup, include=FALSE}
@@ -54,6 +59,7 @@ source("R/mod_rankBySkill.R")
 source("R/mod_matches.R")
 source("R/mod_roster.R")
 source("R/mod_clipboard.R")
+source("R/mod_clipboardP3.R")
 autoWaiter()
 ```
 
@@ -76,7 +82,7 @@ downloadUI("rds", "RDS", color = "success"),
 downloadUI("dashboard", "dashboard", color = "warning"),
 downloadUI("html", "html", color = "warning"),
 downloadUI("p56", "p56", color = "warning"),
-showRkUI("p56", "P56 All", color = "warning"),
+showRkUI("p56", "P56 All", color = "warning")
 )
 reactive({
   if (!is.null(rv$ds)) {
@@ -362,6 +368,16 @@ observe({
 })
 ```
 
+### P-3
+```{r message=FALSE, warning=FALSE}
+clipboardP3UI("matches")
+observe({
+  if (!is.null(rv$ds) && nrow(rv$ds$matches) > 0) {
+    clipboardP3Server("matches")
+  }
+})
+```
+
 ### Roster
 
 ```{r message=FALSE, warning=FALSE}
@@ -374,11 +390,12 @@ observe({
 ```
 
 ### Clipboard
+
 ```{r message=FALSE, warning=FALSE}
-clipboardUI("clipboard")
+clipboardUI("roster")
 observe({
   if (!is.null(rv$ds) && nrow(rv$ds$players) > 0) {
-    clipboardServer("clipboard")
+    clipboardServer("roster")
   }
 })
 ```

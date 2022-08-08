@@ -136,16 +136,16 @@ get_tournament_data <- function(no) {
   }
 }
 
-Percentage <- function(total, performance, digits = 2) {
-  ifelse(total == 0, NA, round((performance * 100) / total, digits))
+Percentage <- function(total, performance, digits = 2, naRankZeroPf = FALSE) {
+  ifelse(total == 0 | (performance == 0 & naRankZeroPf), NA, round((performance * 100) / total, digits))
 }
 
-Efficiency <- function(total, performance, fault, digits = 2) {
-  ifelse(total == 0, NA, round(((performance - fault) * 100) / total, digits))
+Efficiency <- function(total, performance, fault, digits = 2, naRankZeroPf = FALSE) {
+  ifelse(total == 0 | (performance == 0 & naRankZeroPf), NA, round(((performance - fault) * 100) / total, digits))
 }
 
-Per <- function(nb, performance, digits = 2) {
-  ifelse(nb == 0, NA, round(performance / nb, digits))
+Per <- function(nb, performance, digits = 2, naRankZeroPf = FALSE) {
+  ifelse(nb == 0 | (performance == 0 & naRankZeroPf), NA, round(performance / nb, digits))
 }
 
 OrgPoint <- function(total) {
@@ -153,20 +153,20 @@ OrgPoint <- function(total) {
   out
 }
 
-OrgPercentage <- function(total, performance, setLimit = FALSE, teamTotal, limit) {
-  out <- ifelse(total == 0, NA, (performance * 100) / total)
-  if (setLimit) out[total <= teamTotal * limit] <- NA
+OrgPercentage <- function(total, performance, setLimit = FALSE, teamTotal, limit, naRankZeroPf = FALSE) {
+  out <- ifelse(total == 0 | (performance == 0 & naRankZeroPf), NA, (performance * 100) / total)
+  if (setLimit) out[total < teamTotal * limit] <- NA
   out
 }
 
-OrgEfficiency <- function(total, performance, fault, setLimit = FALSE, teamTotal, limit) {
-  out <- ifelse(total == 0, NA, ((performance - fault) * 100) / total)
-  if (setLimit) out[total <= teamTotal * limit] <- NA
+OrgEfficiency <- function(total, performance, fault, setLimit = FALSE, teamTotal, limit, naRankZeroPf = FALSE) {
+  out <- ifelse(total == 0 | (performance == 0 & naRankZeroPf), NA, ((performance - fault) * 100) / total)
+  if (setLimit) out[total < teamTotal * limit] <- NA
   out
 }
 
-OrgPer <- function(nb, performance) {
-  ifelse(nb == 0, NA, performance / nb)
+OrgPer <- function(nb, performance, naRankZeroPf = FALSE) {
+  ifelse(nb == 0 | (performance == 0 & naRankZeroPf), NA, performance / nb)
 }
 
 Ranking <- function(performance, isDesc = TRUE) {
@@ -184,7 +184,7 @@ calculate_agg <- function(gpd_df, isTeam = TRUE) {
       nbSets = sum(nbSets),
       teamError = sum(teamError),
       teamErrorAverageBySet = Per(nbSets, teamError),
-      teamErrorOrgAverageBySet = OrgPer(nbSets, teamError),
+      teamErrorOrgAverageBySet = OrgPer(nbSets, teamError, ),
       opponentError = sum(opponentError),
       opponentErrorAverageBySet = Per(nbSets, opponentError),
       opponentErrorOrgAverageBySet = OrgPer(nbSets, opponentError),
@@ -247,13 +247,13 @@ calculate_agg <- function(gpd_df, isTeam = TRUE) {
     )
 
     out$scoreRank <- Ranking(OrgPoint(out$pointTotal))
-    out$spikeRank <- Ranking(OrgPercentage(out$spikeTotal, out$spikePoint)) # note
-    out$blockRank <- Ranking(OrgPer(out$nbSets, out$blockPoint)) # note
-    out$serveRank <- Ranking(OrgPer(out$nbSets, out$servePoint)) # note
-    out$digRank <- Ranking(OrgPer(out$nbSets, out$digExcellent)) # note
-    out$setRank <- Ranking(OrgPer(out$nbSets, out$setExcellent)) # note
-    out$receptionRank <- Ranking(OrgEfficiency(out$receptionTotal, out$receptionExcellent, out$receptionFault)) # note
-    out$tfRank <- Ranking(OrgPer(out$nbSets, out$teamError), isDesc = FALSE)
+    out$spikeRank <- Ranking(OrgPercentage(out$spikeTotal, out$spikePoint, naRankZeroPf = TRUE)) # note
+    out$blockRank <- Ranking(OrgPer(out$nbSets, out$blockPoint, naRankZeroPf = TRUE)) # note
+    out$serveRank <- Ranking(OrgPer(out$nbSets, out$servePoint, naRankZeroPf = TRUE)) # note
+    out$digRank <- Ranking(OrgPer(out$nbSets, out$digExcellent, naRankZeroPf = TRUE)) # note
+    out$setRank <- Ranking(OrgPer(out$nbSets, out$setExcellent, naRankZeroPf = TRUE)) # note
+    out$receptionRank <- Ranking(OrgEfficiency(out$receptionTotal, out$receptionExcellent, out$receptionFault, naRankZeroPf = TRUE)) # note
+    out$tfRank <- Ranking(OrgPer(out$nbSets, out$teamError, naRankZeroPf = TRUE), isDesc = FALSE)
   } else {
     out <- gpd_df %>% summarise(
       # order by note, team.code, noShirt(player)
@@ -344,12 +344,12 @@ calculate_agg <- function(gpd_df, isTeam = TRUE) {
     )
 
     out$scoreRank <- Ranking(OrgPoint(out$pointTotal))
-    out$spikeRank <- Ranking(OrgPercentage(out$spikeTotal, out$spikePoint, setLimit = TRUE, teamTotal = out$spikeTotal.t, limit = spike_limit)) # note
-    out$blockRank <- Ranking(OrgPer(out$nbSets.t, out$blockPoint)) # note
-    out$serveRank <- Ranking(OrgPer(out$nbSets.t, out$servePoint)) # note
-    out$digRank <- Ranking(OrgPer(out$nbSets.t, out$digExcellent)) # note
-    out$setRank <- Ranking(OrgPer(out$nbSets.t, out$setExcellent)) # note
-    out$receptionRank <- Ranking(OrgEfficiency(out$receptionTotal, out$receptionExcellent, out$receptionFault, setLimit = TRUE, teamTotal = out$receptionTotal.t, limit = reception_limit)) # note
+    out$spikeRank <- Ranking(OrgPercentage(out$spikeTotal, out$spikePoint, setLimit = TRUE, teamTotal = out$spikeTotal.t, limit = spike_limit, naRankZeroPf = TRUE)) # note
+    out$blockRank <- Ranking(OrgPer(out$nbSets.t, out$blockPoint, naRankZeroPf = TRUE)) # note
+    out$serveRank <- Ranking(OrgPer(out$nbSets.t, out$servePoint, naRankZeroPf = TRUE)) # note
+    out$digRank <- Ranking(OrgPer(out$nbSets.t, out$digExcellent, naRankZeroPf = TRUE)) # note
+    out$setRank <- Ranking(OrgPer(out$nbSets.t, out$setExcellent, naRankZeroPf = TRUE)) # note
+    out$receptionRank <- Ranking(OrgEfficiency(out$receptionTotal, out$receptionExcellent, out$receptionFault, setLimit = TRUE, teamTotal = out$receptionTotal.t, limit = reception_limit, naRankZeroPf = TRUE)) # note
     out$liberoRank <- Ranking(OrgPer(out$nbSets.t, out$liberoExcellent)) # note
   }
   out
@@ -689,4 +689,168 @@ rankBySkillshow <- function(f, type, isTeam = FALSE, limit = 0) {
         select(-player.teamName, -y, -x, -showText)
     }
   }
+}
+
+get_p3 <- function(tournamentName, matches, statistics, noMatch, type = "text") {
+  if (is.null(noMatch)) {
+    out <- ""
+  } else {
+    # rename
+    p.col <- c(No = "noShirt", Name = "player.teamName", `Pos` = "player.volleyPosition")
+    t.col <- c(Name = "team")
+    a.col <- c(Atk = "spikePoint", Err = "spikeFault", Inp = "spikeContinue", Tot = "spikeTotal", `Succ.%` = "spikePointPercentage")
+    b.col <- c(Blo = "blockPoint", Err = "blockFault", Inp = "blockContinue", Tot = "blockTotal", `Avg.pS` = "blockPointAverageBySet")
+    s.col <- c(Ace = "servePoint", Err = "serveFault", Inp = "serveContinue", Tot = "serveTotal", `Avg.pS` = "servePointAverageBySet")
+    d.col <- c(Dig = "digExcellent", Err = "digFault", Inp = "digContinue", Tot = "digTotal", `Avg.pS` = "digExcellentAverageBySet")
+    e.col <- c(Run = "setExcellent", Err = "setFault", Inp = "setContinue", Tot = "setTotal", `Avg.pS` = "setExcellentAverageBySet")
+    r.col <- c(Exc = "receptionExcellent", Err = "receptionFault", Inp = "receptionContinue", Tot = "receptionTotal", `Eff. %` = "receptionEfficiencyPercentage")
+
+    m <- matches %>% filter(no == noMatch)
+    m <- m %>% mutate(
+      pointsTeamATotal = rowSums(select(m, starts_with("pointsTeamA")), na.rm = TRUE),
+      pointsTeamBTotal = rowSums(select(m, starts_with("pointsTeamB")), na.rm = TRUE)
+    )
+    lv <- c(m$teamACode, m$teamBCode)
+
+    t <- statistics$Team %>%
+      filter(noMatch == m$no) %>%
+      mutate(team = "Total Team")
+    p <- statistics$Player %>%
+      filter(noMatch == m$no) %>%
+      left_join(t[, c("team.code", "nbSets", "spikeTotal", "blockTotal", "serveTotal", "digTotal", "setTotal", "receptionTotal")], by = c("team.code" = "team.code"), suffix = c("", ".t"), keep = FALSE) %>%
+      group_by(team.code) %>%
+      mutate(
+        name = sprintf("%-20.20s", paste(player.lastName, player.firstName)),
+        spikePointPercentage = Percentage(spikeTotal, spikePoint), # note
+        blockPointAverageBySet = Per(nbSets.t, blockPoint), # note
+        servePointAverageBySet = Per(nbSets.t, servePoint), # note
+        digExcellentAverageBySet = Per(nbSets.t, digExcellent), # note
+        setExcellentAverageBySet = Per(nbSets.t, setExcellent), # note
+        receptionEfficiencyPercentage = Efficiency(receptionTotal, receptionExcellent, receptionFault), # note
+        spikeRank = Ranking(OrgPercentage(spikeTotal, spikePoint, setLimit = TRUE, teamTotal = spikeTotal.t, limit = spike_limit, naRankZeroPf = TRUE)), # note
+        blockRank = Ranking(OrgPer(nbSets.t, blockPoint, naRankZeroPf = TRUE)), # note
+        serveRank = Ranking(OrgPer(nbSets.t, servePoint, naRankZeroPf = TRUE)), # note
+        digRank = Ranking(OrgPer(nbSets.t, digExcellent, naRankZeroPf = TRUE)), # note
+        setRank = Ranking(OrgPer(nbSets.t, setExcellent, naRankZeroPf = TRUE)), # note
+        receptionRank = Ranking(OrgEfficiency(receptionTotal, receptionExcellent, receptionFault, setLimit = TRUE, teamTotal = receptionTotal.t, limit = reception_limit, naRankZeroPf = TRUE)) # note
+      ) %>%
+      ungroup()
+
+    p$spikePointPercentage[is.na(p$spikeRank)] <- NA
+    p$blockPointAverageBySet[is.na(p$blockRank)] <- NA
+    p$servePointAverageBySet[is.na(p$serveRank)] <- NA
+    p$digExcellentAverageBySet[is.na(p$digRank)] <- NA
+    p$setExcellentAverageBySet[is.na(p$setRank)] <- NA
+    p$receptionEfficiencyPercentage[is.na(p$receptionRank)] <- NA
+
+    p$team.code <- factor(p$team.code, levels = lv)
+    t$team.code <- factor(t$team.code, levels = lv)
+
+    sp <- split(p, p$team.code)
+    st <- split(t, t$team.code)
+    # header
+    tournamentName <- "FIVB Volleyball Nations League - Women"
+    header <- paste0(pandoc.header.return(tournamentName, 1, style = "setext") %>% gsub("^\n", "", .), "[P-3] Match players ranking")
+    # P2 Document
+    p2url <- "[P-2]:"
+    if(!is.na(m$noDocumentP2)) p2url <- sprintf("%s https://www.fivb.org/vis2009/getdocument.asmx?no=%s", p2url, as.character(m$noDocumentP2))
+    # Info
+    durationTotal <- as.period(difftime(m$endDateTimeUtc, m$beginDateTimeUtc, units = "mins"))
+    endTime <- hms(m$endTime)
+    beginTime <- endTime - durationTotal
+    info <- sprintf(
+      "Match: %s Date: %s Spectators: %s\nCity: %s\nHall: %s\nMatch duration: Start: %s End: %s Total: %s",
+      m$noInTournament, m$dateLocal, format(m$nbSpectators, big.mark = ","),
+      m$city, m$hall, parsePeridHM(beginTime), parsePeridHM(endTime),
+      parsePeridHM(durationTotal)
+    )
+
+    # Score
+    if (m$format != 2) {
+      i <- 5
+    } else {
+      i <- 7
+    }
+
+    r1 <- m %>%
+      select(teamACode, matchPointsA, all_of(paste0("pointsTeamASet", 1:i)), pointsTeamATotal) %>%
+      setNames(c("Teams", "Sets", 1:i, "Total")) %>%
+      map_df(as.character)
+    r2 <- m %>%
+      select(teamBCode, matchPointsB, all_of(paste0("pointsTeamBSet", 1:i)), pointsTeamBTotal) %>%
+      setNames(c("Teams", "Sets", 1:i, "Total")) %>%
+      map_df(as.character)
+    r3 <- c("Duration:", NA_integer_, parsePeridHM(seconds_to_period(m[, paste0("durationSet", 1:i)])), parsePeridHM(seconds_to_period(m$durationTotal))) %>%
+      setNames(c("Teams", "Sets", 1:i, "Total")) %>%
+      map_df(as.character)
+    score <- bind_rows(r1, r2, r3)
+
+    # Stats
+    p3_stats <- ""
+    for (j in 1:2) {
+      # Title Team
+      titleTeam <- pandoc.table.return(paste(st[[j]]$team.code, st[[j]]$team.name, sep = " - "), style = "grid") %>% gsub("^\n\n|\n$", "", .)
+      stats <- map(c("Attack", "Block", "Serve", "Dig", "Set", "Reception"), function(z) {
+        # Title Skill
+        switch(z,
+          "Attack" = {
+            titleSkill <- sprintf("%s (Limit: %0.f%%)", z, spike_limit * 100)
+            rk <- c(Rk = "spikeRank")
+            sk <- a.col
+          },
+          "Block" = {
+            titleSkill <- z
+            rk <- c(Rk = "blockRank")
+            sk <- b.col
+          },
+          "Serve" = {
+            titleSkill <- z
+            rk <- c(Rk = "serveRank")
+            sk <- s.col
+          },
+          "Dig" = {
+            titleSkill <- z
+            rk <- c(Rk = "digRank")
+            sk <- d.col
+          },
+          "Set" = {
+            titleSkill <- z
+            rk <- c(Rk = "setRank")
+            sk <- e.col
+          },
+          "Reception" = {
+            titleSkill <- sprintf("%s (Limit: %0.f%%)", z, reception_limit * 100)
+            rk <- c(Rk = "receptionRank")
+            sk <- r.col
+          }
+        )
+
+        # Body Player Stats
+        body <- sp[[j]] %>%
+          select(all_of(rk), all_of(p.col), all_of(sk)) %>%
+          arrange(Rk) %>%
+          bind_rows(st[[j]] %>% select(all_of(t.col), all_of(sk)))
+        if (type == "text") {
+          body <- body %>%
+            pandoc.table.return(style = "simple", missing = "", keep.trailing.zeros = TRUE, justify = c("right", "right", "left", "center", rep("right", 5))) %>%
+            gsub("^\n\n", "", .)
+          out <- paste0(pandoc.header.return(titleSkill, 1, style = "setext") %>% gsub("^\n", "", .), body)
+        }
+      })
+      if (type == "text") {
+        p3_stats <- paste(p3_stats, titleTeam, paste(stats, collapse = ""), sep = "\n")
+      }
+    }
+    # finally combine three parts
+    if (type == "text") {
+      out <- paste0(
+        pandoc.table.return(header, style = "grid", justify = "left", keep.line.breaks = TRUE, split.cells = 80) %>% gsub("^\n\n|\n$", "", .),
+        paste0(p2url, "\n"),
+        pandoc.table.return(info, style = "grid", justify = "left", keep.line.breaks = TRUE, split.cells = 80) %>% gsub("^\n\n", "", .),
+        pandoc.table.return(score, style = "grid", missing = "", justify = c("left", rep("right", i + 2))) %>% gsub("^\n\n|\n$", "", .),
+        p3_stats
+      )
+    }
+  }
+  out
 }

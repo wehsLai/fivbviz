@@ -13,5 +13,3 @@ Shiny dashboard for visualizing FIVB volleyball data.
 ![](asset/player_attacker.png)
 
 ![](asset/team_blocker.png)
-
-![](asset/roster.png)

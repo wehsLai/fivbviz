@@ -1,6 +1,8 @@
 library(dplyr)
 library(fivbvis)
 library(gt)
+library(lubridate)
+library(pander)
 library(plotly)
 library(purrr)
 library(rclipboard)

@@ -426,3 +426,9 @@ textRoster <- function(players, selected = TRUE, shortName = TRUE, numShirt = TR
   }
   out
 }
+
+parsePeridHM <- function(period) {
+  out <- as.character(period)
+  out[!is.na(out)] <- sprintf("%d:%02d", hour(period[!is.na(period)]), minute(period[!is.na(period)]))
+  out
+}

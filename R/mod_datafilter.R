@@ -2,8 +2,8 @@ dataFilterUI <- function(id) {
   ns <- NS(id)
   tagList(
     pickerInput(ns("round_pick"),
-      label = "Round", choices = c(), selected = NULL,
-      multiple = TRUE, options = list(`actions-box` = TRUE), width = "fit"
+      label = "Round", choices = c(), selected = character(0),
+      multiple = TRUE, options = list(`actions-box` = TRUE)
     ),
     actionBttn(ns("filter"), label = "Filter", style = "bordered", color = "primary", size = "sm"),
     verbatimTextOutput(ns("msg"), placeholder = TRUE)
@@ -17,10 +17,13 @@ dataFilterServer <- function(id, showSeason, addPoolName = TRUE) {
         out <- paste0(
           rv$marktext, "\n",
           sprintf(
-            "matches: %s\nteams: %s\nplayers:  %s\nstatistics$Player: %s\nstatistics$Team: %s\nNot on roster: %s",
+            "matches: %s\nteams: %s\nplayers: %s\nstatistics$Player: %s\nstatistics$Team: %s\nNot on roster: %s",
             nrow(rv$fds$matches), nrow(rv$fds$teams), nrow(rv$fds$players),
             nrow(rv$fds$statistics$Player), nrow(rv$fds$statistics$Team),
-            nrow(rv$fds$statistics$Player %>% group_by(player.teamName) %>% slice(1) %>% filter(is.na(team.code)))
+            ifelse(nrow(rv$fds$statistics$Player) > 0,
+              nrow(rv$fds$statistics$Player %>% group_by(player.teamName) %>% slice(1) %>% filter(is.na(team.code))),
+              NA
+            )
           )
         )
         out
@@ -28,7 +31,10 @@ dataFilterServer <- function(id, showSeason, addPoolName = TRUE) {
     })
 
     observe({
-      updatePickerInput(session = session, inputId = "round_pick", choices = unique(rv$ds$matches$poolRoundName), selected = character(0))
+      updatePickerInput(
+        session = session, inputId = "round_pick", choices = unique(rv$ds$matches$poolRoundName),
+        selected = character(0)
+      )
     })
 
     pick <- reactive({
