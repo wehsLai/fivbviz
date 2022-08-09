@@ -14,7 +14,7 @@ matchesServer <- function(id) {
         mutate(
           noInTournament = sprintf(fmt, noInTournament),
           dateTimeClient = format(dateTimeUtc, tz = Sys.timezone(), format = "%Y-%m-%d %H:%M"),
-          resultText = sprintf("%s %s", stringr::str_replace_na(matchResultText, ""), stringr::str_replace_na(setsResultsText, ""))
+          resultText = sprintf("%s %s", matchResultText, setsResultsText) %>% stringr::str_replace_all("NA", "")
         ) %>%
         select(noInTournament, dateTimeClient, countryName, city, poolName, teamAName, teamBName, resultText, status)
 

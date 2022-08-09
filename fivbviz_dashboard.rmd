@@ -371,7 +371,7 @@ observe({
 
 ### P-3
 ```{r message=FALSE, warning=FALSE}
-clipboardP3UI("matches")
+clipboardP3RUI("matches")
 observe({
   if (!is.null(rv$ds) && nrow(rv$ds$matches) > 0) {
     clipboardP3Server("matches")

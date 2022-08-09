@@ -16,6 +16,27 @@ clipboardP3UI <- function(id) {
   )
 }
 
+clipboardP3RUI <- function(id) {
+  ns <- NS(id)
+  fillRow(
+    flex = c(NA, 1),
+    tagList(
+      prettyCheckbox(ns("official"), label = "Official", value = TRUE, status = "primary", icon = icon("check")),
+      prettyCheckbox(ns("latin1"), label = "latin1", value = TRUE, status = "primary", icon = icon("check")),
+      selectizeInput(ns("match_pick"), label = NULL, choices = c()),
+      actionButton(ns("copy_match"), label = "Copy Match", icon = fontawesome::fa_i(name = "copy"), `data-clipboard-target` = sprintf("#%s", ns("match_name"))),
+      actionButton(ns("copy_p3"), label = "Copy P3", icon = fontawesome::fa_i(name = "copy"), `data-clipboard-target` = sprintf("#%s", ns("board"))),
+      # trigger clipboard.js, place it at the end of the column
+      uiOutput(ns("clip"), style = "visibility: hidden")
+    ),
+    fillCol(
+      flex = c(NA, 1),
+      verbatimTextOutput(ns("match_name"), placeholder = TRUE),
+      verbatimTextOutput(ns("board"), placeholder = TRUE)
+    )
+  )
+}
+
 clipboardP3Server <- function(id) {
   moduleServer(id, function(input, output, session) {
     cho <- reactive({
@@ -56,9 +77,9 @@ clipboardP3Server <- function(id) {
         filter(no == input$match_pick)
       # convert to latin1
       if (input$latin1) {
-          iconv(out$showText, "UTF8", "latin1")
+        iconv(out$showText, "UTF8", "latin1")
       } else {
-          out$showText
+        out$showText
       }
     })
 

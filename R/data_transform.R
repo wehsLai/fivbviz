@@ -753,7 +753,7 @@ get_p3 <- function(tournamentName, matches, statistics, noMatch, type = "text") 
     header <- paste0(pandoc.header.return(tournamentName, 1, style = "setext") %>% gsub("^\n", "", .), "[P-3] Match players ranking")
     # P2 Document
     p2url <- "[P-2]:"
-    if(!is.na(m$noDocumentP2)) p2url <- sprintf("%s https://www.fivb.org/vis2009/getdocument.asmx?no=%s", p2url, as.character(m$noDocumentP2))
+    if (!is.na(m$noDocumentP2)) p2url <- sprintf("%s https://www.fivb.org/vis2009/getdocument.asmx?no=%s", p2url, as.character(m$noDocumentP2))
     # Info
     durationTotal <- as.period(difftime(m$endDateTimeUtc, m$beginDateTimeUtc, units = "mins"))
     endTime <- hms(m$endTime)
@@ -761,9 +761,9 @@ get_p3 <- function(tournamentName, matches, statistics, noMatch, type = "text") 
     info <- sprintf(
       "Match: %s Date: %s Spectators: %s\nCity: %s\nHall: %s\nMatch duration: Start: %s End: %s Total: %s",
       m$noInTournament, m$dateLocal, format(m$nbSpectators, big.mark = ","),
-      m$city, m$hall, parsePeridHM(beginTime), parsePeridHM(endTime),
-      parsePeridHM(durationTotal)
-    )
+      m$city, m$hall, parsePeridHM(beginTime), parsePeridHM(endTime), parsePeridHM(durationTotal)
+    ) %>%
+      stringr::str_replace_all(" NA", " ")
 
     # Score
     if (m$format != 2) {
