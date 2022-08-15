@@ -749,7 +749,6 @@ get_p3 <- function(tournamentName, matches, statistics, noMatch, type = "text") 
     sp <- split(p, p$team.code)
     st <- split(t, t$team.code)
     # header
-    tournamentName <- "FIVB Volleyball Nations League - Women"
     header <- paste0(pandoc.header.return(tournamentName, 1, style = "setext") %>% gsub("^\n", "", .), "[P-3] Match players ranking")
     # P2 Document
     p2url <- "[P-2]:"

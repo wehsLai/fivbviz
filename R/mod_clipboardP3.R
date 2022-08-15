@@ -68,7 +68,7 @@ clipboardP3Server <- function(id) {
     })
 
     clipVal <- reactive({
-      get_p3(rv$tournament$name, rv$ds$match, rv$ds$statistics, input$match_pick, type = "text")
+      get_p3(rv$ds$tournament$name, rv$ds$match, rv$ds$statistics, input$match_pick, type = "text")
     })
 
     output$match_name <- renderText({
