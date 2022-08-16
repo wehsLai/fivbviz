@@ -835,7 +835,8 @@ get_p3 <- function(tournamentName, matches, statistics, noMatch, type = "text") 
           arrange(Rk, No) %>%
           bind_rows(st[[j]] %>% select(all_of(t.col), all_of(sk)))
         if (type == "text") {
-          body[, tail(names(body), 1)] <- sprintf("%.2f", pull(body[, tail(names(body), 1)])) %>% stringr::str_replace_all("NA", "")
+          body[, tail(names(body), 1)] <- sprintf("%.2f", pull(body[, tail(names(body), 1)])) %>%
+            stringr::str_replace_all("NA", "")
           body <- body %>%
             pandoc.table.return(style = "simple", missing = "", justify = c("right", "right", "left", "center", rep("right", 5))) %>%
             gsub("^\n\n", "", .)
