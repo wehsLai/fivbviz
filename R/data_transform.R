@@ -749,18 +749,18 @@ get_p3 <- function(tournamentName, matches, statistics, noMatch, type = "text") 
     sp <- split(p, p$team.code)
     st <- split(t, t$team.code)
     # header
-    header <- paste0(pandoc.header.return(tournamentName, 1, style = "setext") %>% gsub("^\n", "", .), "[P-3] Match players ranking")
+    header <- pandoc.header.return(paste0(tournamentName, "\n[P-3] Match players ranking"), 1, style = "setext") %>% gsub("^\n", "", .)
     # P2 Document
-    p2url <- "[P-2]:"
+    p2url <- "[P-2]"
     if (!is.na(m$noDocumentP2)) p2url <- sprintf("%s https://www.fivb.org/vis2009/getdocument.asmx?no=%s", p2url, as.character(m$noDocumentP2))
     # Info
     endTime <- hms(m$endTime)
-    if(is.na(m$beginDateTimeUtc)) {
-        beginTime <- hms(m$timeLocal)
-        durationTotal <- endTime - beginTime
+    if (is.na(m$beginDateTimeUtc)) {
+      beginTime <- hms(m$timeLocal)
+      durationTotal <- endTime - beginTime
     } else {
-        durationTotal <- as.period(difftime(m$endDateTimeUtc, m$beginDateTimeUtc, units = "mins"))
-        beginTime <- endTime - durationTotal
+      durationTotal <- as.period(difftime(m$endDateTimeUtc, m$beginDateTimeUtc, units = "mins"))
+      beginTime <- endTime - durationTotal
     }
     info <- sprintf(
       "Match: %s Date: %s Spectators: %s\nCity: %s\nHall: %s\nMatch duration: Start: %s End: %s Total: %s",
@@ -845,13 +845,13 @@ get_p3 <- function(tournamentName, matches, statistics, noMatch, type = "text") 
         p3_stats <- paste(p3_stats, titleTeam, paste(stats, collapse = ""), sep = "\n")
       }
     }
-    # finally combine three parts
+    # finally combine all parts
     if (type == "text") {
       out <- paste0(
-        pandoc.table.return(header, style = "grid", justify = "left", keep.line.breaks = TRUE, split.cells = 80) %>% gsub("^\n\n|\n$", "", .),
-        paste0(p2url, "\n"),
-        pandoc.table.return(info, style = "grid", justify = "left", keep.line.breaks = TRUE, split.cells = 80) %>% gsub("^\n\n", "", .),
+        header,
+        info, "\n",
         pandoc.table.return(score, style = "grid", missing = "", justify = c("left", rep("right", i + 2))) %>% gsub("^\n\n|\n$", "", .),
+        p2url, "\n",
         p3_stats
       )
     }

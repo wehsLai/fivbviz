@@ -52,7 +52,7 @@ clipboardP3Server <- function(id) {
           dateClient = format(dateTimeUtc, tz = Sys.timezone(), format = "%Y-%m-%d"),
           timeClient = format(dateTimeUtc, tz = Sys.timezone(), format = "%H:%M"),
           matchResultText = stringr::str_replace_na(matchResultText, ""),
-          showText = sprintf("%s %s %s-%s %s", noInTournament, poolName, teamACode, teamBCode, matchResultText)
+          showText = sprintf("%s %s %s %s-%s %s", tournamentCode, noInTournament, poolName, teamACode, teamBCode, matchResultText)
         ) %>%
         select(no, showText, dateClient) %>%
         group_by(dateClient)
