@@ -20,8 +20,8 @@ rv <- reactiveValues()
 
 spike_limit <- 0.15
 reception_limit <- 0.2
-pos.color <- RColorBrewer::brewer.pal(6, "Set2")
-names(pos.color) <- c("MB", "OP", "OH", "S", "L", "U")
+pos.color <- RColorBrewer::brewer.pal(7, "Set2")
+names(pos.color) <- c("MB", "OP", "OH", "S", "L", "U", "_")
 plotlyColor <- list(
   bg = "#EBEBEB",
   grid = "#FFFFFF",
