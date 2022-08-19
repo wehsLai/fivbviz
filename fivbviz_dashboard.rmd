@@ -8,7 +8,7 @@ output:
     orientation: rows
     vertical_layout: fill
     theme: 
-      version: 4
+      version: 5
       base_font:
         google: "Source Sans Pro"
       code_font:
