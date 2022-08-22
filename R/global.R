@@ -13,7 +13,7 @@ library(waiter)
 # Clean ----
 rm(list = ls())
 # Default Value ----
-v_caching(TRUE)
+v_caching(FALSE)
 v_options(verbose = FALSE)
 
 rv <- reactiveValues()
