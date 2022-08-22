@@ -754,18 +754,18 @@ get_p3 <- function(tournamentName, matches, statistics, noMatch, type = "text") 
     p2url <- "[P-2]"
     if (!is.na(m$noDocumentP2)) p2url <- sprintf("%s https://www.fivb.org/vis2009/getdocument.asmx?no=%s", p2url, as.character(m$noDocumentP2))
     # Info
-    endTime <- hms(m$endTime)
+    endTime <- hms::as_hms(m$endTime)
     if (is.na(m$beginDateTimeUtc)) {
-      beginTime <- hms(m$timeLocal)
+      beginTime <- hms::as_hms(m$timeLocal)
       durationTotal <- endTime - beginTime
     } else {
-      durationTotal <- as.period(difftime(m$endDateTimeUtc, m$beginDateTimeUtc, units = "mins"))
+      durationTotal <- difftime(m$endDateTimeUtc, m$beginDateTimeUtc)
       beginTime <- endTime - durationTotal
     }
     info <- sprintf(
       "Match: %s Date: %s Spectators: %s\nCity: %s\nHall: %s\nMatch duration: Start: %s End: %s Total: %s",
-      m$noInTournament, m$dateLocal, format(m$nbSpectators, big.mark = ","),
-      m$city, m$hall, parsePeridHM(beginTime), parsePeridHM(endTime), parsePeridHM(durationTotal)
+      m$noInTournament, m$dateLocal, format(m$nbSpectators, big.mark = ","), m$city, m$hall,
+      parsePeridHM(as.period(beginTime)), parsePeridHM(as.period(endTime)), parsePeridHM(as.period(durationTotal))
     ) %>%
       stringr::str_replace_all(" NA", " ")
 
