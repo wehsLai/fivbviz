@@ -29,7 +29,7 @@ matchesServer <- function(id) {
             tags$select(
               onchange = sprintf("Reactable.setFilter('%s', '%s', event.target.value || undefined)", "table", name),
               tags$option(value = "", "All"),
-              map(sort(unique(substr(values, 1, 10))), tags$option),
+              map(sort(unique(substring(values, 1, 10))), tags$option),
               "aria-label" = sprintf("Filter %s", name),
               style = "width: 100%; height: 28px;"
             )
