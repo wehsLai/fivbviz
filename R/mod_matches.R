@@ -22,7 +22,24 @@ matchesServer <- function(id) {
 
       match.colDef <- list(
         noInTournament = colDef(name = "No", minWidth = 55),
-        dateTimeClient = colDef(name = paste0("Date ", format(Sys.time(), format = "%Z")), minWidth = 130),
+        dateTimeClient = colDef(
+          name = paste0("Date ", format(Sys.time(), format = "%Z")),
+          minWidth = 130, filterable = TRUE,
+          filterInput = function(values, name) {
+            tags$select(
+              onchange = sprintf("Reactable.setFilter('%s', '%s', event.target.value || undefined)", "table", name),
+              tags$option(value = "", "All"),
+              map(sort(unique(substr(values, 1, 10))), tags$option),
+              "aria-label" = sprintf("Filter %s", name),
+              style = "width: 100%; height: 28px;"
+            )
+          },
+          filterMethod = JS("function(rows, columnId, filterValue) {
+                               return rows.filter(function(row) {
+                                                    return row.values[columnId].substr(0, 10) == filterValue
+                                                  })
+                             }")
+        ),
         countryName = colDef(
           name = "Country", minWidth = 150, filterable = TRUE,
           filterInput = function(values, name) {
