@@ -14,10 +14,12 @@ matchesServer <- function(id) {
         mutate(
           noInTournament = sprintf(fmt, noInTournament),
           dateTimeClient = format(dateTimeUtc, tz = Sys.timezone(), format = "%Y-%m-%d %H:%M"),
+          dateClient = substring(dateTimeClient, 1, 10),
           resultText = sprintf("%s %s", matchResultText, setsResultsText) %>% stringr::str_replace_all("NA", "")
         ) %>%
-        select(noInTournament, dateTimeClient, countryName, city, poolName, teamAName, teamBName, resultText, status)
+        select(noInTournament, dateTimeClient, dateClient, countryName, city, poolName, teamAName, teamBName, resultText, status)
 
+      dates <- sort(unique(data$dateClient))
       teams <- sort(unique(c(data$teamAName, data$teamBName)))
 
       match.colDef <- list(
@@ -29,17 +31,18 @@ matchesServer <- function(id) {
             tags$select(
               onchange = sprintf("Reactable.setFilter('%s', '%s', event.target.value || undefined)", "table", name),
               tags$option(value = "", "All"),
-              map(sort(unique(substring(values, 1, 10))), tags$option),
+              map(dates, tags$option),
               "aria-label" = sprintf("Filter %s", name),
               style = "width: 100%; height: 28px;"
             )
           },
           filterMethod = JS("function(rows, columnId, filterValue) {
                                return rows.filter(function(row) {
-                                                    return row.values[columnId].substr(0, 10) == filterValue
+                                                    return row.values['dateClient'] == filterValue
                                                   })
                              }")
         ),
+        dateClient = colDef(show = FALSE),
         countryName = colDef(
           name = "Country", minWidth = 150, filterable = TRUE,
           filterInput = function(values, name) {
