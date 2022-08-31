@@ -29,7 +29,6 @@ renPlotly <- function(id, f, type, marktext, isTeam = FALSE, limit = 5) {
   if (isTeam) {
     if (type == "c") {
       data <- f %>%
-        filter(Rk <= 30) %>%
         arrange(desc(Rk), desc(team.code)) %>%
         select(team.code, Attack, Block, Serve, Total, showText)
     } else {
@@ -38,8 +37,9 @@ renPlotly <- function(id, f, type, marktext, isTeam = FALSE, limit = 5) {
   } else {
     if (type == "c") {
       data <- f %>%
-        filter(Rk <= 30) %>%
+        filter(Rk <= 20) %>%
         arrange(desc(Rk), desc(Team)) %>%
+        mutate(player.teamName = paste0(player.teamName, " - ", Team)) %>%
         select(player.teamName, Attack, Block, Serve, Total, showText)
     } else if (type == "l") {
       data <- f %>%
@@ -283,7 +283,7 @@ renTable <- function(id, f, type, isTeam = FALSE, limit = 0, pageSize = 20) {
     data,
     columns = use.colDef,
     defaultColDef = my.colDef,
-    style = list(fontFamily = "Source Sans Pro", minWidth = 650),
+    style = list(fontFamily = fontfamily, minWidth = 650),
     defaultPageSize = pageSize,
     resizable = TRUE,
     highlight = TRUE,

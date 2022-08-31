@@ -18,6 +18,7 @@ v_options(verbose = FALSE)
 
 rv <- reactiveValues()
 
+fontfamily <- "Source Sans Pro"
 spike_limit <- 0.15
 reception_limit <- 0.2
 pos.color <- RColorBrewer::brewer.pal(7, "Set2")

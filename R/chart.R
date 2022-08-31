@@ -82,7 +82,7 @@ playerXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", y
       margin = list(
         t = 80
       ),
-      font = list(family = "Source Sans Pro"),
+      font = list(family = fontfamily),
       plot_bgcolor = plotlyColor$bg,
       width = 650,
       height = 650
@@ -144,11 +144,15 @@ playerBarChart <- function(data, title = "", subtitle = "", xtitle = "", ytitle 
         showgrid = FALSE,
         gridcolor = plotlyColor$grid
       ),
-      legend = list(itemsizing = "constant"),
-      margin = list(
-        t = 80
+      legend = list(
+        itemsizing = "constant",
+        yanchor = "bottom",
+        y = 0.02,
+        xanchor = "right",
+        x = 0.98
       ),
-      font = list(family = "Source Sans Pro"),
+      margin = list(t = 80),
+      font = list(family = fontfamily),
       plot_bgcolor = plotlyColor$bg,
       width = 650,
       height = 650
@@ -219,7 +223,7 @@ teamXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", yti
       margin = list(
         t = 80
       ),
-      font = list(family = "Source Sans Pro"),
+      font = list(family = fontfamily),
       plot_bgcolor = plotlyColor$bg,
       width = 650,
       height = 650
@@ -281,11 +285,17 @@ teamBarChart <- function(data, title = "", subtitle = "", xtitle = "", ytitle = 
         showgrid = FALSE,
         gridcolor = plotlyColor$grid
       ),
-      legend = list(itemsizing = "constant"),
+      legend = list(
+        itemsizing = "constant",
+        yanchor = "bottom",
+        y = 0.02,
+        xanchor = "right",
+        x = 0.98
+      ),
       margin = list(
         t = 80
       ),
-      font = list(family = "Source Sans Pro"),
+      font = list(family = fontfamily),
       plot_bgcolor = plotlyColor$bg,
       width = 650,
       height = 650

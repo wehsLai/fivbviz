@@ -45,13 +45,13 @@ dataFilterServer <- function(id, showSeason, addPoolName = TRUE) {
     observeEvent(input$filter, {
       waiter_show(html = waiting_screen)
       if (is.null(pick()) || identical(pick(), unique(rv$ds$matches$poolRoundName))) {
-        rv$marktext <- paste0(ifelse(showSeason, paste0(rv$ds$tournament$season, " - "), ""), rv$ds$tournament$shortNameOrName)
+        rv$marktext <- paste0(ifelse(showSeason, paste0(rv$ds$tournament$season, " - "), ""), rv$ds$tournament$name)
         rv$fds <- rv$ds
       } else {
         if (addPoolName) {
           rv$marktext <- paste0(
             ifelse(showSeason, paste0(rv$ds$tournament$season, " - "), ""),
-            rv$ds$tournament$shortNameOrName, " - ", paste0(pick(), collapse = ", ")
+            rv$ds$tournament$name, " - ", paste0(pick(), collapse = ", ")
           )
         }
         if (!is.null(rv$ds) && all(map_lgl(rv$ds$statistics, ~ nrow(.x) > 0)) == TRUE) {

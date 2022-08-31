@@ -22,7 +22,7 @@ tournamentsServer <- function(id, showSeason) {
   moduleServer(id, function(input, output, session) {
     # get tournaments list
     tournaments <- reactive({
-      pl <- list(Fields = "No Season ShortNameOrName StartDate EndDate Gender OrganizerType Status DeadlineO2 DeadlineO2bis")
+      pl <- list(Fields = "No Season Name StartDate EndDate Gender OrganizerType Status DeadlineO2 DeadlineO2bis")
       v_get_volley_tournament_list(parent = pl) %>% arrange(desc(startDate))
     })
 
@@ -30,7 +30,7 @@ tournamentsServer <- function(id, showSeason) {
     output$table <- renderReactable({
       tl.colDef <- list(
         no = colDef(minWidth = 50, align = "left"),
-        shortNameOrName = colDef(name = "Tournament", minWidth = 280),
+        name = colDef(name = "Tournament", minWidth = 280),
         startDate = colDef(minWidth = 85),
         endDate = colDef(minWidth = 85)
       )
@@ -39,7 +39,7 @@ tournamentsServer <- function(id, showSeason) {
         tournaments(),
         columns = tl.colDef,
         defaultColDef = df.colDef,
-        style = list(fontFamily = "Source Sans Pro", minWidth = 650),
+        style = list(fontFamily = fontfamily, minWidth = 650),
         defaultPageSize = 20,
         resizable = TRUE,
         filterable = TRUE,
@@ -71,7 +71,7 @@ tournamentsServer <- function(id, showSeason) {
         if (!is.null(rv$ds) && all(map_lgl(rv$ds$statistics, ~ nrow(.x) > 0)) == TRUE) {
           rv$ds$statistics <- add_agg(rv$ds$statistics)
         }
-        rv$marktext <- paste0(ifelse(showSeason, paste0(rv$ds$tournament$season, " - "), ""), rv$ds$tournament$shortNameOrName)
+        rv$marktext <- paste0(ifelse(showSeason, paste0(rv$ds$tournament$season, " - "), ""), rv$ds$tournament$name)
         rv$fds <- rv$ds
         waiter_hide()
       }
