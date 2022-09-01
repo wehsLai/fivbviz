@@ -12,7 +12,7 @@ output:
       base_font:
         google: "Source Sans Pro"
       code_font:
-        google: "Fira Code"
+        google: "Fira Mono"
 ---
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.10/clipboard.min.js"></script>
