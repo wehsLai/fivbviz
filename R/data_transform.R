@@ -749,7 +749,7 @@ get_p3 <- function(tournamentName, matches, statistics, noMatch, type = "text") 
     sp <- split(p, p$team.code)
     st <- split(t, t$team.code)
     # header
-    header <- pandoc.header.return(paste0(tournamentName, "\n[P-3] Match players ranking"), 1, style = "setext") %>% gsub("^\n", "", .)
+    header <- paste0(tournamentName, "\n[P-3] Match players ranking\n", strrep("=",65))
     # P2 Document
     p2url <- "[P-2]"
     if (!is.na(m$noDocumentP2)) p2url <- sprintf("%s https://www.fivb.org/vis2009/getdocument.asmx?no=%s", p2url, as.character(m$noDocumentP2))
@@ -850,7 +850,7 @@ get_p3 <- function(tournamentName, matches, statistics, noMatch, type = "text") 
     # finally combine all parts
     if (type == "text") {
       out <- paste0(
-        header,
+        header, "\n",
         info, "\n",
         pandoc.table.return(score, style = "grid", missing = "", justify = c("left", rep("right", i + 2))) %>% gsub("^\n\n|\n$", "", .),
         p2url, "\n",
