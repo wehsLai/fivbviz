@@ -48,13 +48,13 @@ playerXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", y
       x = ~x,
       y = ~y,
       size = ~Total,
+      sizes = c(4, 40),
       color = ~`Pos.`,
       colors = pos.color,
       text = ~player.teamName,
       hoverinfo = "x+y+text",
       hovertext = ~showText,
       marker = list(
-        sizeref = 2,
         sizemode = "diameter",
         opacity = .5
       )

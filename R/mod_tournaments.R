@@ -4,7 +4,7 @@ tournamentsUI <- function(id) {
     height = "790px", flex = c(NA, 1),
     fluidRow(
       column(width = 1, actionBttn(ns("open"), label = "Open", style = "bordered", color = "primary", size = "sm")),
-      column(width = 3, offset = 0, prettyCheckbox(ns("check"), label = "Show Season", value = TRUE, status = "primary", icon = icon("check")))
+      column(width = 3, offset = 0, prettyCheckbox(ns("check"), label = "Show Season", status = "primary", icon = icon("check")))
     ),
     reactableOutput(ns("table"))
   )
@@ -71,7 +71,7 @@ tournamentsServer <- function(id, showSeason) {
         if (!is.null(rv$ds) && all(map_lgl(rv$ds$statistics, ~ nrow(.x) > 0)) == TRUE) {
           rv$ds$statistics <- add_agg(rv$ds$statistics)
         }
-        rv$marktext <- paste0(ifelse(showSeason, paste0(rv$ds$tournament$season, " - "), ""), rv$ds$tournament$name)
+        rv$marktext <- paste0(ifelse(showSeason(), paste0(rv$ds$tournament$season, " - "), ""), rv$ds$tournament$name)
         rv$fds <- rv$ds
         waiter_hide()
       }

@@ -87,7 +87,7 @@ showRkUI("p56", "P56 All", color = "warning")
 )
 reactive({
   if (!is.null(rv$ds)) {
-    dataFilterServer("filter", showSeason(), addPoolName = TRUE)
+    dataFilterServer("filter", showSeason, addPoolName = TRUE)
     downloadServer("rds", type = "ds")
     downloadServer("dashboard", type = "dashboard")
     downloadServer("html", type = "html")
@@ -103,7 +103,7 @@ reactive({
 ```{r message=FALSE, warning=FALSE}
 tournamentsUI("tournaments")
 showSeason <- showSeasonVal("tournaments")
-tournamentsServer("tournaments", showSeason())
+tournamentsServer("tournaments", showSeason)
 ```
 
 # Player Charts
