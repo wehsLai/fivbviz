@@ -1,13 +1,13 @@
 ---
 title: "`r params$marktext`"
-author: '`r fontawesome::fa_i(name = "user")` wehsLai'
-date: '`r fontawesome::fa_i(name = "calendar-day")` `r format(Sys.time(), "%Y-%m-%d %H:%M %Z")`'
+author: '`r fontawesome::fa(name = "user")` wehsLai'
+date: '`r fontawesome::fa(name = "calendar-day")` `r format(Sys.time(), "%Y-%m-%d %H:%M %Z")`'
 output: 
     html_document:
       includes:
         after_body: footer.html        
       theme:
-        version: 4
+        version: 5
         base_font:
           google: "Source Sans Pro"
       toc: true

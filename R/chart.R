@@ -41,20 +41,20 @@ playerXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", y
   mx <- median(data$origData()$x)
   my <- median(data$origData()$y)
 
-  plot_ly(data) %>%
+  plot_ly(data, width = 650, height = 650) %>%
     add_trace(
       type = "scatter",
       mode = "markers",
       x = ~x,
       y = ~y,
       size = ~Total,
-      sizes = c(4, 40),
       color = ~`Pos.`,
       colors = pos.color,
       text = ~player.teamName,
       hoverinfo = "x+y+text",
       hovertext = ~showText,
       marker = list(
+        sizeref = 2.5,
         sizemode = "diameter",
         opacity = .5
       )
@@ -83,9 +83,7 @@ playerXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", y
         t = 80
       ),
       font = list(family = fontfamily),
-      plot_bgcolor = plotlyColor$bg,
-      width = 650,
-      height = 650
+      plot_bgcolor = plotlyColor$bg
     )
 }
 
@@ -93,7 +91,7 @@ playerXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", y
 playerBarChart <- function(data, title = "", subtitle = "", xtitle = "", ytitle = "") {
   if (missing(data)) stop("playerBarChart must input data")
 
-  plot_ly(data, type = "bar", orientation = "h") %>%
+  plot_ly(data, type = "bar", orientation = "h", width = 650, height = 650) %>%
     add_trace(
       x = ~Attack,
       y = ~player.teamName,
@@ -153,9 +151,7 @@ playerBarChart <- function(data, title = "", subtitle = "", xtitle = "", ytitle 
       ),
       margin = list(t = 80),
       font = list(family = fontfamily),
-      plot_bgcolor = plotlyColor$bg,
-      width = 650,
-      height = 650
+      plot_bgcolor = plotlyColor$bg
     )
 }
 
@@ -187,7 +183,7 @@ teamXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", yti
     )
   })
 
-  plot_ly(data) %>%
+  plot_ly(data, width = 650, height = 650) %>%
     add_trace(
       type = "scatter",
       mode = "text",
@@ -224,9 +220,7 @@ teamXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", yti
         t = 80
       ),
       font = list(family = fontfamily),
-      plot_bgcolor = plotlyColor$bg,
-      width = 650,
-      height = 650
+      plot_bgcolor = plotlyColor$bg
     )
 }
 
@@ -234,7 +228,7 @@ teamXyChart <- function(data, title = "", subtitle = "", xtitle = "Error %", yti
 teamBarChart <- function(data, title = "", subtitle = "", xtitle = "", ytitle = "") {
   if (missing(data)) stop("teamBarChart must input data")
 
-  plot_ly(data, type = "bar", orientation = "h") %>%
+  plot_ly(data, type = "bar", orientation = "h", width = 650, height = 650) %>%
     add_trace(
       x = ~Attack,
       y = ~team.code,
@@ -296,8 +290,6 @@ teamBarChart <- function(data, title = "", subtitle = "", xtitle = "", ytitle = 
         t = 80
       ),
       font = list(family = fontfamily),
-      plot_bgcolor = plotlyColor$bg,
-      width = 650,
-      height = 650
+      plot_bgcolor = plotlyColor$bg
     )
 }

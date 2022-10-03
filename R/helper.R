@@ -116,7 +116,7 @@ renPlotly <- function(id, f, type, marktext, isTeam = FALSE, limit = 5) {
       # pxy
       highlight(
         playerXyChart(data, title, subtitle = marktext, xtitle = xtitle, ytitle = ytitle),
-        on = "plotly_selected", off = "plotly_deselect", selectize = TRUE, persistent = TRUE
+        on = "plotly_selected", off = "plotly_deselect", selectize = TRUE, persistent = FALSE
       )
     }
   }
