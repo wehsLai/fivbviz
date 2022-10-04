@@ -17,13 +17,13 @@ matchesServer <- function(id) {
           dateClient = substring(dateTimeClient, 1, 10),
           resultText = sprintf("%s %s", matchResultText, setsResultsText) %>% stringr::str_replace_all("NA", "")
         ) %>%
-        select(noInTournament, dateTimeClient, dateClient, countryName, city, poolName, teamAName, teamBName, resultText, status)
+        select(noInTournament, dateTimeClient, dateClient, countryName, city, hall, poolName, teamAName, teamBName, resultText, status)
 
       dates <- sort(unique(data$dateClient))
       teams <- sort(unique(c(data$teamAName, data$teamBName)))
 
       match.colDef <- list(
-        noInTournament = colDef(name = "No", minWidth = 55),
+        noInTournament = colDef(name = "No", minWidth = 50),
         dateTimeClient = colDef(
           name = paste0("Date ", format(Sys.time(), format = "%Z")),
           minWidth = 130, filterable = TRUE,
@@ -67,8 +67,20 @@ matchesServer <- function(id) {
             )
           }
         ),
+        hall = colDef(
+            name = "Hall", minWidth = 120, filterable = TRUE,
+            filterInput = function(values, name) {
+                tags$select(
+                    onchange = sprintf("Reactable.setFilter('%s', '%s', event.target.value || undefined)", "table", name),
+                    tags$option(value = "", "All"),
+                    map(sort(unique(values)), tags$option),
+                    "aria-label" = sprintf("Filter %s", name),
+                    style = "width: 100%; height: 28px;"
+                )
+            }
+        ),        
         poolName = colDef(
-          name = "Pool", minWidth = 100, filterable = TRUE,
+          name = "Pool", minWidth = 150, filterable = TRUE,
           filterInput = function(values, name) {
             tags$select(
               onchange = sprintf("Reactable.setFilter('%s', '%s', event.target.value || undefined)", "table", name),
@@ -97,7 +109,7 @@ matchesServer <- function(id) {
                              }")
         ),
         teamBName = colDef(name = "Team B", minWidth = 150),
-        resultText = colDef(name = "Result", minWidth = 250),
+        resultText = colDef(name = "Result", minWidth = 200),
         status = colDef(name = "Status", minWidth = 100)
       )
 
