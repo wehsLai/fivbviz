@@ -29,7 +29,7 @@ Player Charts
 Row {.tabset}
 -------------------------------------
 
-### Best Scorers
+### Score
 
 ```{r}
 # parameters
@@ -57,7 +57,7 @@ fillRow(
 )
 ```
 
-### Best Attackers
+### Attack
 
 ```{r}
 # parameters
@@ -85,7 +85,7 @@ fillRow(
 )
 ```
 
-### Best Blockers
+### Block
 
 ```{r}
 # parameters
@@ -113,7 +113,7 @@ fillRow(
 )
 ```
 
-### Best Servers
+### Serve
 
 ```{r}
 # parameters
@@ -141,7 +141,7 @@ fillRow(
 )
 ```
 
-### Best Diggers
+### Dig
 
 ```{r}
 # parameters
@@ -169,7 +169,7 @@ fillRow(
 )
 ```
 
-### Best Setters
+### Set
 
 ```{r}
 # parameters
@@ -197,7 +197,7 @@ fillRow(
 )
 ```
 
-### Best Receivers
+### Receive
 
 ```{r}
 # parameters
@@ -225,7 +225,7 @@ fillRow(
 )
 ```
 
-### Best Liberos
+### Liberos
 
 ```{r}
 # parameters
@@ -259,7 +259,7 @@ Team Charts
 Row {.tabset}
 -------------------------------------
 
-### Best Scorers
+### Score
 
 ```{r}
 # parameters
@@ -287,7 +287,7 @@ fillRow(
 )
 ```
 
-### Best Attackers
+### Attack
 
 ```{r}
 # parameters
@@ -315,7 +315,7 @@ fillRow(
 )
 ```
 
-### Best Blockers
+### Block
 
 ```{r}
 # parameters
@@ -343,7 +343,7 @@ fillRow(
 )
 ```
 
-### Best Servers
+### Serve
 
 ```{r}
 # parameters
@@ -371,7 +371,7 @@ fillRow(
 )
 ```
 
-### Best Diggers
+### Dig
 
 ```{r}
 # parameters
@@ -399,7 +399,7 @@ fillRow(
 )
 ```
 
-### Best Setters
+### Set
 
 ```{r}
 # parameters
@@ -427,7 +427,7 @@ fillRow(
 )
 ```
 
-### Best Receivers
+### Receive
 
 ```{r}
 # parameters

@@ -110,7 +110,7 @@ tournamentsServer("tournaments", showSeason)
 
 ## Row {.tabset}
 
-### Best Scorers
+### Score
 
 ```{r message=FALSE, warning=FALSE}
 rankBySkillUI("scorer")
@@ -125,7 +125,7 @@ observe({
 })
 ```
 
-### Best Attackers
+### Attack
 
 ```{r message=FALSE, warning=FALSE}
 rankBySkillUI("attacker")
@@ -140,7 +140,7 @@ observe({
 })
 ```
 
-### Best Blockers
+### Block
 
 ```{r message=FALSE, warning=FALSE}
 rankBySkillUI("blocker")
@@ -155,7 +155,7 @@ observe({
 })
 ```
 
-### Best Servers
+### Serve
 
 ```{r message=FALSE, warning=FALSE}
 rankBySkillUI("server")
@@ -170,7 +170,7 @@ observe({
 })
 ```
 
-### Best Diggers
+### Dig
 
 ```{r message=FALSE, warning=FALSE}
 rankBySkillUI("digger")
@@ -185,7 +185,7 @@ observe({
 })
 ```
 
-### Best Setters
+### Set
 
 ```{r message=FALSE, warning=FALSE}
 rankBySkillUI("setter")
@@ -200,7 +200,7 @@ observe({
 })
 ```
 
-### Best Receivers
+### Receive
 
 ```{r message=FALSE, warning=FALSE}
 rankBySkillUI("receiver")
@@ -215,7 +215,7 @@ observe({
 })
 ```
 
-### Best Liberos
+### Liberos
 
 ```{r message=FALSE, warning=FALSE}
 rankBySkillUI("libero")
@@ -234,7 +234,7 @@ observe({
 
 ## Row {.tabset}
 
-### Best Scorers
+### Score
 
 ```{r message=FALSE, warning=FALSE}
 rankBySkillUI("scorer-team")
@@ -249,7 +249,7 @@ observe({
 })
 ```
 
-### Best Attackers
+### Attack
 
 ```{r message=FALSE, warning=FALSE}
 rankBySkillUI("attacker-team")
@@ -264,7 +264,7 @@ observe({
 })
 ```
 
-### Best Blockers
+### Block
 
 ```{r message=FALSE, warning=FALSE}
 rankBySkillUI("blocker-team")
@@ -279,7 +279,7 @@ observe({
 })
 ```
 
-### Best Servers
+### Serve
 
 ```{r message=FALSE, warning=FALSE}
 rankBySkillUI("server-team")
@@ -294,7 +294,7 @@ observe({
 })
 ```
 
-### Best Diggers
+### Dig
 
 ```{r message=FALSE, warning=FALSE}
 rankBySkillUI("digger-team")
@@ -309,7 +309,7 @@ observe({
 })
 ```
 
-### Best Setters
+### Set
 
 ```{r message=FALSE, warning=FALSE}
 rankBySkillUI("setter-team")
@@ -324,7 +324,7 @@ observe({
 })
 ```
 
-### Best Receivers
+### Receive
 
 ```{r message=FALSE, warning=FALSE}
 rankBySkillUI("receiver-team")

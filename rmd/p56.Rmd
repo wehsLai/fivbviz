@@ -45,7 +45,7 @@ number <- params$number
 
 ## [P5] Players ranking by skills
 
-### Best Scorers
+### Score
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -59,7 +59,7 @@ rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$mar
 
 <br>
 
-### Best Attackers
+### Attack
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -73,7 +73,7 @@ rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$mar
 
 <br>
 
-### Best Blockers
+### Block
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -87,7 +87,7 @@ rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$mar
 
 <br>
 
-### Best Servers
+### Serve
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -101,7 +101,7 @@ rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$mar
 
 <br>
 
-### Best Diggers
+### Dig
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -115,7 +115,7 @@ rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$mar
 
 <br>
 
-### Best Setters
+### Set
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -129,7 +129,7 @@ rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$mar
 
 <br>
 
-### Best Receivers
+### Receive
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -143,7 +143,7 @@ rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$mar
 
 <br>
 
-### Best Liberos
+### Liberos
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -158,7 +158,7 @@ rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$mar
 \newpage
 ## [P6] Teams ranking by skills
 
-### Best Scorers
+### Score
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -172,7 +172,7 @@ rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$mar
 
 <br>
 
-### Best Attackers
+### Attack
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -186,7 +186,7 @@ rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$mar
 
 <br>
 
-### Best Blockers
+### Block
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -200,7 +200,7 @@ rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$mar
 
 <br>
 
-### Best Servers
+### Serve
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -214,7 +214,7 @@ rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$mar
 
 <br>
 
-### Best Diggers
+### Dig
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -228,7 +228,7 @@ rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$mar
 
 <br>
 
-### Best Setters
+### Set
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -242,7 +242,7 @@ rankBySkillshow(f, type, isTeam) %>% gtstyle(type, isTeam, subtitle = params$mar
 
 <br>
 
-### Best Receivers
+### Receive
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters

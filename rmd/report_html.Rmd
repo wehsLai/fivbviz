@@ -44,7 +44,7 @@ marktext <- params$marktext
 
 ## Player Charts {.tabset}
 
-### Best Scorers
+### Score
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -66,7 +66,7 @@ tagList(
 )
 ```
 
-### Best Attackers
+### Attack
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -88,7 +88,7 @@ tagList(
 )
 ```
 
-### Best Blockers
+### Block
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -110,7 +110,7 @@ tagList(
 )
 ```
 
-### Best Servers
+### Serve
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -132,7 +132,7 @@ tagList(
 )
 ```
 
-### Best Diggers
+### Dig
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -154,7 +154,7 @@ tagList(
 )
 ```
 
-### Best Setters
+### Set
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -176,7 +176,7 @@ tagList(
 )
 ```
 
-### Best Receivers
+### Receive
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -198,7 +198,7 @@ tagList(
 )
 ```
 
-### Best Liberos
+### Liberos
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -222,7 +222,7 @@ tagList(
 
 ## Team Charts {.tabset}
 
-### Best Scorers
+### Score
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -244,7 +244,7 @@ tagList(
 )
 ```
 
-### Best Attackers
+### Attack
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -266,7 +266,7 @@ tagList(
 )
 ```
 
-### Best Blockers
+### Blockers
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -288,7 +288,7 @@ tagList(
 )
 ```
 
-### Best Servers
+### Serve
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -310,7 +310,7 @@ tagList(
 )
 ```
 
-### Best Diggers
+### Dig
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -332,7 +332,7 @@ tagList(
 )
 ```
 
-### Best Setters
+### Set
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
@@ -354,7 +354,7 @@ tagList(
 )
 ```
 
-### Best Receivers
+### Receive
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
