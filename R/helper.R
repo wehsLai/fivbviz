@@ -1,13 +1,13 @@
 renTitle <- function(type) {
   out <- switch(type,
-    "c" = "Best Scorers",
-    "a" = "Best Attackers",
-    "b" = "Best Blockers",
-    "s" = "Best Servers",
-    "d" = "Best Diggers",
-    "e" = "Best Setters",
-    "r" = "Best Receivers",
-    "l" = "Best Liberos",
+    "c" = "Score",
+    "a" = "Attack",
+    "b" = "Block",
+    "s" = "Serve",
+    "d" = "Dig",
+    "e" = "Set",
+    "r" = "Receive",
+    "l" = "Liberos",
     "f" = "Team Errors",
   )
   out
@@ -299,37 +299,37 @@ gtstyle <- function(data, type, isTeam = FALSE, title = "", subtitle = "", spike
   if (missing(title) || title == "") {
     switch(type,
       "c" = {
-        title <- "Best Scorers"
+        title <- "Score"
         border <- c("Rk", "Team", "Serve")
       },
       "a" = {
-        title <- "Best Attackers"
+        title <- "Attack"
         subtitle <- paste0(subtitle, "<br>", sprintf("Load Limit: %0.f %%", spike_limit * 100))
         border <- c("Rk", "Team", "Total")
       },
       "b" = {
-        title <- "Best Blockers"
+        title <- "Block"
         border <- c("Rk", "Team", "Total")
       },
       "s" = {
-        title <- "Best Servers"
+        title <- "Serve"
         border <- c("Rk", "Team", "Total")
       },
       "d" = {
-        title <- "Best Diggers"
+        title <- "Dig"
         border <- c("Rk", "Team", "Total")
       },
       "e" = {
-        title <- "Best Setters"
+        title <- "Set"
         border <- c("Rk", "Team", "Total")
       },
       "r" = {
-        title <- "Best Receivers"
+        title <- "Receive"
         subtitle <- paste0(subtitle, "<br>", sprintf("Load Limit: %0.f %%", reception_limit * 100))
         border <- c("Rk", "Team", "Total")
       },
       "l" = {
-        title <- "Best Liberos"
+        title <- "Liberos"
         border <- c("Rk", "Team", "Total")
       },
       "f" = {
@@ -391,9 +391,9 @@ textRoster <- function(players, selected = TRUE, shortName = TRUE, numShirt = TR
   out <- ""
   if (!missing(players) && nrow(players) > 0) {
     if (selected) {
-      temp <- players %>% filter(isSelected == 1)
+      temp <- players #%>% filter(isSelected == 1)
     } else {
-      temp <- players %>% filter(isPreselected == 1)
+      temp <- players #%>% filter(isPreselected == 1)
     }
 
     temp <- temp %>%

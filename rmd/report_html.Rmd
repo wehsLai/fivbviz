@@ -266,7 +266,7 @@ tagList(
 )
 ```
 
-### Blockers
+### Block
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # parameters
