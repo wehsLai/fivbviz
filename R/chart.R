@@ -93,7 +93,15 @@ playerXyChart <-
           showgrid = TRUE,
           gridcolor = plotlyColor$grid
         ),
-        legend = list(itemsizing = "constant"),
+        # legend = list(itemsizing = "constant"),
+        legend = list(
+          itemsizing = "constant",
+          yanchor = "top",
+          y = 0.98,
+          # xanchor = "left",
+          x = 0.02,
+          opacity = 0.5
+        ),
         shapes = list(
           hline(my, plotlyColor$medianline),
           vline(mx, plotlyColor$medianline)
