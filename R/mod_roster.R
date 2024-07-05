@@ -12,47 +12,47 @@ rosterServer <- function(id) {
 
       data <- rv$fds$players %>%
         mutate(
-          isCaptain = ifelse(isCaptain == "0", "", "C"),
+          isCaptain = ifelse(isCaptain == "C", "C", ""),
           nbSelTotal = nbSelWC + nbSelOG + nbSelOther,
           weight = weight / 1000000,
           height = height / 10000,
           spike = spike / 10000,
           block = block / 10000
         ) %>%
-        select(team.code, noShirt, isCaptain, lastNamePlayer, firstNamePlayer, teamNamePlayer, position, birthdate, weight, height, spike, block, clubName, nbSelWC, nbSelOG, nbSelOther, nbSelTotal)
+        select(isPreselected, isSelected, team.code, noShirt, isCaptain, lastNamePlayer, firstNamePlayer, teamNamePlayer, position, birthdate, weight, height, spike, block, clubName, nbSelWC, nbSelOG, nbSelOther, nbSelTotal)
 
       roster.colDef <- list(
-        # isPreselected = colDef(
-        #   name = "Pre.", minWidth = 45, filterable = TRUE,
-        #   cell = function(value) {
-        #     # Render as an X mark or check mark
-        #     if (value == "0") "" else "\u2714\ufe0f"
-        #   },
-        #   filterInput = function(values, name) {
-        #     tags$select(
-        #       onchange = sprintf("Reactable.setFilter('%s', '%s', event.target.value || undefined)", "table", name),
-        #       tags$option(value = "", "All"),
-        #       map(sort(unique(values)), tags$option),
-        #       "aria-label" = sprintf("Filter %s", name),
-        #       style = "width: 100%; height: 28px;"
-        #     )
-        #   }
-        # ),
-        # isSelected = colDef(
-        #   name = "Sel.", minWidth = 45, filterable = TRUE, cell = function(value) {
-        #     # Render as an X mark or check mark
-        #     if (value == "0") "" else "\u2714\ufe0f"
-        #   },
-        #   filterInput = function(values, name) {
-        #     tags$select(
-        #       onchange = sprintf("Reactable.setFilter('%s', '%s', event.target.value || undefined)", "table", name),
-        #       tags$option(value = "", "All"),
-        #       map(sort(unique(values)), tags$option),
-        #       "aria-label" = sprintf("Filter %s", name),
-        #       style = "width: 100%; height: 28px;"
-        #     )
-        #   }
-        # ),
+        isPreselected = colDef(
+          name = "Pre.", minWidth = 45, filterable = TRUE,
+          cell = function(value) {
+            # Render as an X mark or check mark
+            if (value == 1) "\u2714\ufe0f" else ""
+          },
+          filterInput = function(values, name) {
+            tags$select(
+              onchange = sprintf("Reactable.setFilter('%s', '%s', event.target.value || undefined)", "table", name),
+              tags$option(value = "", "All"),
+              map(sort(unique(values)), tags$option),
+              "aria-label" = sprintf("Filter %s", name),
+              style = "width: 100%; height: 28px;"
+            )
+          }
+        ),
+        isSelected = colDef(
+          name = "Sel.", minWidth = 45, filterable = TRUE, cell = function(value) {
+            # Render as an X mark or check mark
+            if (value == 1) "\u2714\ufe0f" else ""
+          },
+          filterInput = function(values, name) {
+            tags$select(
+              onchange = sprintf("Reactable.setFilter('%s', '%s', event.target.value || undefined)", "table", name),
+              tags$option(value = "", "All"),
+              map(sort(unique(values)), tags$option),
+              "aria-label" = sprintf("Filter %s", name),
+              style = "width: 100%; height: 28px;"
+            )
+          }
+        ),
         team.code = colDef(
           minWidth = 55, name = "Team", filterable = TRUE,
           filterInput = function(values, name) {

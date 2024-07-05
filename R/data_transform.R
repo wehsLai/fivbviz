@@ -26,6 +26,8 @@ get_tournament_data <- function(no) {
       # players
       cl <- list(Filter = c(NoTournament = no), Relation = c(Name = "Team", Fields = "Code Name"))
       players <- v_get_volley_player_list(children = cl)
+      players$isPreselected <- as.integer(players$isPreselected) %>% replace(is.na(.), 0)
+      players$isSelected <- as.integer(players$isSelected) %>% replace(is.na(.), 0)
       if (nrow(players) > 0) {
         players <- players %>% arrange(team.code, noShirt)
 

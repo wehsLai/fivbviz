@@ -391,9 +391,9 @@ textRoster <- function(players, selected = TRUE, shortName = TRUE, numShirt = TR
   out <- ""
   if (!missing(players) && nrow(players) > 0) {
     if (selected) {
-      temp <- players #%>% filter(isSelected == 1)
+      temp <- players %>% filter(isSelected == 1)
     } else {
-      temp <- players #%>% filter(isPreselected == 1)
+      temp <- players %>% filter(isPreselected == 1)
     }
 
     temp <- temp %>%
