@@ -12,7 +12,7 @@ rosterServer <- function(id) {
 
       data <- rv$fds$players %>%
         mutate(
-          isCaptain = ifelse(isCaptain == "C", "C", ""),
+          isCaptain = ifelse(isCaptain, "C", ""),
           nbSelTotal = nbSelWC + nbSelOG + nbSelOther,
           weight = weight / 1000000,
           height = height / 10000,
@@ -54,7 +54,7 @@ rosterServer <- function(id) {
           }
         ),
         team.code = colDef(
-          minWidth = 55, name = "Team", filterable = TRUE,
+          minWidth = 50, name = "Team", filterable = TRUE,
           filterInput = function(values, name) {
             tags$select(
               onchange = sprintf("Reactable.setFilter('%s', '%s', event.target.value || undefined)", "table", name),
@@ -65,11 +65,11 @@ rosterServer <- function(id) {
             )
           }
         ),
-        noShirt = colDef(name = "Shirt No", minWidth = 55),
-        isCaptain = colDef(name = "C.", minWidth = 45),
-        lastNamePlayer = colDef(name = "Last Name", minWidth = 100),
-        firstNamePlayer = colDef(name = "First Name", minWidth = 100),
-        teamNamePlayer = colDef(name = "Shirt Name", minWidth = 100),
+        noShirt = colDef(name = "Shirt No", minWidth = 50),
+        isCaptain = colDef(name = "C.", minWidth = 40),
+        lastNamePlayer = colDef(name = "Last Name", minWidth = 180),
+        firstNamePlayer = colDef(name = "First Name", minWidth = 180),
+        teamNamePlayer = colDef(name = "Shirt Name", minWidth = 120),
         position = colDef(
           name = "Pos.",
           minWidth = 55, filterable = TRUE,
@@ -83,16 +83,16 @@ rosterServer <- function(id) {
             )
           }
         ),
-        birthdate = colDef(name = "Birthdate"),
-        weight = colDef(name = "Weight [kg]"),
-        height = colDef(name = "Height [cm]"),
-        spike = colDef(name = "Spike [cm]"),
-        block = colDef(name = "Block [cm]"),
+        birthdate = colDef(name = "Birthdate", minWidth = 90),
+        weight = colDef(name = "Weight\n[kg]", minWidth = 65),
+        height = colDef(name = "Height\n[cm]", minWidth = 65),
+        spike = colDef(name = "Spike\n[cm]", minWidth = 65),
+        block = colDef(name = "Block\n[cm]", minWidth = 60),
         clubName = colDef(name = "Club", minWidth = 180),
-        nbSelWC = colDef(name = "WC"),
-        nbSelOG = colDef(name = "OG"),
-        nbSelOther = colDef(name = "Oth."),
-        nbSelTotal = colDef(name = "Tot.")
+        nbSelWC = colDef(name = "WC", maxWidth = 45),
+        nbSelOG = colDef(name = "OG", maxWidth = 45),
+        nbSelOther = colDef(name = "Oth.", maxWidth = 45),
+        nbSelTotal = colDef(name = "Tot.", maxWidth = 45)
       )
 
       reactable(

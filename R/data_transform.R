@@ -43,7 +43,7 @@ get_tournament_data <- function(no) {
             Relation = c(Name = "Player", Fields = "TeamName FirstName LastName VolleyPosition")
           )
           temp <- v_get_volley_statistic_list(parent = pl, children = cl)
-          if (nrow(temp) > 0) {
+          if (nrow(na.omit(temp[1])) > 0) {
             # select Player records only
             statistics$Player <- temp %>%
               filter(noMatch %in% cal_no & itemType == 45) %>%
