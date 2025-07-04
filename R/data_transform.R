@@ -245,7 +245,10 @@ calculate_agg <- function(gpd_df, isTeam = TRUE) {
       receptionEfficiencyPercentage = Efficiency(receptionTotal, receptionExcellent, receptionFault), # note
       receptionExcellentAverageBySet = Per(nbSets, receptionExcellent),
       receptionExcellentOrgPercentage = OrgPercentage(receptionTotal, receptionExcellent),
-      receptionFaultOrgPercentage = OrgPercentage(receptionTotal, receptionFault)
+      receptionFaultOrgPercentage = OrgPercentage(receptionTotal, receptionFault),
+      pointSpikePercentage = Percentage(pointTotal, spikePoint),
+      pointBlockPercentage = Percentage(pointTotal, blockPoint),
+      pointServePercentage = Percentage(pointTotal, servePoint)
     )
 
     out$scoreRank <- Ranking(OrgPoint(out$pointTotal))
@@ -529,7 +532,7 @@ get_p5 <- function(player_agg, type = "c", showAll = FALSE, number = 10) {
 }
 
 get_p6 <- function(team_agg, type = "c", showAll = FALSE, number = 10) {
-  if (missing(type) || !(type %in% c("c", "a", "b", "s", "d", "e", "r", "f"))) {
+  if (missing(type) || !(type %in% c("c", "u", "a", "b", "s", "d", "e", "r", "f"))) {
     stop("type not found")
   } else {
     type <- tolower(type)
@@ -541,12 +544,31 @@ get_p6 <- function(team_agg, type = "c", showAll = FALSE, number = 10) {
             "<b>", team.code, " - ", team.name, "</b><br>",
             "Rank: ", scoreRank, "<br>",
             "Attack: ", spikePoint, "<br>",
+            "Attack%: ", pointSpikePercentage, "<br>",
             "Block: ", blockPoint, "<br>",
+            "Block%: ", pointBlockPercentage, "<br>",
             "Serve: ", servePoint, "<br>",
+            "Serve%: ", pointServePercentage, "<br>",
             "Total: ", pointTotal, "<br>",
             "Avg. by set: ", pointPointAverageBySet
           )) %>%
-          select(Rk = "scoreRank", all_of(t.col), all_of(scorer.col), showText)
+          select(Rk = "scoreRank", all_of(t.col), all_of(scorer.team.col), showText)
+      },
+      "u" = {
+          out <- team_agg %>%
+              mutate(showText = paste0(
+                  "<b>", team.code, " - ", team.name, "</b><br>",
+                  "Rank: ", scoreRank, "<br>",
+                  "Attack: ", spikePoint, "<br>",
+                  "Attack%: ", pointSpikePercentage, "<br>",
+                  "Block: ", blockPoint, "<br>",
+                  "Block%: ", pointBlockPercentage, "<br>",
+                  "Serve: ", servePoint, "<br>",
+                  "Serve%: ", pointServePercentage, "<br>",
+                  "Total: ", pointTotal, "<br>",
+                  "Avg. by set: ", pointPointAverageBySet
+              )) %>%
+              select(Rk = "scoreRank", all_of(t.col), all_of(scorer.team.col), showText)
       },
       "a" = {
         out <- team_agg %>%

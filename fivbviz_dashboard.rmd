@@ -249,6 +249,20 @@ observe({
 })
 ```
 
+### Score Structure
+
+```{r message=FALSE, warning=FALSE}
+rankBySkillUI("structure-team")
+observe({
+  if (!is.null(rv$fds$statistics$team_agg) && nrow(rv$fds$statistics$team_agg) > 0) {
+    type <- "u"
+    isTeam <- TRUE
+    f <- rankBySkillDfServer("structure-team", rv$fds$statistics$team_agg, type = type, isTeam = isTeam)
+    rankBySkillChartServer("structure-team", f, type = type, isTeam = isTeam)
+  }
+})
+```
+
 ### Attack
 
 ```{r message=FALSE, warning=FALSE}

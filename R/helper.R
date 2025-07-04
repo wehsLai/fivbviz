@@ -27,10 +27,10 @@ renLimit <- function(type) {
 renPlotly <- function(id, f, type, marktext, isTeam = FALSE, limit = 5) {
   ns <- NS(id)
   if (isTeam) {
-    if (type == "c") {
+    if (type %in% c("c", "u")) {
       data <- f %>%
         arrange(desc(Rk), desc(team.code)) %>%
-        select(team.code, Attack, Block, Serve, Total, showText)
+        select(team.code, Attack, `Attack %`, Block, `Block %`, Serve, `Serve %`, Total, showText)
     } else {
       data <- f %>% select(x, y, team.code, showText)
     }
@@ -58,6 +58,11 @@ renPlotly <- function(id, f, type, marktext, isTeam = FALSE, limit = 5) {
       title <- "Score Performance"
       xtitle <- ""
       ytitle <- ""
+    },
+    "u" = {
+        title <- "Score Structure"
+        xtitle <- ""
+        ytitle <- ""
     },
     "a" = {
       title <- "Attack Performance"
@@ -101,9 +106,9 @@ renPlotly <- function(id, f, type, marktext, isTeam = FALSE, limit = 5) {
     }
   )
   out <- if (isTeam) {
-    if (type == "c") {
+    if (type %in% c("c", "u")) {
       # bar top 30
-      teamBarChart(data, title, subtitle = marktext)
+      teamBarChart(data, type, title, subtitle = marktext)
     } else {
       # txy
       teamXyChart(data, title, subtitle = marktext, xtitle = xtitle, ytitle = ytitle)
@@ -214,7 +219,12 @@ renTable <- function(id, f, type, isTeam = FALSE, limit = 0, pageSize = 20) {
   # define digits
   switch(type,
     "c" = {
-      use.colDef <- c(use.colDef, list(`Avg. by set` = colDef(format = colFormat(digits = 2))))
+      use.colDef <- c(use.colDef, list(
+          `Avg. by set` = colDef(format = colFormat(digits = 2)),
+          `Attack %` = colDef(format = colFormat(digits = 2)),
+          `Block %` = colDef(format = colFormat(digits = 2)),
+          `Serve %` = colDef(format = colFormat(digits = 2))
+      ))
     },
     "a" = {
       use.colDef <- c(use.colDef, list(

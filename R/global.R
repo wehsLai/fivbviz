@@ -32,6 +32,7 @@ plotlyColor <- list(
 p.col <- c(No = "noShirt", Name = "name", "player.teamName", `Pos.` = "player.volleyPosition", Team = "team.code")
 t.col <- c(Team = "team", "team.code")
 scorer.col <- c(Attack = "spikePoint", Block = "blockPoint", Serve = "servePoint", Total = "pointTotal", `Avg. by set` = "pointPointAverageBySet")
+scorer.team.col <- c(Attack = "spikePoint", `Attack %`="pointSpikePercentage", Block = "blockPoint", `Block %`="pointBlockPercentage", Serve = "servePoint", `Serve %`="pointServePercentage", Total = "pointTotal", `Avg. by set` = "pointPointAverageBySet")
 attacker.col <- c(Attacks = "spikePoint", Faults = "spikeFault", Shots = "spikeContinue", Total = "spikeTotal", `Succ. %` = "spikePointPercentage", `Eff. %` = "spikeEfficiencyPercentage", `Avg. by set` = "spikePointAverageBySet", y = "spikePointOrgPercentage", x = "spikeFaultOrgPercentage")
 blocker.col <- c(`Kill Blocks` = "blockPoint", Faults = "blockFault", Rebounds = "blockContinue", Total = "blockTotal", `KB. %` = "blockPointPercentage", `Eff. %` = "blockEfficiencyPercentage", `Avg. by set` = "blockPointAverageBySet", y = "blockPointOrgPercentage", x = "blockFaultOrgPercentage")
 server.col <- c(`Aces` = "servePoint", Faults = "serveFault", `Serve Hits` = "serveContinue", Total = "serveTotal", `Ace %` = "servePointPercentage", `Eff. %` = "serveEfficiencyPercentage", `Avg. by set` = "servePointAverageBySet", y = "servePointOrgPercentage", x = "serveFaultOrgPercentage")

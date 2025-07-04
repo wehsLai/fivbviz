@@ -244,6 +244,20 @@ tagList(
 )
 ```
 
+### Score Structure
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# parameters
+id <- "structure-team"
+ns <- NS(id)
+type <- "u"
+isTeam <- TRUE
+# data
+f <- rankBySkillDf(ds$statistics$team_agg, type, isTeam)
+# render
+renPlotly(id, f, type, marktext, isTeam)
+```
+
 ### Attack
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}

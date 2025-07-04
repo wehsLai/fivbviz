@@ -70,8 +70,8 @@ playerXyChart <-
         hoverinfo = "x+y+text",
         hovertext = ~ showText,
         marker = list(
-          sizeref = 2.5,
-          sizemode = "diameter",
+          sizeref = .25,
+          sizemode = "area",
           opacity = .5
         )
       ) %>%
@@ -275,81 +275,115 @@ teamXyChart <-
 
 # draw team Bar chart
 teamBarChart <-
-  function(data,
-           title = "",
-           subtitle = "",
-           xtitle = "",
-           ytitle = "") {
-    if (missing(data))
-      stop("teamBarChart must input data")
-    
-    plot_ly(
-      data,
-      type = "bar",
-      orientation = "h",
-      width = 650,
-      height = 650
-    ) %>%
-      add_trace(
-        x = ~ Attack,
-        y = ~ team.code,
-        hoverinfo = "x+y+text",
-        hovertext = ~ showText,
-        color = "#8DA0CB",
-        name = "Attack"
-      ) %>%
-      add_trace(
-        x = ~ Block,
-        y = ~ team.code,
-        hoverinfo = "x+y+text",
-        hovertext = ~ showText,
-        color = "#66C2A5",
-        name = "Block"
-      ) %>%
-      add_trace(
-        x = ~ Serve,
-        y = ~ team.code,
-        hoverinfo = "x+y+text",
-        hovertext = ~ showText,
-        color = "#FC8D62",
-        name = "Serve"
-      ) %>%
-      add_text(
-        x = ~ Total,
-        y = ~ team.code,
-        text = ~ Total,
-        textposition = "right",
-        showlegend = FALSE,
-        name = "Total"
-      ) %>%
-      layout(
-        barmode = "stack",
-        title = list(
-          xref = "paper",
-          y = 0.95,
-          text = paste0("<b>", title, "</b><br><sub>", subtitle, "</sub>"),
-          font = title.font
-        ),
-        xaxis = list(
-          title = list(text = ""),
-          showgrid = TRUE,
-          gridcolor = plotlyColor$grid
-        ),
-        yaxis = list(
-          title = list(text = ""),
-          showgrid = FALSE,
-          gridcolor = plotlyColor$grid
-        ),
-        legend = list(
-          itemsizing = "constant",
-          yanchor = "bottom",
-          y = 0.02,
-          xanchor = "right",
-          x = 0.98
-        ),
-        margin = list(t = 80),
-        annotations = my_annotation,
-        font = list(family = fontfamily),
-        plot_bgcolor = plotlyColor$bg
-      )
-  }
+    function(data,
+             type,
+             title = "",
+             subtitle = "",
+             xtitle = "",
+             ytitle = "") {
+        
+        if (missing(data))
+            stop("teamBarChart must input data")
+        
+        p <- plot_ly(
+            data,
+            type = "bar",
+            orientation = "h",
+            width = 650,
+            height = 650
+        )
+        
+        if (type == "u") {
+            p <- p %>%
+                add_trace(
+                    x = ~`Attack %`,
+                    y = ~team.code,
+                    hoverinfo = "x+y+text",
+                    hovertext = ~showText,
+                    color = I("#8DA0CB"),
+                    name = "Attack %"
+                ) %>%
+                add_trace(
+                    x = ~`Block %`,
+                    y = ~team.code,
+                    hoverinfo = "x+y+text",
+                    hovertext = ~showText,
+                    color = I("#66C2A5"),
+                    name = "Block %"
+                ) %>%
+                add_trace(
+                    x = ~`Serve %`,
+                    y = ~team.code,
+                    hoverinfo = "x+y+text",
+                    hovertext = ~showText,
+                    color = I("#FC8D62"),
+                    name = "Serve %"
+                )
+        } else {
+            p <- p %>%
+                add_trace(
+                    x = ~Attack,
+                    y = ~team.code,
+                    hoverinfo = "x+y+text",
+                    hovertext = ~showText,
+                    color = I("#8DA0CB"),
+                    name = "Attack"
+                ) %>%
+                add_trace(
+                    x = ~Block,
+                    y = ~team.code,
+                    hoverinfo = "x+y+text",
+                    hovertext = ~showText,
+                    color = I("#66C2A5"),
+                    name = "Block"
+                ) %>%
+                add_trace(
+                    x = ~Serve,
+                    y = ~team.code,
+                    hoverinfo = "x+y+text",
+                    hovertext = ~showText,
+                    color = I("#FC8D62"),
+                    name = "Serve"
+                ) %>%
+                add_text(
+                    x = ~Total,
+                    y = ~team.code,
+                    text = ~Total,
+                    textposition = "right",
+                    showlegend = FALSE,
+                    name = "Total"
+                )
+        }
+        
+        p %>%
+            layout(
+                barmode = "stack",
+                title = list(
+                    xref = "paper",
+                    y = 0.95,
+                    text = paste0("<b>", title, "</b><br><sub>", subtitle, "</sub>"),
+                    font = title.font
+                ),
+                xaxis = list(
+                    title = list(text = xtitle),
+                    showgrid = TRUE,
+                    gridcolor = plotlyColor$grid
+                ),
+                yaxis = list(
+                    title = list(text = ytitle),
+                    showgrid = FALSE,
+                    gridcolor = plotlyColor$grid
+                ),
+                legend = if (type == "u") list(showlegend = FALSE) else list(
+                    itemsizing = "constant",
+                    yanchor = "bottom",
+                    y = 0.02,
+                    xanchor = "right",
+                    x = 0.98
+                ),
+                margin = list(t = 80),
+                annotations = my_annotation,
+                font = list(family = fontfamily),
+                plot_bgcolor = plotlyColor$bg
+            )
+    }
