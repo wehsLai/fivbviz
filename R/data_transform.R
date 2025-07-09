@@ -722,12 +722,12 @@ get_p3 <- function(tournamentName, matches, statistics, noMatch, type = "text") 
     # rename
     p.col <- c(No = "noShirt", Name = "player.teamName", `Pos` = "player.volleyPosition")
     t.col <- c(Name = "team")
-    a.col <- c(Atk = "spikePoint", Err = "spikeFault", Inp = "spikeContinue", Tot = "spikeTotal", `Succ.%` = "spikePointPercentage")
+    a.col <- c(Atk = "spikePoint", Err = "spikeFault", Inp = "spikeContinue", Tot = "spikeTotal", `Eff. %` = "spikeEfficiencyPercentage")
     b.col <- c(Blo = "blockPoint", Err = "blockFault", Inp = "blockContinue", Tot = "blockTotal", `Avg.pS` = "blockPointAverageBySet")
     s.col <- c(Ace = "servePoint", Err = "serveFault", Inp = "serveContinue", Tot = "serveTotal", `Avg.pS` = "servePointAverageBySet")
     d.col <- c(Dig = "digExcellent", Err = "digFault", Inp = "digContinue", Tot = "digTotal", `Avg.pS` = "digExcellentAverageBySet")
     e.col <- c(Run = "setExcellent", Err = "setFault", Inp = "setContinue", Tot = "setTotal", `Avg.pS` = "setExcellentAverageBySet")
-    r.col <- c(Exc = "receptionExcellent", Err = "receptionFault", Inp = "receptionContinue", Tot = "receptionTotal", `Eff. %` = "receptionEfficiencyPercentage")
+    r.col <- c(Exc = "receptionExcellent", Err = "receptionFault", Inp = "receptionContinue", Tot = "receptionTotal", `Exc. %` = "receptionExcellentPercentage")
 
     m <- matches %>% filter(no == noMatch)
     m <- m %>% mutate(
